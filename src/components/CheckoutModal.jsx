@@ -1,0 +1,313 @@
+import React, { useState } from 'react';
+import { X } from 'lucide-react';
+import { supabase } from '../services/supabase';
+import Toast from '../components/Toast'; 
+import FeedbackModal from './FeedbackModal';
+import { estabelecimentoAberto } from '../utils/businessHours';
+
+export default function CheckoutModal({ isOpen, onClose, cart, totalValue, onOrderSuccess, notesFromCart }) {
+  const [notification, setNotification] = useState(null); 
+  const [loading, setLoading] = useState(false);
+  const [showFeedback, setShowFeedback] = useState(false);
+  const [orderId, setOrderId] = useState(null);
+  const [formData, setFormData] = useState({ 
+    name: '', 
+    phone: '', 
+    payment: 'pix', 
+    needsChange: false, 
+    changeValue: ''
+  });
+
+  // Funções de Máscara
+  const maskPhone = (value) => {
+    return value
+      .replace(/\D/g, "")
+      .replace(/(\d{2})(\d)/, "($1) $2")
+      .replace(/(\d{5})(\d)/, "$1-$2")
+      .replace(/(-\d{4})\d+?$/, "$1");
+  };
+
+  const maskCurrency = (value) => {
+    let v = value.replace(/\D/g, "");
+    v = (v / 100).toFixed(2) + "";
+    v = v.replace(".", ",");
+    v = v.replace(/(\d)(\d{3})(\d{3}),/g, "$1.$2.$3,");
+    v = v.replace(/(\d)(\d{3}),/g, "$1.$2,");
+    return "R$ " + v;
+  };
+
+  // Função para limpar os dados do formulário
+  const resetForm = () => {
+    setFormData({ 
+      name: '', 
+      phone: '', 
+      payment: 'pix', 
+      needsChange: false, 
+      changeValue: ''
+    });
+    setOrderId(null);
+    setShowFeedback(false);
+  };
+
+  const handleFeedbackSubmit = async (data) => {
+    try {
+      // Faz o insert diretamente na tabela de feedbacks que você criou
+      const { error } = await supabase
+        .from('feedbacks')
+        .insert([{
+          order_id: orderId,
+          stars: data.stars,
+          comment: data.comment,
+          customer_name: formData.name // Aproveita o nome que já está no estado do checkout
+        }]);
+
+      if (error) throw error;
+
+      resetForm(); // Limpa o formulário antes de fechar
+      onOrderSuccess(); 
+    } catch (err) {
+      console.error("Erro ao salvar feedback:", err);
+      // Mesmo com erro no feedback, finalizamos o fluxo do pedido
+      resetForm(); // Limpa o formulário mesmo com erro
+      onOrderSuccess();
+    }
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    if (!estabelecimentoAberto()) {
+    setNotification({
+      message: "Estamos fechados. Nosso horário de atendimento é de segunda a sexta, das 07:00 às 16:10.",
+      type: "error"
+    });
+    return;
+  }    
+    setLoading(true);
+
+    const parts = [];
+    parts.push(`PAYMENT:${formData.payment.toUpperCase()}`); 
+
+    if (formData.payment === 'dinheiro' && formData.needsChange) {
+      parts.push(`TROCO PARA:${formData.changeValue}`);
+    }
+
+    if (notesFromCart?.trim()) {
+      parts.push(`OBS_GERAL:${notesFromCart.trim()}`);
+    }
+
+    try {
+      const { data, error } = await supabase
+        .from('orders')
+        .insert([{
+          customer_name: formData.name,
+          customer_phone: formData.phone,
+          items: cart, 
+          total: Number(totalValue), 
+          payment_method: formData.payment,
+          notes: parts.join('|'),
+          status: 'novo'
+        }])
+        .select();
+
+      if (error) throw error;
+      
+      setOrderId(data[0].id);
+      setShowFeedback(true); 
+
+    } catch (error) {
+      setNotification({ message: "Erro ao enviar pedido.", type: "error" });
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // Se fechar no "X", também limpa o formulário
+  const handleClose = () => {
+    resetForm();
+    onClose();
+  };
+
+  if (!isOpen && !showFeedback) return null;
+
+  const aberto = estabelecimentoAberto();
+
+  return (
+    <>
+      {isOpen && !showFeedback && (
+        <div 
+          className="modal-overlay" 
+          style={{ 
+            display: 'flex', 
+            justifyContent: 'center', 
+            alignItems: 'center', 
+            zIndex: 1000, 
+            position: 'fixed', 
+            inset: 0, 
+            background: 'rgba(0,0,0,0.6)',
+            padding: '20px'
+          }}
+          onClick={handleClose}
+        >
+          <div 
+            className="checkout-card" 
+            onClick={e => e.stopPropagation()}
+            style={{ 
+              background: 'white', 
+              padding: '24px', 
+              borderRadius: '20px', 
+              maxWidth: '450px', 
+              width: '100%',
+              height: 'auto', // Ajusta a altura ao conteúdo
+              maxHeight: '90vh', // Evita que saia da tela
+              overflowY: 'auto', // Scroll caso o conteúdo seja grande
+              boxShadow: '0 10px 25px rgba(0,0,0,0.2)',
+              position: 'relative'
+            }}
+          >
+            {/* Cabeçalho */}
+            <div style={{ 
+              display: 'flex', 
+              justifyContent: 'space-between', 
+              alignItems: 'center', 
+              marginBottom: '20px',
+              borderBottom: '1px solid #eee',
+              paddingBottom: '15px'
+            }}>
+              <h2 style={{ margin: 0, fontSize: '1.4rem', fontWeight: '800' }}>Finalizar Pedido</h2>
+              <button 
+                onClick={handleClose} 
+                style={{ background: '#f5f5f5', border: 'none', cursor: 'pointer', padding: '8px', borderRadius: '50%', display: 'flex' }}
+              >
+                <X size={20} />
+              </button>
+            </div>
+
+            <form onSubmit={handleSubmit}>
+              {/* Campo Nome */}
+              <div style={{ marginBottom: '15px' }}>
+                <label style={{ display: 'block', marginBottom: '8px', fontWeight: '600', fontSize: '0.9rem' }}>Nome</label>
+                <input 
+                  required 
+                  placeholder="Seu nome completo" 
+                  style={{ width: '100%', padding: '12px', borderRadius: '10px', border: '1px solid #ddd', fontSize: '1rem' }} 
+                  value={formData.name} 
+                  onChange={e => setFormData({ ...formData, name: e.target.value })} 
+                />
+              </div>
+
+              {/* Campo Telefone */}
+              <div style={{ marginBottom: '15px' }}>
+                <label style={{ display: 'block', marginBottom: '8px', fontWeight: '600', fontSize: '0.9rem' }}>Telefone</label>
+                <input 
+                  required 
+                  type="tel" 
+                  placeholder="(00) 00000-0000" 
+                  style={{ width: '100%', padding: '12px', borderRadius: '10px', border: '1px solid #ddd', fontSize: '1rem' }} 
+                  value={formData.phone} 
+                  onChange={e => setFormData({ ...formData, phone: maskPhone(e.target.value) })} 
+                />
+              </div>
+
+              {/* Forma de Pagamento */}
+              <div style={{ marginBottom: '20px' }}>
+                <label style={{ display: 'block', marginBottom: '8px', fontWeight: '600', fontSize: '0.9rem' }}>Forma de Pagamento</label>
+                <select 
+                  value={formData.payment} 
+                  style={{ width: '100%', padding: '12px', borderRadius: '10px', border: '1px solid #ddd', fontSize: '1rem', background: 'white' }} 
+                  onChange={e => setFormData({ ...formData, payment: e.target.value })}
+                >
+                  <option value="pix">Pix</option>
+                  <option value="dinheiro">Dinheiro</option>
+                  <option value="debito">Cartão de Débito</option>
+                  <option value="credito">Cartão de Crédito</option>
+                </select>
+              </div>
+
+              {/* Lógica de Troco */}
+              {formData.payment === 'dinheiro' && (
+                <div style={{ marginBottom: '20px', padding: '15px', background: '#f8f9fa', borderRadius: '12px', border: '1px solid #e9ecef' }}>
+                  <label style={{ display: 'flex', alignItems: 'center', gap: '10px', cursor: 'pointer', fontWeight: '600' }}>
+                    <input 
+                      type="checkbox" 
+                      style={{ width: '18px', height: '18px' }}
+                      checked={formData.needsChange} 
+                      onChange={e => setFormData({ ...formData, needsChange: e.target.checked })} 
+                    />
+                    Precisa de troco?
+                  </label>
+                  {formData.needsChange && (
+                    <input 
+                      required 
+                      placeholder="Troco para quanto?" 
+                      style={{ width: '100%', marginTop: '12px', padding: '12px', borderRadius: '8px', border: '1px solid #ddd' }} 
+                      value={formData.changeValue} 
+                      onChange={e => setFormData({ ...formData, changeValue: maskCurrency(e.target.value) })} 
+                    />
+                  )}
+                </div>
+              )}
+
+              {!aberto && (
+                <div
+                  style={{
+                    marginBottom: '15px',
+                    padding: '12px',
+                    background: '#fff3cd',
+                    color: '#856404',
+                    border: '1px solid #ffeeba',
+                    borderRadius: '8px',
+                    fontWeight: '600',
+                    textAlign: 'center'
+                  }}
+                >
+                  No momento estamos fechados.
+                  <br />
+                  Funcionamos de segunda a sexta, das 07:00 às 16:10.
+                </div>
+              )}
+
+              {/* Botão Finalizar */}
+            <button
+            type="submit"
+            disabled={loading || !aberto}
+            style={{
+              width: '100%',
+              padding: '16px',
+              background: aberto ? '#28a745' : '#999',
+              color: 'white',
+              border: 'none',
+              borderRadius: '12px',
+              fontWeight: '800',
+              fontSize: '1.1rem',
+              cursor: (loading || !aberto) ? 'not-allowed' : 'pointer',
+              opacity: (loading || !aberto) ? 0.7 : 1
+            }}
+          >
+            {loading
+              ? "Processando..."
+              : aberto
+                ? "Confirmar Pedido"
+                : "Estabelecimento Fechado"}
+          </button>   
+            </form>
+          </div>
+        </div>
+      )}
+
+      {/* Modais de Suporte */}
+      <FeedbackModal 
+        isOpen={showFeedback} 
+        onClose={() => { resetForm(); onOrderSuccess(); }} 
+        onSubmit={handleFeedbackSubmit} 
+      />
+      
+      {notification && (
+        <Toast 
+          message={notification.message} 
+          type={notification.type} 
+          onClose={() => setNotification(null)} 
+        />
+      )}
+    </>
+  );
+}
