@@ -23,7 +23,7 @@ export default function AdminLoginPage() {
 
   const login = (e) => {
     e.preventDefault();
-    if(u === 'DiSalgados' && p === '1234') { 
+    if(u === 'DiSalgados' && p === '202518') { 
       
       // Lógica de persistência do "Lembre-se de mim"
       if (rememberMe) {
