@@ -1,50 +1,119 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { UserCog, MapPin } from 'lucide-react'; 
-import logoImg from '/Logo.png'; 
+import {
+  UserCog,
+  MapPin,
+  Menu,
+  X
+} from 'lucide-react';
+
+import logoImg from '/Logo.png';
 import TrackOrderModal from './TrackOrderModal';
 
 export default function Header() {
   const [isTrackerOpen, setIsTrackerOpen] = useState(false);
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+
+  function fecharMenu() {
+    setIsMenuOpen(false);
+  }
+
+  function abrirAcompanhamento() {
+    setIsMenuOpen(false);
+    setIsTrackerOpen(true);
+  }
 
   return (
-    <header className="header">
-      <div className="container header-content">
-        <Link to="/" className="brand">
-          <img src={logoImg} alt="Di Salgados Logo" className="logo-header" />
-          <span>Di Salgados</span>
-        </Link>
-        
-        <nav className="nav-links">
-          <Link to="/">Pedidos</Link>          
-          <Link to="/contato">Contato</Link>
-          <Link to="/localizacao">Localização</Link>
-        </nav>
-        
-        <div style={{ display: 'flex', gap: '10px', alignItems: 'center' }}>
-          
-          {/* Botão limpo: Agora ele puxa 100% do CSS .admin-button */}
-          <button 
-            onClick={() => setIsTrackerOpen(true)}
-            className="admin-button"
-            style={{ cursor: 'pointer' }}
+    <>
+      <header className="site-header">
+        <div className="site-header-content">
+          <Link
+            to="/"
+            className="site-brand"
+            onClick={fecharMenu}
           >
-            <MapPin size={16} />
-            <span>Acompanhar Pedido</span>
-          </button>
-        
-          <Link to="/admin" className="admin-button">
-            <UserCog size={16} />
-            <span>Painel Admin</span>
+            <img
+              src={logoImg}
+              alt="Logo Di Salgados"
+              className="site-logo"
+            />
+
+            <span>Di Salgados</span>
           </Link>
 
-        </div>
-      </div>
+          <nav className="site-desktop-nav">
+            <Link to="/">Pedidos</Link>
+            <Link to="/contato">Contato</Link>
+            <Link to="/localizacao">Localização</Link>
+          </nav>
 
-      <TrackOrderModal 
-        isOpen={isTrackerOpen} 
-        onClose={() => setIsTrackerOpen(false)} 
+          <div className="site-desktop-actions">
+            <button
+              type="button"
+              className="site-header-button"
+              onClick={() => setIsTrackerOpen(true)}
+            >
+              <MapPin size={17} />
+              <span>Acompanhar Pedido</span>
+            </button>
+
+            <Link
+              to="/admin"
+              className="site-header-button"
+            >
+              <UserCog size={17} />
+              <span>Painel Admin</span>
+            </Link>
+          </div>
+
+          <button
+            type="button"
+            className="site-mobile-button"
+            onClick={() => setIsMenuOpen((valorAtual) => !valorAtual)}
+            aria-label={isMenuOpen ? 'Fechar menu' : 'Abrir menu'}
+          >
+            {isMenuOpen ? <X size={26} /> : <Menu size={26} />}
+          </button>
+        </div>
+
+        <div
+          className={`site-mobile-menu ${
+            isMenuOpen ? 'site-mobile-menu-open' : ''
+          }`}
+        >
+          <nav className="site-mobile-nav">
+            <Link to="/" onClick={fecharMenu}>
+              Pedidos
+            </Link>
+
+            <Link to="/contato" onClick={fecharMenu}>
+              Contato
+            </Link>
+
+            <Link to="/localizacao" onClick={fecharMenu}>
+              Localização
+            </Link>
+
+            <button
+              type="button"
+              onClick={abrirAcompanhamento}
+            >
+              <MapPin size={19} />
+              <span>Acompanhar Pedido</span>
+            </button>
+
+            <Link to="/admin" onClick={fecharMenu}>
+              <UserCog size={19} />
+              <span>Painel Admin</span>
+            </Link>
+          </nav>
+        </div>
+      </header>
+
+      <TrackOrderModal
+        isOpen={isTrackerOpen}
+        onClose={() => setIsTrackerOpen(false)}
       />
-    </header>
+    </>
   );
 }
