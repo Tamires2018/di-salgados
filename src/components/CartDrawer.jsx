@@ -1,143 +1,455 @@
-import React, { useState, useEffect } from 'react';
-import { X, Minus, Plus, Trash2, MessageSquare } from 'lucide-react';
+import React, { useEffect, useState } from 'react';
+import {
+  X,
+  Minus,
+  Plus,
+  Trash2,
+  MessageSquare
+} from 'lucide-react';
+
 import { formatCurrency } from '../utils/formatCurrency';
 
-export default function CartDrawer({ isOpen, onClose, cart, updateQty, removeItem, updateItemNote, onCheckout }) {
+export default function CartDrawer({
+  isOpen,
+  onClose,
+  cart,
+  updateQty,
+  removeItem,
+  updateItemNote,
+  onCheckout
+}) {
   const [generalNote, setGeneralNote] = useState('');
 
-  // Limpa a observação geral quando o carrinho é esvaziado (após checkout)
   useEffect(() => {
     if (cart.length === 0) {
       setGeneralNote('');
     }
   }, [cart.length]);
 
+  // Impede a página de trás de rolar enquanto o carrinho estiver aberto
+  useEffect(() => {
+    if (!isOpen) return;
+
+    const previousOverflow = document.body.style.overflow;
+    document.body.style.overflow = 'hidden';
+
+    return () => {
+      document.body.style.overflow = previousOverflow;
+    };
+  }, [isOpen]);
+
+  // Fecha o carrinho ao apertar ESC
+  useEffect(() => {
+    if (!isOpen) return;
+
+    const handleKeyDown = (event) => {
+      if (event.key === 'Escape') {
+        onClose();
+      }
+    };
+
+    window.addEventListener('keydown', handleKeyDown);
+
+    return () => {
+      window.removeEventListener('keydown', handleKeyDown);
+    };
+  }, [isOpen, onClose]);
+
   if (!isOpen) return null;
-  
-  const total = cart.reduce((acc, item) => acc + (item.price * item.qty), 0);
+
+  const total = cart.reduce(
+    (accumulator, item) =>
+      accumulator + Number(item.price) * Number(item.qty),
+    0
+  );
 
   return (
-    <div className="modal-overlay" onClick={onClose}>
-      <div className="drawer" onClick={e => e.stopPropagation()}>
-        
-        {/* CABEÇALHO ADICIONADO ABAIXO */}
-        <div style={{ 
-          display: 'flex', 
-          justifyContent: 'space-between', 
-          alignItems: 'center', 
-          paddingBottom: '15px', 
-          borderBottom: '1px solid #eee',
-          marginBottom: '10px' 
-        }}>
-          <h2 style={{ margin: 0, fontSize: '1.2rem', fontWeight: '800' }}>Meu Carrinho</h2>
-          <button 
-            onClick={onClose} 
-            style={{ 
-              background: 'none', 
-              border: 'none', 
-              cursor: 'pointer', 
-              color: '#666',
-              padding: '5px',
-              display: 'flex',
-              alignItems: 'center'
+    <div
+      role="presentation"
+      onClick={onClose}
+      style={{
+        position: 'fixed',
+        inset: 0,
+        width: '100%',
+        height: '100dvh',
+        background: 'rgba(0, 0, 0, 0.48)',
+
+        // A navbar está com z-index 1000
+        zIndex: 9998,
+
+        display: 'flex',
+        justifyContent: 'flex-end',
+        alignItems: 'stretch'
+      }}
+    >
+      <aside
+        role="dialog"
+        aria-modal="true"
+        aria-label="Carrinho de compras"
+        onClick={(event) => event.stopPropagation()}
+        style={{
+          position: 'relative',
+          zIndex: 9999,
+
+          width: 'min(460px, 100%)',
+          height: '100dvh',
+          maxHeight: '100dvh',
+
+          display: 'flex',
+          flexDirection: 'column',
+
+          background: '#ffffff',
+          boxShadow: '-5px 0 25px rgba(0, 0, 0, 0.18)',
+          overflow: 'hidden'
+        }}
+      >
+        {/* Cabeçalho do carrinho */}
+        <div
+          style={{
+            minHeight: '74px',
+            padding: '14px 18px',
+
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'space-between',
+            gap: '12px',
+
+            background: '#ffffff',
+            borderBottom: '1px solid #eeeeee',
+            flexShrink: 0
+          }}
+        >
+          <h2
+            style={{
+              margin: 0,
+              color: '#222222',
+              fontSize: '1.2rem',
+              fontWeight: 800
             }}
           >
-            <X size={24} />
+            Meu Carrinho
+          </h2>
+
+          <button
+            type="button"
+            onClick={onClose}
+            aria-label="Fechar carrinho"
+            title="Fechar carrinho"
+            style={{
+              width: '44px',
+              height: '44px',
+              padding: 0,
+
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              flexShrink: 0,
+
+              background: '#f3f3f3',
+              color: '#333333',
+
+              border: '1px solid #e5e5e5',
+              borderRadius: '50%',
+              cursor: 'pointer'
+            }}
+          >
+            <X size={25} strokeWidth={2.4} />
           </button>
         </div>
 
-        <div style={{ flex: 1, overflowY: 'auto', paddingRight: '5px' }}>
+        {/* Área dos produtos */}
+        <div
+          style={{
+            flex: 1,
+            minHeight: 0,
+            overflowY: 'auto',
+            padding: '0 18px'
+          }}
+        >
           {cart.length === 0 ? (
-            <p style={{ textAlign: 'center', marginTop: '40px', color: '#888' }}>Seu carrinho está vazio</p>
+            <p
+              style={{
+                margin: '38px 0 0',
+                textAlign: 'center',
+                color: '#888888',
+                fontSize: '1rem'
+              }}
+            >
+              Seu carrinho está vazio
+            </p>
           ) : (
-            cart.map(item => (
-              <div key={item.id} className="cart-item" style={{ flexDirection: 'column', alignItems: 'flex-start', gap: '10px', padding: '15px 0', borderBottom: '1px solid #eee' }}>
-                <div style={{ display: 'flex', justifyContent: 'space-between', width: '100%', alignItems: 'center' }}>
-                  <div style={{ flex: 1 }}>
-                    <span style={{ fontWeight: '600', display: 'block' }}>{item.name}</span>
-                    <span style={{ fontSize: '0.85rem', color: '#888' }}>{formatCurrency(item.price)}</span>
+            cart.map((item) => (
+              <div
+                key={item.id}
+                style={{
+                  width: '100%',
+                  padding: '16px 0',
+
+                  display: 'flex',
+                  flexDirection: 'column',
+                  alignItems: 'flex-start',
+                  gap: '11px',
+
+                  borderBottom: '1px solid #eeeeee'
+                }}
+              >
+                <div
+                  style={{
+                    width: '100%',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'space-between',
+                    gap: '12px'
+                  }}
+                >
+                  <div
+                    style={{
+                      flex: 1,
+                      minWidth: 0
+                    }}
+                  >
+                    <span
+                      style={{
+                        display: 'block',
+                        marginBottom: '3px',
+                        color: '#222222',
+                        fontWeight: 700
+                      }}
+                    >
+                      {item.name}
+                    </span>
+
+                    <span
+                      style={{
+                        color: '#777777',
+                        fontSize: '0.87rem'
+                      }}
+                    >
+                      {formatCurrency(item.price)}
+                    </span>
                   </div>
 
-                  <div className="qty-controls">
-                    <button className="btn-qty" onClick={() => updateQty(item.id, -1)}><Minus size={14} /></button>
-                    <span style={{ fontWeight: 'bold', minWidth: '20px', textAlign: 'center' }}>{item.qty}</span>
-                    <button className="btn-qty" onClick={() => updateQty(item.id, 1)}><Plus size={14} /></button>
-                    <button className="btn-trash" onClick={() => removeItem(item.id)}>
+                  <div
+                    style={{
+                      display: 'flex',
+                      alignItems: 'center',
+                      gap: '7px',
+                      flexShrink: 0
+                    }}
+                  >
+                    <button
+                      type="button"
+                      aria-label={`Diminuir quantidade de ${item.name}`}
+                      onClick={() => updateQty(item.id, -1)}
+                      style={quantityButtonStyle}
+                    >
+                      <Minus size={15} />
+                    </button>
+
+                    <span
+                      style={{
+                        minWidth: '22px',
+                        textAlign: 'center',
+                        color: '#222222',
+                        fontWeight: 800
+                      }}
+                    >
+                      {item.qty}
+                    </span>
+
+                    <button
+                      type="button"
+                      aria-label={`Aumentar quantidade de ${item.name}`}
+                      onClick={() => updateQty(item.id, 1)}
+                      style={quantityButtonStyle}
+                    >
+                      <Plus size={15} />
+                    </button>
+
+                    <button
+                      type="button"
+                      aria-label={`Remover ${item.name} do carrinho`}
+                      onClick={() => removeItem(item.id)}
+                      style={{
+                        width: '36px',
+                        height: '36px',
+                        padding: 0,
+
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+
+                        background: '#fff1f1',
+                        color: '#e52f2f',
+
+                        border: '1px solid #ffd7d7',
+                        borderRadius: '9px',
+                        cursor: 'pointer'
+                      }}
+                    >
                       <Trash2 size={18} />
                     </button>
                   </div>
                 </div>
-                
-                <div style={{ width: '100%' }}>
-                  <input 
-                    type="text"
-                    placeholder="Ex: Tirar cebola, ponto da carne..."
-                    value={item.note || ''}
-                    onChange={(e) => updateItemNote(item.id, e.target.value)}
-                    style={{
-                      width: '100%',
-                      padding: '8px 12px',
-                      fontSize: '0.8rem',
-                      borderRadius: '8px',
-                      border: '1px solid #ddd',
-                      background: '#fff',
-                      outline: 'none'
-                    }}
-                  />
-                </div>
+
+                <input
+                  type="text"
+                  placeholder="Ex: Tirar cebola, ponto da carne..."
+                  value={item.note || ''}
+                  onChange={(event) =>
+                    updateItemNote(item.id, event.target.value)
+                  }
+                  style={{
+                    width: '100%',
+                    padding: '10px 12px',
+
+                    background: '#ffffff',
+                    color: '#333333',
+
+                    border: '1px solid #dddddd',
+                    borderRadius: '9px',
+                    outline: 'none',
+
+                    fontSize: '0.85rem'
+                  }}
+                />
               </div>
             ))
           )}
         </div>
 
-        {/* Rodapé */}
-        <div style={{ borderTop: '2px solid #eee', paddingTop: '15px' }}>
+        {/* Rodapé do carrinho */}
+        <div
+          style={{
+            padding: '15px 18px 18px',
+            background: '#ffffff',
+            borderTop: '2px solid #eeeeee',
+            flexShrink: 0
+          }}
+        >
           <div style={{ marginBottom: '15px' }}>
-            <label style={{ fontSize: '0.9rem', fontWeight: '600', display: 'flex', alignItems: 'center', gap: '5px', marginBottom: '8px' }}>
-              <MessageSquare size={16} /> Observação Geral
+            <label
+              htmlFor="general-note"
+              style={{
+                marginBottom: '8px',
+
+                display: 'flex',
+                alignItems: 'center',
+                gap: '6px',
+
+                color: '#222222',
+                fontSize: '0.92rem',
+                fontWeight: 700
+              }}
+            >
+              <MessageSquare size={17} />
+              Observação Geral
             </label>
-            <textarea 
+
+            <textarea
+              id="general-note"
               placeholder="Deseja adicionar alguma observação ao pedido?"
               value={generalNote}
-              onChange={(e) => setGeneralNote(e.target.value)}
+              onChange={(event) => setGeneralNote(event.target.value)}
               style={{
                 width: '100%',
-                height: '60px',
-                padding: '10px',
-                borderRadius: '8px',
-                border: '1px solid #ddd',
+                height: '72px',
+                padding: '11px 12px',
+
+                background: '#ffffff',
+                color: '#333333',
+
+                border: '1px solid #dddddd',
+                borderRadius: '10px',
                 resize: 'none',
-                fontSize: '0.85rem'
+                outline: 'none',
+
+                fontSize: '0.87rem'
               }}
             />
           </div>
 
-          <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '10px' }}>
-            <span style={{ fontSize: '1.2rem', fontWeight: 'bold' }}>Total:</span>
-            <span style={{ fontSize: '1.2rem', fontWeight: '800', color: 'var(--primary)' }}>
+          <div
+            style={{
+              marginBottom: '14px',
+
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'space-between',
+              gap: '10px'
+            }}
+          >
+            <span
+              style={{
+                color: '#222222',
+                fontSize: '1.2rem',
+                fontWeight: 800
+              }}
+            >
+              Total:
+            </span>
+
+            <span
+              style={{
+                color: 'var(--primary, #e52f2f)',
+                fontSize: '1.25rem',
+                fontWeight: 900
+              }}
+            >
               {formatCurrency(total)}
             </span>
           </div>
-          <button 
-              className="btn-checkout" 
-              onClick={() => onCheckout(generalNote)} 
-              disabled={cart.length === 0}
-              style={{ 
-                opacity: cart.length === 0 ? 0.5 : 1, 
-                width: '100%', 
-                padding: '15px', 
-                background: '#28a745', 
-                color: 'white', 
-                border: 'none', 
-                borderRadius: '12px', 
-                fontWeight: 'bold', 
-                cursor: 'pointer' 
-              }}
-              >
-              Finalizar Pedido
+
+          <button
+            type="button"
+            onClick={() => onCheckout(generalNote)}
+            disabled={cart.length === 0}
+            style={{
+              width: '100%',
+              minHeight: '54px',
+              padding: '14px',
+
+              background:
+                cart.length === 0
+                  ? '#91d3a0'
+                  : '#28a745',
+
+              color: '#ffffff',
+              opacity: cart.length === 0 ? 0.7 : 1,
+
+              border: 'none',
+              borderRadius: '12px',
+
+              fontSize: '1rem',
+              fontWeight: 800,
+
+              cursor:
+                cart.length === 0
+                  ? 'not-allowed'
+                  : 'pointer'
+            }}
+          >
+            Finalizar Pedido
           </button>
         </div>
-      </div>
+      </aside>
     </div>
   );
 }
+
+const quantityButtonStyle = {
+  width: '34px',
+  height: '34px',
+  padding: 0,
+
+  display: 'flex',
+  alignItems: 'center',
+  justifyContent: 'center',
+
+  background: '#f5f5f5',
+  color: '#333333',
+
+  border: '1px solid #dddddd',
+  borderRadius: '8px',
+  cursor: 'pointer'
+};
