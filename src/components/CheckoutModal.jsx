@@ -4,19 +4,23 @@ import { supabase } from '../services/supabase';
 import Toast from '../components/Toast'; 
 import FeedbackModal from './FeedbackModal';
 import { estabelecimentoAberto } from '../utils/businessHours';
+import PixPaymentModal from './PixPaymentModal';
+import { generatePix } from '../utils/pix';
 
 export default function CheckoutModal({ isOpen, onClose, cart, totalValue, onOrderSuccess, notesFromCart }) {
-  const [notification, setNotification] = useState(null); 
-  const [loading, setLoading] = useState(false);
-  const [showFeedback, setShowFeedback] = useState(false);
-  const [orderId, setOrderId] = useState(null);
-  const [formData, setFormData] = useState({ 
-    name: '', 
-    phone: '', 
-    payment: 'pix', 
-    needsChange: false, 
-    changeValue: ''
-  });
+const [notification, setNotification] = useState(null);
+const [loading, setLoading] = useState(false);
+const [showFeedback, setShowFeedback] = useState(false);
+const [showPixModal, setShowPixModal] = useState(false);
+const [orderId, setOrderId] = useState(null);
+const [pixCode, setPixCode] = useState('');
+const [formData, setFormData] = useState({
+  name: '',
+  phone: '',
+  payment: 'pix',
+  needsChange: false,
+  changeValue: ''
+});
 
   // Funções de Máscara
   const maskPhone = (value) => {
@@ -47,6 +51,8 @@ export default function CheckoutModal({ isOpen, onClose, cart, totalValue, onOrd
     });
     setOrderId(null);
     setShowFeedback(false);
+    setShowPixModal(false);
+    setPixCode('');
   };
 
   const handleFeedbackSubmit = async (data) => {
@@ -105,14 +111,30 @@ export default function CheckoutModal({ isOpen, onClose, cart, totalValue, onOrd
           total: Number(totalValue), 
           payment_method: formData.payment,
           notes: parts.join('|'),
-          status: 'novo'
+          status: formData.payment === 'pix'
+          ? 'aguardando_pagamento'
+          : 'novo'
         }])
         .select();
 
       if (error) throw error;
-      
-      setOrderId(data[0].id);
-      setShowFeedback(true); 
+
+     setOrderId(data[0].id);
+
+    if (formData.payment === 'pix') {
+      const generatedPixCode = generatePix({
+        key: 'tamiresledoa@gmail.com',
+        name: 'Tamires Ledo da Silva Alves',
+        city: 'GARCA',
+        amount: Number(totalValue),
+        orderId: data[0].id
+      });
+
+      setPixCode(generatedPixCode);
+      setShowPixModal(true);
+    } else {
+      setShowFeedback(true);
+    }
 
     } catch (error) {
       setNotification({ message: "Erro ao enviar pedido.", type: "error" });
@@ -127,13 +149,23 @@ export default function CheckoutModal({ isOpen, onClose, cart, totalValue, onOrd
     onClose();
   };
 
-  if (!isOpen && !showFeedback) return null;
+  const handlePixPaymentDone = () => {
+    setShowPixModal(false);
+    setShowFeedback(true);
+  };
+
+  const handlePixClose = () => {
+    resetForm();
+    onOrderSuccess();
+  };
+
+  if (!isOpen && !showFeedback && !showPixModal) return null;
 
   const aberto = estabelecimentoAberto();
 
   return (
     <>
-      {isOpen && !showFeedback && (
+      {isOpen && !showFeedback && !showPixModal && (
         <div 
           className="modal-overlay" 
           style={{ 
@@ -293,6 +325,16 @@ export default function CheckoutModal({ isOpen, onClose, cart, totalValue, onOrd
           </div>
         </div>
       )}
+
+      {/* Modal de pagamento Pix */}
+      <PixPaymentModal
+        isOpen={showPixModal}
+        onClose={handlePixClose}
+        orderId={orderId}
+        totalValue={totalValue}
+        pixCode={pixCode}
+        onPaymentDone={handlePixPaymentDone}
+      />
 
       {/* Modais de Suporte */}
       <FeedbackModal 
