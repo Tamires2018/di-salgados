@@ -7,7 +7,15 @@ import { estabelecimentoAberto } from '../utils/businessHours';
 import PixPaymentModal from './PixPaymentModal';
 import { generatePix } from '../utils/pix';
 
-export default function CheckoutModal({ isOpen, onClose, cart, totalValue, onOrderSuccess, notesFromCart }) {
+export default function CheckoutModal({
+  isOpen,
+  onClose,
+  cart,
+  totalValue,
+  onOrderSuccess,
+  onOrderCreated,
+  notesFromCart
+}) {
 const [notification, setNotification] = useState(null);
 const [loading, setLoading] = useState(false);
 const [showFeedback, setShowFeedback] = useState(false);
@@ -107,37 +115,50 @@ const [formData, setFormData] = useState({
         .insert([{
           customer_name: formData.name,
           customer_phone: formData.phone,
-          items: cart, 
-          total: Number(totalValue), 
+          items: cart,
+          total: Number(totalValue),
           payment_method: formData.payment,
           notes: parts.join('|'),
-          status: formData.payment === 'pix'
-          ? 'aguardando_pagamento'
-          : 'novo'
+          status:
+            formData.payment === 'pix'
+              ? 'aguardando_pagamento'
+              : 'novo',
+          payment_status:
+            formData.payment === 'pix'
+              ? 'pendente'
+              : null
         }])
-        .select();
+        .select()
+        .single();
 
       if (error) throw error;
 
-     setOrderId(data[0].id);
+      const createdOrderId = data.id;
 
-    if (formData.payment === 'pix') {
-      const generatedPixCode = generatePix({
-        key: 'tamiresledoa@gmail.com',
-        name: 'Tamires Ledo da Silva Alves',
-        city: 'GARCA',
-        amount: Number(totalValue),
-        orderId: data[0].id
-      });
+      setOrderId(createdOrderId);
+      onOrderCreated?.(createdOrderId);
 
-      setPixCode(generatedPixCode);
-      setShowPixModal(true);
-    } else {
-      setShowFeedback(true);
-    }
+      if (formData.payment === 'pix') {
+        const generatedPixCode = generatePix({
+          key: 'tamiresledoa@gmail.com',
+          name: 'Tamires Ledo da Silva Alves',
+          city: 'GARCA',
+          amount: Number(totalValue),
+          orderId: createdOrderId
+        });
 
+        setPixCode(generatedPixCode);
+        setShowPixModal(true);
+      } else {
+        setShowFeedback(true);
+      }
     } catch (error) {
-      setNotification({ message: "Erro ao enviar pedido.", type: "error" });
+      console.error('Erro completo ao enviar pedido:', error);
+
+      setNotification({
+        message: error?.message || 'Erro ao enviar pedido.',
+        type: 'error'
+      });
     } finally {
       setLoading(false);
     }

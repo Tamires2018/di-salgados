@@ -13,6 +13,7 @@ import ConfirmationModal from '../components/ConfirmationModal';
 import OrderCard from '../components/OrderCard';
 import CashierSection from '../components/CashierSection';
 import { formatCurrency } from '../utils/formatCurrency';
+import { notifyNewOrder } from '../services/notifications';
 
 // --- Funções Auxiliares ---
 const applyPriceMask = (value) => {
@@ -146,12 +147,136 @@ export default function AdminDashboard() {
   };
 
   useEffect(() => {
+    let isMounted = true;
+
+    const refreshAdminData = async () => {
+      if (!isMounted) return;
+
+      await Promise.all([
+        loadOrders(),
+        checkCashierStatus()
+      ]);
+    };
+
     loadOrders();
     loadProducts();
     checkCashierStatus();
-    loadCashierHistory(); 
-    const channel = supabase.channel('db_changes').on('postgres_changes', { event: '*', schema: 'public', table: 'orders' }, () => loadOrders()).subscribe();
-    return () => { supabase.removeChannel(channel); };
+    loadCashierHistory();
+
+    const channel = supabase
+      .channel('admin-orders-realtime')
+      .on(
+        'postgres_changes',
+        {
+          event: 'INSERT',
+          schema: 'public',
+          table: 'orders'
+        },
+        (payload) => {
+          console.log('Novo pedido recebido:', payload.new);
+
+          notifyNewOrder(payload.new);
+
+          setOrders((currentOrders) => {
+            const alreadyExists = currentOrders.some(
+              (order) =>
+                String(order.id) === String(payload.new.id)
+            );
+
+            if (alreadyExists) {
+              return currentOrders;
+            }
+
+            return [payload.new, ...currentOrders];
+          });
+
+          setNotification({
+            message: `🔔 Novo pedido #${payload.new.id} recebido!`,
+            type: 'success'
+          });
+        }
+      )
+      .on(
+        'postgres_changes',
+        {
+          event: 'UPDATE',
+          schema: 'public',
+          table: 'orders'
+        },
+        (payload) => {
+          console.log('Pedido atualizado:', payload.new);
+
+          setOrders((currentOrders) =>
+            currentOrders.map((order) =>
+              String(order.id) === String(payload.new.id)
+                ? { ...order, ...payload.new }
+                : order
+            )
+          );
+        }
+      )
+      .on(
+        'postgres_changes',
+        {
+          event: 'DELETE',
+          schema: 'public',
+          table: 'orders'
+        },
+        (payload) => {
+          console.log('Pedido removido:', payload.old);
+
+          setOrders((currentOrders) =>
+            currentOrders.filter(
+              (order) =>
+                String(order.id) !== String(payload.old.id)
+            )
+          );
+        }
+      )
+      .subscribe((status) => {
+        console.log('Realtime do Admin:', status);
+
+        if (status === 'SUBSCRIBED') {
+          console.log('Admin conectado aos novos pedidos.');
+        }
+
+        if (
+          status === 'CHANNEL_ERROR' ||
+          status === 'TIMED_OUT'
+        ) {
+          console.warn(
+            'Realtime do Admin desconectado. O modo de segurança continuará atualizando.'
+          );
+        }
+      });
+
+    const intervalId = window.setInterval(() => {
+      refreshAdminData();
+    }, 5000);
+
+    const handleVisibilityChange = () => {
+      if (document.visibilityState === 'visible') {
+        refreshAdminData();
+      }
+    };
+
+    document.addEventListener(
+      'visibilitychange',
+      handleVisibilityChange
+    );
+
+    return () => {
+      isMounted = false;
+
+      window.clearInterval(intervalId);
+
+      document.removeEventListener(
+        'visibilitychange',
+        handleVisibilityChange
+      );
+
+      supabase.removeChannel(channel);
+    };
   }, []);
 
   const changeStatus = async (id, newStatus) => {
@@ -296,32 +421,78 @@ export default function AdminDashboard() {
   };
 
   const changePaymentStatus = async (id, newPaymentStatus) => {
-    isUpdatingLocally.current = true;
+    if (isUpdatingLocally.current) return;
 
-    const { error } = await supabase
-      .from('orders')
-      .update({ payment_status: newPaymentStatus })
-      .eq('id', id);
+    const currentOrder = orders.find(
+      (order) => String(order.id) === String(id)
+    );
 
-    if (!error) {
-      setOrders(prev => prev.map(order =>
-        order.id === id
-          ? { ...order, payment_status: newPaymentStatus }
-          : order
-      ));
-
+    if (!currentOrder) {
       setNotification({
-        message: `Pagamento atualizado para ${newPaymentStatus}.`,
-        type: 'success'
-      });
-    } else {
-      setNotification({
-        message: 'Erro ao atualizar o pagamento.',
+        message: 'Pedido não encontrado.',
         type: 'error'
       });
+      return;
     }
 
-    isUpdatingLocally.current = false;
+    isUpdatingLocally.current = true;
+
+    try {
+      const updates = {
+        payment_status: newPaymentStatus
+      };
+
+      if (newPaymentStatus === 'pago') {
+        updates.status = 'novo';
+      }
+
+      if (newPaymentStatus === 'pendente') {
+        updates.status = 'aguardando_pagamento';
+      }
+
+      if (newPaymentStatus === 'cancelado') {
+        updates.status = 'cancelado';
+      }
+
+      const { data, error } = await supabase
+        .from('orders')
+        .update(updates)
+        .eq('id', id)
+        .select()
+        .single();
+
+      if (error) throw error;
+
+      setOrders((currentOrders) =>
+        currentOrders.map((order) =>
+          String(order.id) === String(id)
+            ? { ...order, ...data }
+            : order
+        )
+      );
+
+      const messages = {
+        pago: 'Pagamento Pix confirmado! O pedido entrou na fila.',
+        pendente: 'Pagamento Pix marcado como pendente.',
+        cancelado: 'Pagamento Pix e pedido cancelados.'
+      };
+
+      setNotification({
+        message:
+          messages[newPaymentStatus] ||
+          `Pagamento atualizado para ${newPaymentStatus}.`,
+        type: 'success'
+      });
+    } catch (error) {
+      console.error('Erro ao atualizar pagamento Pix:', error);
+
+      setNotification({
+        message: error?.message || 'Erro ao atualizar o pagamento.',
+        type: 'error'
+      });
+    } finally {
+      isUpdatingLocally.current = false;
+    }
   };
 
   const deleteOrder = async (id) => {

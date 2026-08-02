@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { HashRouter, Routes, Route } from 'react-router-dom';
 import Header from './components/Header';
 import Footer from './components/Footer';
@@ -7,10 +7,12 @@ import CheckoutModal from './components/CheckoutModal';
 import PedidosPage from './pages/PedidosPage';
 import AdminLoginPage from './pages/AdminLoginPage';
 import AdminDashboard from './pages/AdminDashboard';
-import ContactPage from './pages/ContactPage'; 
+import ContactPage from './pages/ContactPage';
 import LocationPage from './pages/LocationPage';
 import PrivateRoute from './routes/PrivateRoute';
-import Toast from './components/Toast'; 
+import Toast from './components/Toast';
+import OrderTrackingModal from './components/OrderTrackingModal';
+import { initializeNotifications } from './services/notifications';
 import './styles/global.css';
 
 export default function App() {
@@ -20,78 +22,153 @@ export default function App() {
   const [notification, setNotification] = useState(null);
   const [tempGeneralNote, setTempGeneralNote] = useState('');
 
-  const totalValue = cart.reduce((acc, item) => acc + (item.price * item.qty), 0);
+  const [currentOrderId, setCurrentOrderId] = useState(() => {
+    return localStorage.getItem('currentOrderId');
+  });
+
+  const [showOrderTracking, setShowOrderTracking] = useState(() => {
+    return Boolean(localStorage.getItem('currentOrderId'));
+  });
+
+  useEffect(() => {
+    initializeNotifications();
+  }, []);
+
+  const totalValue = cart.reduce(
+    (acc, item) => acc + item.price * item.qty,
+    0
+  );
 
   const addToCart = (item) => {
-    setCart(prev => {
-      const exists = prev.find(i => i.id === item.id);
+    setCart((prev) => {
+      const exists = prev.find((cartItem) => cartItem.id === item.id);
+
       if (exists) {
-        return prev.map(i => i.id === item.id ? { ...i, qty: i.qty + 1 } : i);
+        return prev.map((cartItem) =>
+          cartItem.id === item.id
+            ? { ...cartItem, qty: cartItem.qty + 1 }
+            : cartItem
+        );
       }
+
       return [...prev, { ...item, qty: 1, note: '' }];
     });
   };
 
   const updateQty = (id, delta) => {
-    setCart(prev => prev.map(i => 
-      i.id === id ? { ...i, qty: Math.max(1, i.qty + delta) } : i
-    ));
+    setCart((prev) =>
+      prev.map((item) =>
+        item.id === id
+          ? { ...item, qty: Math.max(1, item.qty + delta) }
+          : item
+      )
+    );
   };
 
   const updateItemNote = (id, note) => {
-    setCart(prev => prev.map(i => i.id === id ? { ...i, note: note } : i));
+    setCart((prev) =>
+      prev.map((item) =>
+        item.id === id ? { ...item, note } : item
+      )
+    );
   };
 
   const removeItem = (id) => {
-    setCart(prev => prev.filter(i => i.id !== id));
+    setCart((prev) => prev.filter((item) => item.id !== id));
+  };
+
+  const handleOrderCreated = (orderId) => {
+    const normalizedId = String(orderId);
+
+    localStorage.setItem('currentOrderId', normalizedId);
+    setCurrentOrderId(normalizedId);
   };
 
   const handleOrderComplete = () => {
-    setCart([]); 
-    setTempGeneralNote(''); 
+    setCart([]);
+    setTempGeneralNote('');
     setIsCheckoutOpen(false);
     setIsCartOpen(false);
-    setNotification({ message: '🚀 Pedido enviado com sucesso!', type: 'success' });
+    setShowOrderTracking(true);
+
+    setNotification({
+      message: '🚀 Pedido enviado com sucesso!',
+      type: 'success'
+    });
   };
 
   return (
     <HashRouter>
-      <Header />  
+      <Header />
+
       <main className="main-content">
         <Routes>
-          <Route path="/" element={<PedidosPage addToCart={addToCart} cartCount={cart.length} openCart={() => setIsCartOpen(true)} />} />
+          <Route
+            path="/"
+            element={
+              <PedidosPage
+                addToCart={addToCart}
+                cartCount={cart.length}
+                openCart={() => setIsCartOpen(true)}
+              />
+            }
+          />
+
           <Route path="/contato" element={<ContactPage />} />
           <Route path="/localizacao" element={<LocationPage />} />
           <Route path="/admin" element={<AdminLoginPage />} />
-          <Route path="/admin/pedidos" element={<PrivateRoute><AdminDashboard /></PrivateRoute>} />
+
+          <Route
+            path="/admin/pedidos"
+            element={
+              <PrivateRoute>
+                <AdminDashboard />
+              </PrivateRoute>
+            }
+          />
         </Routes>
       </main>
+
       <Footer />
 
-      {notification && <Toast message={notification.message} type={notification.type} onClose={() => setNotification(null)} />}
+      {notification && (
+        <Toast
+          message={notification.message}
+          type={notification.type}
+          onClose={() => setNotification(null)}
+        />
+      )}
 
-      <CartDrawer 
-        isOpen={isCartOpen} 
-        onClose={() => setIsCartOpen(false)} 
-        cart={cart} 
-        updateQty={updateQty} 
-        updateItemNote={updateItemNote} 
-        removeItem={removeItem} 
-        onCheckout={(note) => { 
+      <CartDrawer
+        isOpen={isCartOpen}
+        onClose={() => setIsCartOpen(false)}
+        cart={cart}
+        updateQty={updateQty}
+        updateItemNote={updateItemNote}
+        removeItem={removeItem}
+        onCheckout={(note) => {
           setTempGeneralNote(note);
           setIsCartOpen(false);
           setIsCheckoutOpen(true);
-        }} 
+        }}
       />
 
-      <CheckoutModal 
-        isOpen={isCheckoutOpen} 
-        onClose={() => setIsCheckoutOpen(false)} 
+      <CheckoutModal
+        isOpen={isCheckoutOpen}
+        onClose={() => setIsCheckoutOpen(false)}
         cart={cart}
         totalValue={totalValue}
-        notesFromCart={tempGeneralNote} 
+        notesFromCart={tempGeneralNote}
+        onOrderCreated={handleOrderCreated}
         onOrderSuccess={handleOrderComplete}
       />
+
+      {showOrderTracking && currentOrderId && (
+        <OrderTrackingModal
+          orderId={currentOrderId}
+          onClose={() => setShowOrderTracking(false)}
+        />
+      )}
     </HashRouter>
   );
 }
