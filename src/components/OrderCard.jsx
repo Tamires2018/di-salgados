@@ -9,7 +9,8 @@ import {
   CreditCard,
   MessageSquare,
   Banknote,
-  Star
+  Star,
+  MessageCircle
 } from 'lucide-react';
 import StatusBadge from './StatusBadge';
 import PaymentStatusButtons from './PaymentStatusButtons';
@@ -37,6 +38,7 @@ export default function OrderCard({
     ?.trim();
 
   const feedbackData = order.feedbacks?.[0];
+
   const ratingVal =
     feedbackData?.stars ||
     order.rating ||
@@ -91,9 +93,40 @@ export default function OrderCard({
     }
   };
 
+  const normalizeWhatsAppPhone = (phone) => {
+    const numbers = String(phone || '').replace(/\D/g, '');
+
+    if (!numbers) return '';
+
+    return numbers.startsWith('55') ? numbers : `55${numbers}`;
+  };
+
+  const handleSendReadyMessage = () => {
+    const phone = normalizeWhatsAppPhone(order.customer_phone);
+
+    if (!phone || phone.length < 12) {
+      window.alert('O telefone deste cliente parece estar inválido.');
+      return;
+    }
+
+    const customerName = order.customer_name || 'cliente';
+
+   const message =
+    `Olá, ${customerName}!\n\n` +
+    `Seu pedido #${order.id} já está pronto para retirada.\n\n` +
+    `Estamos aguardando você. Obrigado pela preferência!\n\n` +
+    `Di Salgados`;
+
+    const whatsappUrl =
+      `https://wa.me/${phone}?text=${encodeURIComponent(message)}`;
+
+    window.open(whatsappUrl, '_blank', 'noopener,noreferrer');
+  };
+
   const items = getItems();
   const finalObservation = getFinalObservation();
   const isPix = String(order.payment_method || '').toLowerCase() === 'pix';
+  const isReady = order.status === 'pronto';
 
   return (
     <div
@@ -241,6 +274,33 @@ export default function OrderCard({
           </div>
         )}
       </div>
+
+      {isReady && (
+        <button
+          type="button"
+          onClick={handleSendReadyMessage}
+          style={{
+            width: '100%',
+            padding: '13px',
+            marginBottom: '12px',
+            borderRadius: '10px',
+            border: 'none',
+            background: '#25D366',
+            color: '#ffffff',
+            fontWeight: '800',
+            fontSize: '0.95rem',
+            cursor: 'pointer',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            gap: '8px',
+            boxShadow: '0 4px 10px rgba(37, 211, 102, 0.25)'
+          }}
+        >
+          <MessageCircle size={20} />
+          Avisar cliente pelo WhatsApp
+        </button>
+      )}
 
       <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap' }}>
         {ORDER_ACTIONS.map((action) => {

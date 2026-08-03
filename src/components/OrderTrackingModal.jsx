@@ -147,9 +147,24 @@ export default function OrderTrackingModal({
           .from('orders')
           .select('*')
           .eq('id', orderId)
-          .single();
+          .maybeSingle();
 
         if (error) throw error;
+
+        // Se o pedido não existe mais, limpa o ID antigo salvo
+        // e fecha automaticamente a tela de acompanhamento.
+        if (!data) {
+          localStorage.removeItem('currentOrderId');
+          previousStatusRef.current = null;
+
+          if (isMounted) {
+            setOrder(null);
+            setLoading(false);
+            onClose();
+          }
+
+          return;
+        }
 
         const isFirstLoad = !previousStatusRef.current;
 
@@ -188,7 +203,7 @@ export default function OrderTrackingModal({
           updateOrder(payload.new, true);
         }
       )
-      .subscribe((status) => {
+      .subscribe((status, error) => {
         console.log('Status do Realtime:', status);
 
         if (status === 'SUBSCRIBED') {
@@ -200,7 +215,8 @@ export default function OrderTrackingModal({
           status === 'TIMED_OUT'
         ) {
           console.warn(
-            'Realtime desconectado. O acompanhamento continuará pelo modo de segurança.'
+            'Realtime desconectado. O acompanhamento continuará pelo modo de segurança.',
+            error || ''
           );
         }
       });
