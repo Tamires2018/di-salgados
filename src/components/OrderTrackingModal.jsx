@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import {
   CheckCircle2,
   Clock,
@@ -53,11 +53,89 @@ export default function OrderTrackingModal({
 }) {
   const [order, setOrder] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [notification, setNotification] = useState(null);
+
+  const previousStatusRef = useRef(null);
+  const notificationTimeoutRef = useRef(null);
 
   useEffect(() => {
     if (!orderId) return undefined;
 
     let isMounted = true;
+
+    const requestNotificationPermission = async () => {
+      try {
+        if (
+          'Notification' in window &&
+          Notification.permission === 'default'
+        ) {
+          await Notification.requestPermission();
+        }
+      } catch (error) {
+        console.warn(
+          'Não foi possível solicitar permissão para notificações:',
+          error
+        );
+      }
+    };
+
+    const notifyCustomer = (updatedOrder) => {
+      const statusData = STATUS_CONFIG[updatedOrder?.status];
+
+      if (!statusData) return;
+
+      setNotification({
+        title: statusData.title,
+        message: statusData.message
+      });
+
+      if (notificationTimeoutRef.current) {
+        window.clearTimeout(notificationTimeoutRef.current);
+      }
+
+      notificationTimeoutRef.current = window.setTimeout(() => {
+        if (isMounted) {
+          setNotification(null);
+        }
+      }, 6000);
+
+      if (
+        'Notification' in window &&
+        Notification.permission === 'granted'
+      ) {
+        try {
+          new Notification(statusData.title, {
+            body: statusData.message,
+            tag: `pedido-${updatedOrder.id}`,
+            renotify: true
+          });
+        } catch (error) {
+          console.warn(
+            'Não foi possível exibir a notificação do navegador:',
+            error
+          );
+        }
+      }
+    };
+
+    const updateOrder = (updatedOrder, shouldNotify = true) => {
+      if (!isMounted || !updatedOrder) return;
+
+      const previousStatus = previousStatusRef.current;
+      const newStatus = updatedOrder.status;
+
+      setOrder(updatedOrder);
+
+      if (
+        shouldNotify &&
+        previousStatus &&
+        previousStatus !== newStatus
+      ) {
+        notifyCustomer(updatedOrder);
+      }
+
+      previousStatusRef.current = newStatus;
+    };
 
     const loadOrder = async (showLoading = false) => {
       try {
@@ -73,9 +151,9 @@ export default function OrderTrackingModal({
 
         if (error) throw error;
 
-        if (isMounted) {
-          setOrder(data);
-        }
+        const isFirstLoad = !previousStatusRef.current;
+
+        updateOrder(data, !isFirstLoad);
       } catch (error) {
         console.error('Erro ao carregar pedido:', error);
       } finally {
@@ -85,10 +163,12 @@ export default function OrderTrackingModal({
       }
     };
 
+    requestNotificationPermission();
+
     // Carrega o pedido assim que o modal abre.
     loadOrder(true);
 
-    // Escuta as alterações do pedido pelo Realtime.
+    // Escuta alterações do pedido pelo Supabase Realtime.
     const channel = supabase
       .channel(`order-tracking-${orderId}`)
       .on(
@@ -105,9 +185,7 @@ export default function OrderTrackingModal({
             payload.new
           );
 
-          if (isMounted) {
-            setOrder(payload.new);
-          }
+          updateOrder(payload.new, true);
         }
       )
       .subscribe((status) => {
@@ -132,7 +210,7 @@ export default function OrderTrackingModal({
       loadOrder(false);
     }, 5000);
 
-    // Atualiza imediatamente ao voltar para o aplicativo.
+    // Atualiza imediatamente quando o cliente volta para a página.
     const handleVisibilityChange = () => {
       if (document.visibilityState === 'visible') {
         loadOrder(false);
@@ -148,6 +226,10 @@ export default function OrderTrackingModal({
       isMounted = false;
 
       window.clearInterval(intervalId);
+
+      if (notificationTimeoutRef.current) {
+        window.clearTimeout(notificationTimeoutRef.current);
+      }
 
       document.removeEventListener(
         'visibilitychange',
@@ -190,6 +272,71 @@ export default function OrderTrackingModal({
       }}
       onClick={handleClose}
     >
+      {notification && (
+        <div
+          role="alert"
+          style={{
+            position: 'fixed',
+            top: '20px',
+            left: '50%',
+            transform: 'translateX(-50%)',
+            width: 'calc(100% - 40px)',
+            maxWidth: '400px',
+            background: '#ffffff',
+            borderLeft: '5px solid #ef4444',
+            borderRadius: '12px',
+            padding: '16px',
+            boxShadow: '0 10px 35px rgba(0, 0, 0, 0.25)',
+            zIndex: 10001,
+            textAlign: 'left'
+          }}
+          onClick={(event) => event.stopPropagation()}
+        >
+          <button
+            type="button"
+            aria-label="Fechar notificação"
+            onClick={() => setNotification(null)}
+            style={{
+              position: 'absolute',
+              top: '8px',
+              right: '8px',
+              width: '30px',
+              height: '30px',
+              border: 'none',
+              borderRadius: '50%',
+              background: '#f1f1f1',
+              cursor: 'pointer',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center'
+            }}
+          >
+            <X size={16} />
+          </button>
+
+          <strong
+            style={{
+              display: 'block',
+              color: '#222',
+              marginBottom: '5px',
+              paddingRight: '30px'
+            }}
+          >
+            {notification.title}
+          </strong>
+
+          <span
+            style={{
+              color: '#666',
+              fontSize: '0.9rem',
+              lineHeight: 1.4
+            }}
+          >
+            {notification.message}
+          </span>
+        </div>
+      )}
+
       <div
         onClick={(event) => event.stopPropagation()}
         style={{
@@ -287,8 +434,8 @@ export default function OrderTrackingModal({
                 color: '#555'
               }}
             >
-              Esta tela será atualizada automaticamente quando o estabelecimento
-              alterar o pedido.
+              Esta tela será atualizada automaticamente quando o
+              estabelecimento alterar o pedido.
             </div>
           </>
         )}
