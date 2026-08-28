@@ -9,6 +9,7 @@ import {
 
 import logoImg from '/Logo.png';
 import TrackOrderModal from './TrackOrderModal';
+import InstallButton from './InstallButton';
 
 export default function Header() {
   const [isTrackerOpen, setIsTrackerOpen] = useState(false);
@@ -48,6 +49,9 @@ export default function Header() {
           </nav>
 
           <div className="site-desktop-actions">
+            {/* Agora o botão usará a mesma classe e design dos outros */}
+            <InstallButton className="site-header-button" iconSize={17} />
+
             <button
               type="button"
               className="site-header-button"
@@ -106,6 +110,9 @@ export default function Header() {
               <UserCog size={19} />
               <span>Painel Admin</span>
             </Link>
+
+            {/* No celular, usamos um ícone um pouco maior e fechamos o menu ao clicar */}
+            <InstallButton iconSize={19} onCustomClick={fecharMenu} />
           </nav>
         </div>
       </header>

@@ -1,5 +1,5 @@
 import React from 'react';
-import { Banknote, ClipboardList, History, Lock, Unlock } from 'lucide-react';
+import { Banknote, ClipboardList, History, Lock, Unlock, Wallet } from 'lucide-react';
 import { formatCurrency } from '../utils/formatCurrency';
 
 const getOrdersForCashier = (cashier, allOrders) => {
@@ -29,6 +29,69 @@ const parseOrderItems = (items) => {
   }
 };
 
+// Função para separar a soma por método de pagamento
+const calculatePaymentBreakdown = (orders) => {
+  const breakdown = {
+    dinheiro: 0,
+    pix: 0,
+    credito: 0,
+    debito: 0,
+    outros: 0
+  };
+
+  orders.forEach(order => {
+    const method = String(order.payment_method || '').toLowerCase().trim();
+    const value = Number(order.total || 0);
+
+    if (method.includes('dinheiro')) breakdown.dinheiro += value;
+    else if (method.includes('pix')) breakdown.pix += value;
+    else if (method.includes('credito') || method.includes('crédito')) breakdown.credito += value;
+    else if (method.includes('debito') || method.includes('débito')) breakdown.debito += value;
+    else breakdown.outros += value;
+  });
+
+  return breakdown;
+};
+
+// Componente visual com pílulas estilizadas e bem visíveis
+const PaymentBreakdownView = ({ breakdown }) => {
+  const hasPayments = Object.values(breakdown).some(val => val > 0);
+  if (!hasPayments) return null;
+
+  return (
+    <div style={styles.paymentBreakdownContainer}>
+      <span style={styles.paymentBreakdownLabel}>Entradas por forma de pagamento:</span>
+      <div style={styles.paymentPillsWrapper}>
+        {breakdown.dinheiro > 0 && (
+          <span style={{ ...styles.paymentPill, background: '#f0fdf4', color: '#15803d', borderColor: '#bcf0da' }}>
+            💵 Dinheiro: <strong>{formatCurrency(breakdown.dinheiro)}</strong>
+          </span>
+        )}
+        {breakdown.pix > 0 && (
+          <span style={{ ...styles.paymentPill, background: '#eff6ff', color: '#1d4ed8', borderColor: '#bfdbfe' }}>
+            ❖ Pix: <strong>{formatCurrency(breakdown.pix)}</strong>
+          </span>
+        )}
+        {breakdown.credito > 0 && (
+          <span style={{ ...styles.paymentPill, background: '#fdf4ff', color: '#a21caf', borderColor: '#f5d0fe' }}>
+            💳 Crédito: <strong>{formatCurrency(breakdown.credito)}</strong>
+          </span>
+        )}
+        {breakdown.debito > 0 && (
+          <span style={{ ...styles.paymentPill, background: '#fff7ed', color: '#c2410c', borderColor: '#fed7aa' }}>
+            💳 Débito: <strong>{formatCurrency(breakdown.debito)}</strong>
+          </span>
+        )}
+        {breakdown.outros > 0 && (
+          <span style={{ ...styles.paymentPill, background: '#f8f9fa', color: '#475569', borderColor: '#e2e8f0' }}>
+            Outros: <strong>{formatCurrency(breakdown.outros)}</strong>
+          </span>
+        )}
+      </div>
+    </div>
+  );
+};
+
 export default function CashierSection({
   activeTab,
   cashierStatus,
@@ -41,14 +104,15 @@ export default function CashierSection({
   loading = false
 }) {
   if (activeTab === 'caixa') {
-    const currentSales = cashierStatus.isOpen && cashierStatus.data?.aberto_em
-      ? orders
-          .filter((order) => (
-            order.status === 'finalizado' &&
-            new Date(order.created_at) >= new Date(cashierStatus.data.aberto_em)
-          ))
-          .reduce((total, order) => total + Number(order.total || 0), 0)
-      : 0;
+    const currentOrders = cashierStatus.isOpen && cashierStatus.data?.aberto_em
+      ? orders.filter((order) => (
+          order.status === 'finalizado' &&
+          new Date(order.created_at) >= new Date(cashierStatus.data.aberto_em)
+        ))
+      : [];
+
+    const currentSales = currentOrders.reduce((total, order) => total + Number(order.total || 0), 0);
+    const currentBreakdown = calculatePaymentBreakdown(currentOrders);
 
     return (
       <div style={styles.sectionCard}>
@@ -116,6 +180,16 @@ export default function CashierSection({
               </div>
             </div>
 
+            {/* Resumo de pagamentos no caixa aberto */}
+            {currentOrders.length > 0 && (
+               <div style={{ background: '#f8f9fa', padding: '15px', borderRadius: '12px', border: '1px solid #eee', marginBottom: '25px' }}>
+                  <span style={{ fontSize: '0.85rem', fontWeight: 'bold', color: '#666', display: 'flex', alignItems: 'center', gap: '5px' }}>
+                     <Wallet size={16} /> ENTRADAS POR MÉTODO DE PAGAMENTO:
+                  </span>
+                  <PaymentBreakdownView breakdown={currentBreakdown} />
+               </div>
+            )}
+
             <div style={styles.operationNotice}>
               <p style={{ margin: 0, fontWeight: 'bold', color: '#856404' }}>
                 O caixa está operando. Todas as vendas finalizadas a partir de agora serão somadas ao fechamento.
@@ -160,6 +234,7 @@ export default function CashierSection({
           <div style={{ display: 'grid', gap: '15px' }}>
             {cashierHistory.map((cashier) => {
               const sessionOrders = getOrdersForCashier(cashier, orders);
+              const sessionBreakdown = calculatePaymentBreakdown(sessionOrders);
 
               return (
                 <div key={cashier.id} style={styles.historyCard}>
@@ -197,6 +272,9 @@ export default function CashierSection({
                       </div>
                     </div>
                   </div>
+
+                  {/* Resumo de métodos de pagamento bem visível */}
+                  <PaymentBreakdownView breakdown={sessionBreakdown} />
 
                   {sessionOrders.length > 0 && (
                     <div style={styles.sessionOrdersSection}>
@@ -460,6 +538,36 @@ const styles = {
   finalTotalValue: {
     color: '#000',
     fontSize: '1.3rem'
+  },
+  paymentBreakdownContainer: {
+    marginTop: '10px',
+    paddingTop: '10px',
+    borderTop: '1px dashed #cbd5e1'
+  },
+  paymentBreakdownLabel: {
+    fontSize: '0.75rem',
+    fontWeight: 'bold',
+    color: '#475569',
+    display: 'block',
+    marginBottom: '6px',
+    textTransform: 'uppercase',
+    letterSpacing: '0.5px'
+  },
+  paymentPillsWrapper: {
+    display: 'flex',
+    gap: '8px',
+    flexWrap: 'wrap'
+  },
+  paymentPill: {
+    padding: '6px 12px',
+    borderRadius: '8px',
+    fontSize: '0.85rem',
+    border: '1px solid',
+    display: 'inline-flex',
+    alignItems: 'center',
+    gap: '6px',
+    boxShadow: '0 1px 2px rgba(0,0,0,0.03)',
+    fontWeight: '500'
   },
   sessionOrdersSection: {
     marginTop: '15px',

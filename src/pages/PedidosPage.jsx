@@ -13,33 +13,34 @@ export default function PedidosPage({ addToCart, cartCount, openCart }) {
 
   const aberto = estabelecimentoAberto();
 
-const categories = [
-  {
-    name: 'Todos',
-    icon: LayoutGrid
-  },
-  {
-    name: 'Salgados',
-    icon: Sandwich
-  },
-  {
-    name: 'Pasteis',
-    label: 'Pastéis',
-    icon: Croissant
-  },
-  {
-    name: 'Bebidas',
-    icon: CupSoda
-  },
-  {
-    name: 'Doces',
-    icon: Candy
-  },
-  {
-    name: 'Salgadinhos',
-    icon: Popcorn
-  }
-];
+  const categories = [
+    {
+      name: 'Todos',
+      icon: LayoutGrid
+    },
+    {
+      name: 'Salgados',
+      icon: Sandwich
+    },
+    {
+      name: 'Pasteis',
+      label: 'Pastéis',
+      icon: Croissant
+    },
+    {
+      name: 'Bebidas',
+      icon: CupSoda
+    },
+    {
+      name: 'Doces',
+      icon: Candy
+    },
+    {
+      name: 'Salgadinhos',
+      icon: Popcorn
+    }
+  ];
+
   const getImageUrl = (imagePath) => {
     if (!imagePath || imagePath === '.') {
       return 'https://images.unsplash.com/photo-1513104890138-7c749659a591?w=400';
@@ -59,15 +60,18 @@ const categories = [
       try {
         setLoading(true);
 
+        // Buscamos todos os produtos e filtramos no front ou por 'ativo'
         const { data, error } = await supabase
           .from('produtos')
           .select('*')
-          .eq('active', true) 
           .order('name', { ascending: true });
 
         if (error) throw error;
 
-        setProducts(data || []);
+        // Filtra apenas os que estão ativos (se a coluna 'ativo' for false, esconde do cliente)
+        const activeProducts = (data || []).filter(item => item.ativo !== false);
+
+        setProducts(activeProducts);
       } catch (error) {
         console.error('Erro ao carregar produtos:', error.message);
       } finally {
@@ -125,27 +129,27 @@ const categories = [
         </div>
       )}
 
-    <div className="categories-container">
-  {categories.map((category) => {
-    const Icon = category.icon;
-    const isActive = filter === category.name;
+      <div className="categories-container">
+        {categories.map((category) => {
+          const Icon = category.icon;
+          const isActive = filter === category.name;
 
-    return (
-      <button
-        key={category.name}
-        type="button"
-        onClick={() => setFilter(category.name)}
-        className={`filter-btn ${isActive ? 'active' : ''}`}
-      >
-        <Icon size={17} strokeWidth={2.2} />
+          return (
+            <button
+              key={category.name}
+              type="button"
+              onClick={() => setFilter(category.name)}
+              className={`filter-btn ${isActive ? 'active' : ''}`}
+            >
+              <Icon size={17} strokeWidth={2.2} />
 
-        <span>
-          {category.label || category.name}
-        </span>
-      </button>
-    );
-  })}
-</div>
+              <span>
+                {category.label || category.name}
+              </span>
+            </button>
+          );
+        })}
+      </div>
 
       {loading ? (
         <div

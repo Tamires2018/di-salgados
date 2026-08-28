@@ -4,7 +4,7 @@ import {
   LogOut, Trash2, CheckCircle2, Play, PackageCheck, XCircle, 
   PlusCircle, LayoutDashboard, UtensilsCrossed, Edit, X, 
   CreditCard, MessageSquare, ClipboardList, Check, Banknote, Save, ImageIcon, Upload, Star,
-  History 
+  History, Eye, EyeOff 
 } from 'lucide-react';
 import { supabase } from '../services/supabase';
 import StatusBadge from '../components/StatusBadge';
@@ -308,7 +308,6 @@ export default function AdminDashboard() {
       'expired'
     ];
 
-    // Não permite entregar um pedido Pix cancelado, recusado ou expirado.
     if (
       isPix &&
       isFinishing &&
@@ -321,7 +320,6 @@ export default function AdminDashboard() {
       return;
     }
 
-    // Se o Pix estiver pendente, abre o nosso modal personalizado.
     if (
       isPix &&
       isFinishing &&
@@ -334,7 +332,6 @@ export default function AdminDashboard() {
       return;
     }
 
-    // Fluxo normal para Pix pago, dinheiro, crédito e débito.
     isUpdatingLocally.current = true;
 
     try {
@@ -508,7 +505,7 @@ export default function AdminDashboard() {
   const handleAddProduct = async (e) => {
     e.preventDefault();
     setLoading(true);
-    const { error } = await supabase.from('produtos').insert([{ ...newProduct, price: parsePrice(newProduct.price) }]);
+    const { error } = await supabase.from('produtos').insert([{ ...newProduct, price: parsePrice(newProduct.price), ativo: true }]);
     if (!error) {
       setNotification({ message: "Produto adicionado!", type: "success" });
       setNewProduct({ name: '', price: '', category: 'Salgados', image: '' });
@@ -525,6 +522,21 @@ export default function AdminDashboard() {
       setNotification({ message: "Produto atualizado!", type: "success" });
       setEditingProduct(null);
       loadProducts();
+    }
+    setLoading(false);
+  };
+
+  const handleToggleProduct = async (id, currentStatus) => {
+    const isActive = currentStatus === false ? false : true;
+    const newStatus = !isActive;
+    
+    setLoading(true);
+    const { error } = await supabase.from('produtos').update({ ativo: newStatus }).eq('id', id);
+    if (!error) {
+      setNotification({ message: newStatus ? "Produto ativado!" : "Produto pausado!", type: "success" });
+      loadProducts();
+    } else {
+      setNotification({ message: "Erro ao atualizar status.", type: "error" });
     }
     setLoading(false);
   };
@@ -647,12 +659,20 @@ export default function AdminDashboard() {
       {activeTab === 'editar' && (
         <div className="products-list" style={{ display: 'grid', gap: '10px' }}>
           {products.map(p => (
-            <div key={p.id} style={{ background: 'white', padding: '15px', borderRadius: '10px', display: 'flex', justifyContent: 'space-between', alignItems: 'center', border: '1px solid #eee' }}>
+            <div key={p.id} style={{ background: 'white', padding: '15px', borderRadius: '10px', display: 'flex', justifyContent: 'space-between', alignItems: 'center', border: '1px solid #eee', opacity: p.ativo === false ? 0.6 : 1 }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-                {p.image && <img src={p.image} alt="" style={{ width: '40px', height: '40px', borderRadius: '6px', objectFit: 'cover' }} />}
-                <div><strong style={{ display: 'block' }}>{p.name}</strong><span style={{ color: '#ef4444', fontWeight: 'bold' }}>{formatCurrency(p.price)}</span><span style={{ fontSize: '0.8rem', color: '#999', marginLeft: '10px' }}>({p.category})</span></div>
+                {p.image && <img src={p.image} alt="" style={{ width: '40px', height: '40px', borderRadius: '6px', objectFit: 'cover', filter: p.ativo === false ? 'grayscale(100%)' : 'none' }} />}
+                <div>
+                  <strong style={{ display: 'block', textDecoration: p.ativo === false ? 'line-through' : 'none' }}>{p.name}</strong>
+                  <span style={{ color: '#ef4444', fontWeight: 'bold' }}>{formatCurrency(p.price)}</span>
+                  <span style={{ fontSize: '0.8rem', color: '#999', marginLeft: '10px' }}>({p.category})</span>
+                  {p.ativo === false && <span style={{ fontSize: '0.75rem', background: '#fee2e2', color: '#ef4444', padding: '2px 6px', borderRadius: '4px', marginLeft: '10px', fontWeight: 'bold' }}>Pausado</span>}
+                </div>
               </div>
               <div style={{ display: 'flex', gap: '10px' }}>
+                <button onClick={() => handleToggleProduct(p.id, p.ativo)} title={p.ativo === false ? 'Reativar produto' : 'Pausar produto'} style={{ background: '#f3f4f6', color: '#4b5563', border: 'none', padding: '8px', borderRadius: '5px', cursor: 'pointer' }}>
+                  {p.ativo === false ? <EyeOff size={16}/> : <Eye size={16}/>}
+                </button>
                 <button onClick={() => setEditingProduct({...p, price: formatCurrency(p.price)})} style={{ background: '#f0f0f0', border: 'none', padding: '8px', borderRadius: '5px', cursor: 'pointer' }}><Edit size={16}/></button>
                 <button onClick={() => handleDeleteProduct(p.id)} style={{ background: '#fee2e2', color: '#ef4444', border: 'none', padding: '8px', borderRadius: '5px', cursor: 'pointer' }}><Trash2 size={16}/></button>
               </div>
