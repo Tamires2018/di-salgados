@@ -12,6 +12,7 @@ import Toast from '../components/Toast';
 import ConfirmationModal from '../components/ConfirmationModal';
 import OrderCard from '../components/OrderCard';
 import CashierSection from '../components/CashierSection';
+import AdminNotificationBell from '../components/AdminNotificationBell'; // <- Nosso botão de sininho integrado
 import { formatCurrency } from '../utils/formatCurrency';
 import { notifyNewOrder } from '../services/notifications';
 
@@ -569,9 +570,13 @@ export default function AdminDashboard() {
       {/* HEADER */}
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px' }}>
         <h1 style={{ fontSize: '1.5rem', fontWeight: '800' }}>Gestão Di Salgados</h1>
-        <button onClick={() => navigate('/')} className="btn-exit" style={{ display: 'flex', alignItems: 'center', gap: '5px', padding: '8px 15px', borderRadius: '8px', border: '1px solid #ddd', background: 'white', cursor: 'pointer' }}>
-          <LogOut size={18} /> Sair
-        </button>
+        
+        <div style={{ display: 'flex', gap: '10px', alignItems: 'center' }}>
+          <AdminNotificationBell />
+          <button onClick={() => navigate('/')} className="btn-exit" style={{ display: 'flex', alignItems: 'center', gap: '5px', padding: '8px 15px', borderRadius: '8px', border: '1px solid #ddd', background: 'white', cursor: 'pointer' }}>
+            <LogOut size={18} /> Sair
+          </button>
+        </div>
       </div>
 
       {/* TABS DE NAVEGAÇÃO ENXUTAS */}
