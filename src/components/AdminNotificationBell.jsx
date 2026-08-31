@@ -3,7 +3,7 @@ import { Bell, BellOff } from 'lucide-react';
 import { supabase } from '../services/supabase';
 
 // Cole aqui a sua Public Key gerada nas chaves VAPID
-const PUBLIC_VAPID_KEY = 'BGKOF-fFpPj11kUMHDlM0f3H8SI7vC5uke7_F0DQN_Zk9_82nFc46FeTLFNkLtnuXcoLVsSnZN2sfQC56yib3WQ';
+const PUBLIC_VAPID_KEY = 'SUA_CHAVE_PUBLICA_AQUI';
 
 function urlBase64ToUint8Array(base64String) {
   const padding = '='.repeat((4 - (base64String.length % 4)) % 4);
@@ -43,17 +43,14 @@ export default function AdminNotificationBell() {
       const registration = await navigator.serviceWorker.ready;
 
       if (isSubscribed) {
-        // Desinscrever
         const subscription = await registration.pushManager.getSubscription();
         if (subscription) {
           await subscription.unsubscribe();
-          // Remove do Supabase
           await supabase.from('admin_subscriptions').delete().eq('endpoint', subscription.endpoint);
         }
         setIsSubscribed(false);
         alert('Notificações desativadas.');
       } else {
-        // Pedir permissão
         const permission = await Notification.requestPermission();
         if (permission !== 'granted') {
           alert('Permissão de notificação negada pelo usuário.');
@@ -61,7 +58,6 @@ export default function AdminNotificationBell() {
           return;
         }
 
-        // Inscrever no Push
         const convertedKey = urlBase64ToUint8Array(PUBLIC_VAPID_KEY);
         const subscription = await registration.pushManager.subscribe({
           userVisibleOnly: true,
@@ -70,7 +66,6 @@ export default function AdminNotificationBell() {
 
         const subJson = subscription.toJSON();
 
-        // Salvar no Supabase
         const { error } = await supabase.from('admin_subscriptions').upsert({
           endpoint: subJson.endpoint,
           p256dh: subJson.keys.p256dh,
@@ -98,20 +93,21 @@ export default function AdminNotificationBell() {
       style={{
         display: 'flex',
         alignItems: 'center',
-        gap: '6px',
-        padding: '8px 12px',
+        gap: '5px',
+        padding: '8px 15px',
         borderRadius: '8px',
         border: '1px solid #ddd',
         background: isSubscribed ? '#f0fdf4' : 'white',
         color: isSubscribed ? '#166534' : '#666',
         cursor: 'pointer',
-        fontWeight: '600',
-        fontSize: '0.85rem'
+        fontWeight: 'normal',
+        fontSize: '1rem',
+        whiteSpace: 'nowrap'
       }}
       title={isSubscribed ? 'Notificações ativadas' : 'Ativar notificações'}
     >
-      {isSubscribed ? <Bell size={16} color="#166534" /> : <BellOff size={16} color="#999" />}
-      <span>{isSubscribed ? 'Ativas' : 'Ativar Alerta'}</span>
+      {isSubscribed ? <Bell size={18} color="#166534" /> : <BellOff size={18} color="#999" />}
+      <span>{isSubscribed ? 'Ativas' : 'Alerta'}</span>
     </button>
   );
 }
