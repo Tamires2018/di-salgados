@@ -101,7 +101,7 @@ export default function AdminNotificationBell() {
 
   return (
     <>
-      <button
+    <button
         type="button"
         onClick={toggleSubscription}
         disabled={loading}
@@ -111,16 +111,17 @@ export default function AdminNotificationBell() {
           gap: '5px',
           padding: '8px 15px',
           borderRadius: '8px',
-          border: '1px solid #ddd',
-          background: isSubscribed ? '#f0fdf4' : 'white',
-          color: isSubscribed ? '#166534' : '#333',
+          border: '1px solid',
+          borderColor: isSubscribed ? '#bcf0da' : '#fca5a5',
+          background: isSubscribed ? '#f0fdf4' : '#fef2f2',
+          color: isSubscribed ? '#166534' : '#dc2626',
           cursor: 'pointer',
           fontSize: '1rem',
           whiteSpace: 'nowrap'
         }}
         title={isSubscribed ? 'Notificações ativadas' : 'Ativar notificações'}
       >
-        {isSubscribed ? <Bell size={18} color="#166534" /> : <BellOff size={18} color="#666" />}
+        {isSubscribed ? <Bell size={18} color="#166534" /> : <BellOff size={18} color="#dc2626" />}
         <span>{isSubscribed ? 'Ativas' : 'Alerta'}</span>
       </button>
 
