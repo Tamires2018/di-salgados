@@ -56,14 +56,14 @@ export default function AdminNotificationBell() {
     try {
       const registration = await navigator.serviceWorker.ready;
 
-      if (isSubscribed) {
+     if (isSubscribed) {
         const subscription = await registration.pushManager.getSubscription();
         if (subscription) {
           await subscription.unsubscribe();
           await supabase.from('admin_subscriptions').delete().eq('endpoint', subscription.endpoint);
         }
         setIsSubscribed(false);
-        setToast({ message: 'Notificações desativadas.', type: 'success' });
+        setToast({ message: 'Notificações desativadas.', type: 'error' }); // <- Mudamos para 'error' aqui!
       } else {
         const permission = await Notification.requestPermission();
         if (permission !== 'granted') {
