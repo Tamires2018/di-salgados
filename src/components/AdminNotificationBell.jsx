@@ -2,8 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { Bell, BellOff } from 'lucide-react';
 import { supabase } from '../services/supabase';
 
-// Cole aqui a sua Public Key gerada nas chaves VAPID
-const PUBLIC_VAPID_KEY = 'SUA_CHAVE_PUBLICA_AQUI';
+// Cole aqui a sua Public Key gerada nas chaves VAPID (sem espaços)
+const PUBLIC_VAPID_KEY = 'BGKOF-fFpPj11kUMHDlM0f3H8SI7vC5uke7_F0DQN_Zk9_82nFc46FeTLFNkLtnuXcoLVsSnZN2sfQC56yib3WQ';
 
 function urlBase64ToUint8Array(base64String) {
   const padding = '='.repeat((4 - (base64String.length % 4)) % 4);
@@ -25,16 +25,20 @@ export default function AdminNotificationBell() {
   }, []);
 
   async function checkSubscription() {
-    if ('serviceWorker' in navigator && 'PushManager' in window) {
-      const registration = await navigator.serviceWorker.ready;
-      const subscription = await registration.pushManager.getSubscription();
-      setIsSubscribed(!!subscription);
+    try {
+      if ('serviceWorker' in navigator && 'PushManager' in window) {
+        const registration = await navigator.serviceWorker.ready;
+        const subscription = await registration.pushManager.getSubscription();
+        setIsSubscribed(!!subscription);
+      }
+    } catch (err) {
+      console.error('Erro ao checar inscrição:', err);
     }
   }
 
   async function toggleSubscription() {
-    if (!('serviceWorker' in navigator)) {
-      alert('Seu navegador não suporta notificações.');
+    if (!('serviceWorker' in navigator) || !('PushManager' in window)) {
+      alert('Seu navegador não suporta notificações push.');
       return;
     }
 
@@ -53,7 +57,7 @@ export default function AdminNotificationBell() {
       } else {
         const permission = await Notification.requestPermission();
         if (permission !== 'granted') {
-          alert('Permissão de notificação negada pelo usuário.');
+          alert('Permissão de notificação negada pelo navegador.');
           setLoading(false);
           return;
         }
@@ -78,8 +82,8 @@ export default function AdminNotificationBell() {
         alert('Notificações ativadas com sucesso!');
       }
     } catch (error) {
-      console.error('Erro ao alternar inscrições:', error);
-      alert('Erro ao configurar notificações.');
+      console.error('Erro detalhado ao configurar notificações:', error);
+      alert(`Erro ao configurar notificações: ${error.message || error}`);
     } finally {
       setLoading(false);
     }
@@ -98,15 +102,14 @@ export default function AdminNotificationBell() {
         borderRadius: '8px',
         border: '1px solid #ddd',
         background: isSubscribed ? '#f0fdf4' : 'white',
-        color: isSubscribed ? '#166534' : '#666',
+        color: isSubscribed ? '#166534' : '#333',
         cursor: 'pointer',
-        fontWeight: 'normal',
         fontSize: '1rem',
         whiteSpace: 'nowrap'
       }}
       title={isSubscribed ? 'Notificações ativadas' : 'Ativar notificações'}
     >
-      {isSubscribed ? <Bell size={18} color="#166534" /> : <BellOff size={18} color="#999" />}
+      {isSubscribed ? <Bell size={18} color="#166534" /> : <BellOff size={18} color="#666" />}
       <span>{isSubscribed ? 'Ativas' : 'Alerta'}</span>
     </button>
   );
