@@ -1,16 +1,24 @@
 import React, { useState, useEffect } from 'react';
 import { Bell, BellOff } from 'lucide-react';
 import { supabase } from '../services/supabase';
-import Toast from './Toast'; // <- Importando o componente de Toast elegante
+import Toast from './Toast';
 
-// Cole aqui a sua Public Key gerada nas chaves VAPID
-const PUBLIC_VAPID_KEY = 'SUA_CHAVE_PUBLICA_AQUI';
+// Cole a sua chave pública VAPID aqui entre as aspas
+const PUBLIC_VAPID_KEY = 'BGKOF-fFpPj11kUMHDlM0f3H8SI7vC5uke7_F0DQN_Zk9_82nFc46FeTLFNkLtnuXcoLVsSnZN2sfQC56yib3WQ';
 
 function urlBase64ToUint8Array(base64String) {
+  if (!base64String) {
+    throw new Error("A chave VAPID pública está vazia!");
+  }
+  
   const padding = '='.repeat((4 - (base64String.length % 4)) % 4);
-  const base64 = (base64String + padding).replace(/-/g, '+').replace(/_/g, '/');
+  const base64 = (base64String + padding)
+    .replace(/\-/g, '+')
+    .replace(/_/g, '/');
+
   const rawData = window.atob(base64);
   const outputArray = new Uint8Array(rawData.length);
+
   for (let i = 0; i < rawData.length; ++i) {
     outputArray[i] = rawData.charCodeAt(i);
   }
@@ -20,7 +28,7 @@ function urlBase64ToUint8Array(base64String) {
 export default function AdminNotificationBell() {
   const [isSubscribed, setIsSubscribed] = useState(false);
   const [loading, setLoading] = useState(false);
-  const [toast, setToast] = useState(null); // <- Estado para controlar o aviso flutuante
+  const [toast, setToast] = useState(null);
 
   useEffect(() => {
     checkSubscription();
@@ -116,7 +124,6 @@ export default function AdminNotificationBell() {
         <span>{isSubscribed ? 'Ativas' : 'Alerta'}</span>
       </button>
 
-      {/* Componente Toast flutuante bonito igual ao resto do sistema */}
       {toast && (
         <Toast 
           message={toast.message} 
