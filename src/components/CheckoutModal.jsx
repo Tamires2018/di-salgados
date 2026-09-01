@@ -136,6 +136,19 @@ export default function CheckoutModal({
       setOrderId(createdOrderId);
       onOrderCreated?.(createdOrderId);
 
+      // Dispara o Push Notification em tempo real via Edge Function para o painel admin
+      try {
+        await supabase.functions.invoke('hyper-worker', {
+          body: {
+            type: 'INSERT',
+            table: 'orders',
+            record: data
+          }
+        });
+      } catch (pushErr) {
+        console.error('Erro ao disparar notificação push:', pushErr);
+      }
+
       if (formData.payment === 'pix') {
         const generatedPixCode = generatePix({
           key: 'tamiresledoa@gmail.com',
@@ -311,28 +324,28 @@ export default function CheckoutModal({
                 </div>
               )}
 
-            <button
-            type="submit"
-            disabled={loading || !aberto}
-            style={{
-              width: '100%',
-              padding: '16px',
-              background: aberto ? '#28a745' : '#999',
-              color: 'white',
-              border: 'none',
-              borderRadius: '12px',
-              fontWeight: '800',
-              fontSize: '1.1rem',
-              cursor: (loading || !aberto) ? 'not-allowed' : 'pointer',
-              opacity: (loading || !aberto) ? 0.7 : 1
-            }}
-          >
-            {loading
-              ? "Processando..."
-              : aberto
-                ? "Confirmar Pedido"
-                : "Estabelecimento Fechado"}
-          </button>   
+              <button
+                type="submit"
+                disabled={loading || !aberto}
+                style={{
+                  width: '100%',
+                  padding: '16px',
+                  background: aberto ? '#28a745' : '#999',
+                  color: 'white',
+                  border: 'none',
+                  borderRadius: '12px',
+                  fontWeight: '800',
+                  fontSize: '1.1rem',
+                  cursor: (loading || !aberto) ? 'not-allowed' : 'pointer',
+                  opacity: (loading || !aberto) ? 0.7 : 1
+                }}
+              >
+                {loading
+                  ? "Processando..."
+                  : aberto
+                    ? "Confirmar Pedido"
+                    : "Estabelecimento Fechado"}
+              </button>   
             </form>
           </div>
         </div>
