@@ -16,19 +16,19 @@ export default function CheckoutModal({
   onOrderCreated,
   notesFromCart
 }) {
-const [notification, setNotification] = useState(null);
-const [loading, setLoading] = useState(false);
-const [showFeedback, setShowFeedback] = useState(false);
-const [showPixModal, setShowPixModal] = useState(false);
-const [orderId, setOrderId] = useState(null);
-const [pixCode, setPixCode] = useState('');
-const [formData, setFormData] = useState({
-  name: '',
-  phone: '',
-  payment: 'pix',
-  needsChange: false,
-  changeValue: ''
-});
+  const [notification, setNotification] = useState(null);
+  const [loading, setLoading] = useState(false);
+  const [showFeedback, setShowFeedback] = useState(false);
+  const [showPixModal, setShowPixModal] = useState(false);
+  const [orderId, setOrderId] = useState(null);
+  const [pixCode, setPixCode] = useState('');
+  const [formData, setFormData] = useState({
+    name: '',
+    phone: '',
+    payment: 'pix',
+    needsChange: false,
+    changeValue: ''
+  });
 
   // Funções de Máscara
   const maskPhone = (value) => {
@@ -65,24 +65,22 @@ const [formData, setFormData] = useState({
 
   const handleFeedbackSubmit = async (data) => {
     try {
-      // Faz o insert diretamente na tabela de feedbacks que você criou
       const { error } = await supabase
         .from('feedbacks')
         .insert([{
           order_id: orderId,
           stars: data.stars,
           comment: data.comment,
-          customer_name: formData.name // Aproveita o nome que já está no estado do checkout
+          customer_name: formData.name
         }]);
 
       if (error) throw error;
 
-      resetForm(); // Limpa o formulário antes de fechar
+      resetForm(); 
       onOrderSuccess(); 
     } catch (err) {
       console.error("Erro ao salvar feedback:", err);
-      // Mesmo com erro no feedback, finalizamos o fluxo do pedido
-      resetForm(); // Limpa o formulário mesmo com erro
+      resetForm(); 
       onOrderSuccess();
     }
   };
@@ -90,12 +88,12 @@ const [formData, setFormData] = useState({
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!estabelecimentoAberto()) {
-    setNotification({
-      message: "Estamos fechados. Nosso horário de atendimento é de segunda a sexta, das 07:00 às 16:10.",
-      type: "error"
-    });
-    return;
-  }    
+      setNotification({
+        message: "Estamos fechados. Nosso horário de atendimento é de segunda a sexta, das 07:00 às 16:10.",
+        type: "error"
+      });
+      return;
+    }    
     setLoading(true);
 
     const parts = [];
@@ -138,6 +136,19 @@ const [formData, setFormData] = useState({
       setOrderId(createdOrderId);
       onOrderCreated?.(createdOrderId);
 
+      // Dispara o Push Notification em tempo real via Edge Function
+      try {
+        await supabase.functions.invoke('hyper-worker', {
+          body: {
+            type: 'INSERT',
+            table: 'orders',
+            record: data
+          }
+        });
+      } catch (pushErr) {
+        console.error('Erro ao disparar notificação push:', pushErr);
+      }
+
       if (formData.payment === 'pix') {
         const generatedPixCode = generatePix({
           key: 'tamiresledoa@gmail.com',
@@ -164,7 +175,6 @@ const [formData, setFormData] = useState({
     }
   };
 
-  // Se fechar no "X", também limpa o formulário
   const handleClose = () => {
     resetForm();
     onClose();
@@ -210,14 +220,13 @@ const [formData, setFormData] = useState({
               borderRadius: '20px', 
               maxWidth: '450px', 
               width: '100%',
-              height: 'auto', // Ajusta a altura ao conteúdo
-              maxHeight: '90vh', // Evita que saia da tela
-              overflowY: 'auto', // Scroll caso o conteúdo seja grande
+              height: 'auto',
+              maxHeight: '90vh',
+              overflowY: 'auto',
               boxShadow: '0 10px 25px rgba(0,0,0,0.2)',
               position: 'relative'
             }}
           >
-            {/* Cabeçalho */}
             <div style={{ 
               display: 'flex', 
               justifyContent: 'space-between', 
@@ -236,7 +245,6 @@ const [formData, setFormData] = useState({
             </div>
 
             <form onSubmit={handleSubmit}>
-              {/* Campo Nome */}
               <div style={{ marginBottom: '15px' }}>
                 <label style={{ display: 'block', marginBottom: '8px', fontWeight: '600', fontSize: '0.9rem' }}>Nome</label>
                 <input 
@@ -248,7 +256,6 @@ const [formData, setFormData] = useState({
                 />
               </div>
 
-              {/* Campo Telefone */}
               <div style={{ marginBottom: '15px' }}>
                 <label style={{ display: 'block', marginBottom: '8px', fontWeight: '600', fontSize: '0.9rem' }}>Telefone</label>
                 <input 
@@ -261,7 +268,6 @@ const [formData, setFormData] = useState({
                 />
               </div>
 
-              {/* Forma de Pagamento */}
               <div style={{ marginBottom: '20px' }}>
                 <label style={{ display: 'block', marginBottom: '8px', fontWeight: '600', fontSize: '0.9rem' }}>Forma de Pagamento</label>
                 <select 
@@ -276,7 +282,6 @@ const [formData, setFormData] = useState({
                 </select>
               </div>
 
-              {/* Lógica de Troco */}
               {formData.payment === 'dinheiro' && (
                 <div style={{ marginBottom: '20px', padding: '15px', background: '#f8f9fa', borderRadius: '12px', border: '1px solid #e9ecef' }}>
                   <label style={{ display: 'flex', alignItems: 'center', gap: '10px', cursor: 'pointer', fontWeight: '600' }}>
@@ -319,7 +324,6 @@ const [formData, setFormData] = useState({
                 </div>
               )}
 
-              {/* Botão Finalizar */}
             <button
             type="submit"
             disabled={loading || !aberto}
@@ -347,7 +351,6 @@ const [formData, setFormData] = useState({
         </div>
       )}
 
-      {/* Modal de pagamento Pix */}
       <PixPaymentModal
         isOpen={showPixModal}
         onClose={handlePixClose}
@@ -357,7 +360,6 @@ const [formData, setFormData] = useState({
         onPaymentDone={handlePixPaymentDone}
       />
 
-      {/* Modais de Suporte */}
       <FeedbackModal 
         isOpen={showFeedback} 
         onClose={() => { resetForm(); onOrderSuccess(); }} 
