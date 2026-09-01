@@ -136,19 +136,6 @@ export default function CheckoutModal({
       setOrderId(createdOrderId);
       onOrderCreated?.(createdOrderId);
 
-      // Dispara o Push Notification em tempo real via Edge Function
-      try {
-        await supabase.functions.invoke('hyper-worker', {
-          body: {
-            type: 'INSERT',
-            table: 'orders',
-            record: data
-          }
-        });
-      } catch (pushErr) {
-        console.error('Erro ao disparar notificação push:', pushErr);
-      }
-
       if (formData.payment === 'pix') {
         const generatedPixCode = generatePix({
           key: 'tamiresledoa@gmail.com',
