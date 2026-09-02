@@ -22,13 +22,9 @@ export default function App() {
   const [notification, setNotification] = useState(null);
   const [tempGeneralNote, setTempGeneralNote] = useState('');
 
-  const [currentOrderId, setCurrentOrderId] = useState(() => {
-    return localStorage.getItem('currentOrderId');
-  });
-
-  const [showOrderTracking, setShowOrderTracking] = useState(() => {
-    return Boolean(localStorage.getItem('currentOrderId'));
-  });
+  // Iniciam vazios para a página carregar limpa sem exibir pop-up ao atualizar
+  const [currentOrderId, setCurrentOrderId] = useState(null);
+  const [showOrderTracking, setShowOrderTracking] = useState(false);
 
   useEffect(() => {
     initializeNotifications();
