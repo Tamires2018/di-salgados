@@ -11,15 +11,30 @@ ReactDOM.createRoot(document.getElementById('root')).render(
   </React.StrictMode>
 );
 
-// Registra o Service Worker responsável pelas notificações Push
+// ======================================================
+// SERVICE WORKER - NOTIFICAÇÕES PUSH
+// ======================================================
+
 if ('serviceWorker' in navigator) {
   window.addEventListener('load', async () => {
     try {
-      const registration = await navigator.serviceWorker.register('/sw.js');
+      const registration = await navigator.serviceWorker.register(
+        '/sw.js',
+        {
+          scope: '/'
+        }
+      );
 
       console.log(
         '[PWA] Service Worker registrado:',
         registration.scope
+      );
+
+      // Garante que o navegador atualize o Service Worker
+      await registration.update();
+
+      console.log(
+        '[PWA] Service Worker atualizado/verificado.'
       );
     } catch (error) {
       console.error(
