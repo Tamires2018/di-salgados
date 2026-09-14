@@ -2889,3 +2889,30 @@ html[data-theme='dark'] .contact-card a.contact-instagram svg {
   color: #E1306C !important;
   stroke: #E1306C !important;
 }
+/* ================================
+   PEDIDOS - MODO NOTURNO
+================================ */
+
+/* Barra de pesquisa no modo noturno */
+html[data-theme='dark'] .search-container {
+  background: transparent !important;
+}
+
+html[data-theme='dark'] .search-input {
+  background: #1b1b1b !important;
+  color: #ffffff !important;
+  border-color: #ff3030 !important;
+}
+
+html[data-theme='dark'] .search-input::placeholder {
+  color: #a9a9a9 !important;
+}
+
+html[data-theme='dark'] .search-icon-wrapper {
+  color: #ff3030 !important;
+}
+
+html[data-theme='dark'] .search-icon-wrapper svg {
+  color: #ff3030 !important;
+  stroke: #ff3030 !important;
+}
