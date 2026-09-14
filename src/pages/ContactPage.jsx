@@ -15,15 +15,33 @@ export default function ContactPage() {
           <h3 style={{ marginBottom: '20px', color: 'var(--primary)' }}>Canais Diretos</h3>
           
           <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
-            <a href="https://wa.me/5514988040296" target="_blank" rel="noreferrer" 
-               style={{ display: 'flex', alignItems: 'center', gap: '12px', textDecoration: 'none', color: '#25D366', fontWeight: 'bold', fontSize: '1.1rem' }}>
-              <MessageCircle size={24} /> WhatsApp
-            </a>
+ <a className="contact-whatsapp" href="https://wa.me/5514988040296" target="_blank" rel="noreferrer"
+  style={{
+    display: 'flex',
+    alignItems: 'center',
+    gap: '12px',
+    textDecoration: 'none',
+    color: '#25D366',
+    fontWeight: 'bold',
+    fontSize: '1.1rem'
+  }}
+>
+  <MessageCircle size={24} /> WhatsApp
+</a>
 
-            <a href="https://instagram.com/dionizia_ledo" target="_blank" rel="noreferrer"
-               style={{ display: 'flex', alignItems: 'center', gap: '12px', textDecoration: 'none', color: '#E1306C', fontWeight: 'bold', fontSize: '1.1rem' }}>
-              <Instagram size={24} /> @dionizia_ledo
-            </a>
+<a className="contact-instagram" href="https://instagram.com/dionizia_ledo" target="_blank" rel="noreferrer"
+  style={{
+    display: 'flex',
+    alignItems: 'center',
+    gap: '12px',
+    textDecoration: 'none',
+    color: '#E1306C',
+    fontWeight: 'bold',
+    fontSize: '1.1rem'
+  }}
+>
+  <Instagram size={24} /> @dionizia_ledo
+</a> 
 
             <div style={{ display: 'flex', alignItems: 'center', gap: '12px', color: 'var(--text-main)' }}>
               <Mail size={24} color="var(--primary)" /> salgadosdi92@gmail.com

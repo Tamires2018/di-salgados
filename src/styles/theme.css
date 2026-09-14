@@ -2821,3 +2821,71 @@ html[data-theme='dark'] .site-mobile-nav button svg {
   color: #ffffff !important;
   stroke: #ffffff !important;
 }
+
+/* =========================================================
+   ADMIN — TÍTULO "GESTÃO DI SALGADOS"
+   ========================================================= */
+
+/* Modo noturno: deixa o título branco */
+html[data-theme='dark'] .admin-dashboard-title {
+  color: #ffffff !important;
+}
+
+/* =========================================================
+   CONTATO — WHATSAPP E INSTAGRAM
+   ========================================================= */
+
+/* WhatsApp */
+.contact-card a.contact-whatsapp,
+.contact-card a.contact-whatsapp:link,
+.contact-card a.contact-whatsapp:visited {
+  color: #25D366 !important;
+  text-decoration: none !important;
+}
+
+.contact-card a.contact-whatsapp svg {
+  color: #25D366 !important;
+  stroke: #25D366 !important;
+}
+
+
+/* Instagram */
+.contact-card a.contact-instagram,
+.contact-card a.contact-instagram:link,
+.contact-card a.contact-instagram:visited {
+  color: #E1306C !important;
+  text-decoration: none !important;
+}
+
+.contact-card a.contact-instagram svg {
+  color: #E1306C !important;
+  stroke: #E1306C !important;
+}
+
+
+/* =========================================================
+   MODO NOTURNO — MANTÉM AS CORES DAS REDES
+   ========================================================= */
+
+html[data-theme='dark'] .contact-card a.contact-whatsapp,
+html[data-theme='dark'] .contact-card a.contact-whatsapp:link,
+html[data-theme='dark'] .contact-card a.contact-whatsapp:visited {
+  color: #25D366 !important;
+}
+
+html[data-theme='dark'] .contact-card a.contact-whatsapp svg {
+  color: #25D366 !important;
+  stroke: #25D366 !important;
+}
+
+
+html[data-theme='dark'] .contact-card a.contact-instagram,
+html[data-theme='dark'] .contact-card a.contact-instagram:link,
+html[data-theme='dark'] .contact-card a.contact-instagram:visited {
+  color: #E1306C !important;
+}
+
+html[data-theme='dark'] .contact-card a.contact-instagram svg {
+  color: #E1306C !important;
+  stroke: #E1306C !important;
+}

@@ -569,7 +569,7 @@ export default function AdminDashboard() {
     <div className="container" style={{ marginTop: '20px', paddingBottom: '40px' }}>
       {/* HEADER */}
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px' }}>
-        <h1 style={{ fontSize: '1.5rem', fontWeight: '800' }}>Gestão Di Salgados</h1>
+        <h1 className="admin-dashboard-title">Gestão Di Salgados</h1>
         
         <div style={{ display: 'flex', gap: '10px', alignItems: 'center' }}>
           <AdminNotificationBell />
