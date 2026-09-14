@@ -1,0 +1,2802 @@
+:root {
+  --theme-transition:
+    background-color 0.25s ease,
+    color 0.25s ease,
+    border-color 0.25s ease,
+    box-shadow 0.25s ease;
+}
+
+/* =========================================================
+   BOTÃO DE TEMA
+   ========================================================= */
+
+.theme-toggle {
+  width: 42px;
+  height: 42px;
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  border: 1px solid #dddddd;
+  border-radius: 10px;
+
+  background: #ffffff;
+  color: #333333;
+
+  cursor: pointer;
+
+  transition:
+    background-color 0.2s ease,
+    color 0.2s ease,
+    border-color 0.2s ease,
+    transform 0.2s ease;
+}
+
+.theme-toggle:hover {
+  background: #f3f3f3;
+  transform: translateY(-1px);
+}
+
+/* =========================================================
+   MODO CLARO - BASE
+   ========================================================= */
+
+html[data-theme='light'] body {
+  background: #f8f9fa;
+  color: #222222;
+}
+
+/* =========================================================
+   MODO ESCURO - BASE
+   ========================================================= */
+
+html[data-theme='dark'] body {
+  background: #0f0f0f;
+  color: #f5f5f5;
+}
+
+/* =========================================================
+   BOTÃO DE TEMA - ESCURO
+   ========================================================= */
+
+html[data-theme='dark'] .theme-toggle {
+  background: #202020;
+  color: #ffffff;
+  border-color: #444444;
+}
+
+html[data-theme='dark'] .theme-toggle:hover {
+  background: #2d2d2d;
+}
+
+/* =========================================================
+   HEADER
+   ========================================================= */
+
+html[data-theme='dark'] .site-header {
+  color: #ffffff;
+}
+
+html[data-theme='dark'] .site-nav-link {
+  color: #ffffff;
+}
+
+html[data-theme='dark'] .site-mobile-menu {
+  background: #171717;
+  border-color: #333333;
+}
+
+html[data-theme='dark'] .site-mobile-menu-link {
+  color: #ffffff;
+}
+
+/* =========================================================
+   ÁREA ADMINISTRATIVA - BASE
+   ========================================================= */
+
+html[data-theme='light'] .admin-dashboard-page {
+  color: #222222;
+}
+
+html[data-theme='dark'] .admin-dashboard-page {
+  color: #f5f5f5;
+}
+
+/* =========================================================
+   ABAS DO ADMIN - MODO CLARO
+   ========================================================= */
+
+html[data-theme='light']
+.admin-dashboard-page
+.admin-tab {
+  color: #555555 !important;
+  background: transparent !important;
+}
+
+html[data-theme='light']
+.admin-dashboard-page
+.admin-tab:hover {
+  color: #222222 !important;
+  background: #f3f3f3 !important;
+}
+
+html[data-theme='light']
+.admin-dashboard-page
+.admin-tab.active {
+  color: #d32f2f !important;
+  background: #ffffff !important;
+}
+
+/* =========================================================
+   ABAS DO ADMIN - MODO ESCURO
+   ========================================================= */
+
+html[data-theme='dark']
+.admin-dashboard-page
+.admin-tab {
+  color: #cfcfcf !important;
+  background: transparent !important;
+}
+
+html[data-theme='dark']
+.admin-dashboard-page
+.admin-tab:hover {
+  color: #ffffff !important;
+  background: #292929 !important;
+}
+
+html[data-theme='dark']
+.admin-dashboard-page
+.admin-tab.active {
+  color: #ff6b6b !important;
+  background: #222222 !important;
+}
+
+/* =========================================================
+   FILTROS - CLARO
+   ========================================================= */
+
+html[data-theme='light']
+.admin-dashboard-page
+.admin-filter {
+  background: #f0f0f0 !important;
+  color: #555555 !important;
+  border-color: #dddddd !important;
+}
+
+html[data-theme='light']
+.admin-dashboard-page
+.admin-filter:hover {
+  background: #e5e5e5 !important;
+  color: #222222 !important;
+}
+
+html[data-theme='light']
+.admin-dashboard-page
+.admin-filter.active {
+  background: #d32f2f !important;
+  color: #ffffff !important;
+  border-color: #d32f2f !important;
+}
+
+/* =========================================================
+   FILTROS - ESCURO
+   ========================================================= */
+
+html[data-theme='dark']
+.admin-dashboard-page
+.admin-filter {
+  background: #292929 !important;
+  color: #dddddd !important;
+  border-color: #444444 !important;
+}
+
+html[data-theme='dark']
+.admin-dashboard-page
+.admin-filter:hover {
+  background: #353535 !important;
+  color: #ffffff !important;
+}
+
+html[data-theme='dark']
+.admin-dashboard-page
+.admin-filter.active {
+  background: #d32f2f !important;
+  color: #ffffff !important;
+  border-color: #d32f2f !important;
+}
+
+/* =========================================================
+   SUPERFÍCIES ADMIN - ESCURO
+   ========================================================= */
+
+html[data-theme='dark']
+.admin-dashboard-page
+.admin-main-surface {
+  background: #161616 !important;
+  color: #f5f5f5 !important;
+  border-color: #333333 !important;
+}
+
+html[data-theme='dark']
+.admin-dashboard-page
+.admin-add-product {
+  background: #1b1b1b !important;
+  color: #f5f5f5 !important;
+  border-color: #333333 !important;
+}
+
+html[data-theme='dark']
+.admin-dashboard-page
+.admin-edit-product {
+  background: #1b1b1b !important;
+  color: #f5f5f5 !important;
+  border-color: #333333 !important;
+}
+
+/* =========================================================
+   INPUTS ADMIN - CLARO
+   ========================================================= */
+
+html[data-theme='light']
+.admin-dashboard-page input,
+html[data-theme='light']
+.admin-dashboard-page textarea,
+html[data-theme='light']
+.admin-dashboard-page select {
+  background: #ffffff !important;
+  color: #222222 !important;
+  border-color: #d6d6d6 !important;
+}
+
+/* =========================================================
+   INPUTS ADMIN - ESCURO
+   ========================================================= */
+
+html[data-theme='dark']
+.admin-dashboard-page input,
+html[data-theme='dark']
+.admin-dashboard-page textarea,
+html[data-theme='dark']
+.admin-dashboard-page select {
+  background: #222222 !important;
+  color: #ffffff !important;
+  border-color: #444444 !important;
+}
+
+html[data-theme='dark']
+.admin-dashboard-page input::placeholder,
+html[data-theme='dark']
+.admin-dashboard-page textarea::placeholder {
+  color: #999999 !important;
+}
+
+
+/* =========================================================
+   LABELS ADMIN - ESCURO
+   ========================================================= */
+
+html[data-theme='dark']
+.admin-dashboard-page label {
+  color: #eeeeee !important;
+}
+
+
+/* =========================================================
+   UPLOAD DE IMAGEM
+   ========================================================= */
+
+html[data-theme='light']
+.admin-dashboard-page
+.admin-upload-label {
+  background: #f8f9fa !important;
+  color: #555555 !important;
+  border-color: #dddddd !important;
+}
+
+html[data-theme='dark']
+.admin-dashboard-page
+.admin-upload-label {
+  background: #242424 !important;
+  color: #eeeeee !important;
+  border-color: #444444 !important;
+}
+
+html[data-theme='dark']
+.admin-dashboard-page
+.admin-upload-text {
+  color: #dddddd !important;
+}
+
+/* =========================================================
+   PEDIDOS
+   ========================================================= */
+
+html[data-theme='light']
+.admin-order-card {
+  background: #ffffff !important;
+  color: #222222 !important;
+}
+
+html[data-theme='dark']
+.admin-order-card {
+  background: #1b1b1b !important;
+  color: #f5f5f5 !important;
+  box-shadow:
+    0 4px 16px rgba(0, 0, 0, 0.35) !important;
+}
+/* =========================================================
+   ORDER CARD - CLARO
+   ========================================================= */
+
+html[data-theme='light']
+.admin-order-title {
+  color: #222222 !important;
+}
+
+html[data-theme='light']
+.admin-order-date {
+  color: #777777 !important;
+}
+
+html[data-theme='light']
+.admin-order-customer {
+  color: #222222 !important;
+}
+
+html[data-theme='light']
+.admin-order-phone {
+  color: #666666 !important;
+}
+
+html[data-theme='light']
+.admin-order-total {
+  color: #222222 !important;
+}
+
+
+/* =========================================================
+   ORDER CARD - ESCURO
+   ========================================================= */
+
+html[data-theme='dark']
+.admin-order-title {
+  color: #ffffff !important;
+}
+
+html[data-theme='dark']
+.admin-order-date {
+  color: #aaaaaa !important;
+}
+
+html[data-theme='dark']
+.admin-order-customer {
+  color: #f5f5f5 !important;
+}
+
+html[data-theme='dark']
+.admin-order-phone {
+  color: #bbbbbb !important;
+}
+
+html[data-theme='dark']
+.admin-order-total {
+  color: #ffffff !important;
+}
+
+
+/* =========================================================
+   CAIXA DE ITENS
+   ========================================================= */
+
+html[data-theme='light']
+.admin-items-box {
+  background: #f8f9fa !important;
+  color: #222222 !important;
+}
+
+html[data-theme='dark']
+.admin-items-box {
+  background: #242424 !important;
+  color: #f5f5f5 !important;
+}
+
+html[data-theme='dark']
+.admin-items-title {
+  color: #ffffff !important;
+}
+
+html[data-theme='dark']
+.admin-order-item {
+  border-bottom-color: #3b3b3b !important;
+}
+
+html[data-theme='dark']
+.admin-order-item-name,
+html[data-theme='dark']
+.admin-order-item-price {
+  color: #f2f2f2 !important;
+}
+
+html[data-theme='dark']
+.admin-item-observation {
+  color: #ffb36b !important;
+}
+
+
+/* =========================================================
+   OBSERVAÇÃO DO CLIENTE
+   ========================================================= */
+
+html[data-theme='light']
+.admin-order-observation {
+  background: #fff9db !important;
+  border-color: #ffec99 !important;
+}
+
+html[data-theme='light']
+.admin-observation-title {
+  color: #856404 !important;
+}
+
+html[data-theme='light']
+.admin-observation-text {
+  color: #444444 !important;
+}
+
+
+html[data-theme='dark']
+.admin-order-observation {
+  background: #352f17 !important;
+  border-color: #75631f !important;
+}
+
+html[data-theme='dark']
+.admin-observation-title {
+  color: #ffe58a !important;
+}
+
+html[data-theme='dark']
+.admin-observation-text {
+  color: #fff3bd !important;
+}
+
+
+/* =========================================================
+   PAGAMENTO / TROCO
+   ========================================================= */
+
+html[data-theme='dark']
+.admin-order-payment-info {
+  color: #c8c8c8 !important;
+}
+
+html[data-theme='dark']
+.admin-order-payment-info strong {
+  color: #ffffff !important;
+}
+
+
+/* =========================================================
+   FEEDBACK
+   ========================================================= */
+
+html[data-theme='light']
+.admin-feedback-box {
+  background: #fefce8 !important;
+  border-color: #fde047 !important;
+}
+
+html[data-theme='light']
+.admin-feedback-title {
+  color: #854d0e !important;
+}
+
+html[data-theme='light']
+.admin-feedback-text {
+  color: #713f12 !important;
+}
+
+
+html[data-theme='dark']
+.admin-feedback-box {
+  background: #302b16 !important;
+  border-color: #6f641e !important;
+}
+
+html[data-theme='dark']
+.admin-feedback-title {
+  color: #ffe58a !important;
+}
+
+html[data-theme='dark']
+.admin-feedback-comment {
+  border-top-color: #655d25 !important;
+}
+
+html[data-theme='dark']
+.admin-feedback-text {
+  color: #ffeeb0 !important;
+}
+
+
+/* =========================================================
+   BOTÕES DE AÇÃO DO PEDIDO
+   ========================================================= */
+
+html[data-theme='dark']
+.admin-order-action {
+  transition:
+    filter 0.2s ease,
+    transform 0.2s ease;
+}
+
+html[data-theme='dark']
+.admin-order-action:hover {
+  filter: brightness(1.08);
+  transform: translateY(-1px);
+}
+
+
+/* =========================================================
+   MODAIS ADMIN
+   ========================================================= */
+
+html[data-theme='light']
+.admin-modal {
+  background: #ffffff !important;
+  color: #222222 !important;
+}
+
+html[data-theme='dark']
+.admin-modal {
+  background: #1b1b1b !important;
+  color: #f5f5f5 !important;
+  border-color: #3a3a3a !important;
+}
+
+html[data-theme='dark']
+.admin-modal label {
+  color: #eeeeee !important;
+}
+
+
+/* =========================================================
+   BOTÃO SAIR
+   ========================================================= */
+
+html[data-theme='light']
+.admin-exit-button {
+  background: #ffffff !important;
+  color: #333333 !important;
+  border-color: #dddddd !important;
+}
+
+html[data-theme='dark']
+.admin-exit-button {
+  background: #252525 !important;
+  color: #ffffff !important;
+  border-color: #444444 !important;
+}
+
+
+/* =========================================================
+   LOGIN ADMIN - MODO CLARO
+   ========================================================= */
+
+html[data-theme='light']
+.admin-login-page {
+  background: #f8f9fa !important;
+}
+
+html[data-theme='light']
+.admin-login-card {
+  background: #ffffff !important;
+  color: #222222 !important;
+}
+
+html[data-theme='light']
+.admin-login-label,
+html[data-theme='light']
+.admin-login-remember-label {
+  color: #4b5563 !important;
+}
+
+
+/* =========================================================
+   LOGIN ADMIN - MODO ESCURO
+   ========================================================= */
+
+html[data-theme='dark']
+.admin-login-page {
+  background: #000000 !important;
+  color: #ffffff !important;
+}
+
+html[data-theme='dark']
+.admin-login-card {
+  background: #171717 !important;
+  color: #ffffff !important;
+  border-color: #333333 !important;
+  box-shadow:
+    0 12px 40px rgba(0, 0, 0, 0.55) !important;
+}
+
+html[data-theme='dark']
+.admin-login-label,
+html[data-theme='dark']
+.admin-login-remember-label {
+  color: #eeeeee !important;
+}
+
+html[data-theme='dark']
+.admin-login-page input {
+  background: #222222 !important;
+  color: #ffffff !important;
+  border-color: #444444 !important;
+}
+
+html[data-theme='dark']
+.admin-login-page input::placeholder {
+  color: #999999 !important;
+}
+
+/* =========================================================
+   CARDS DE PRODUTOS - TELA PRINCIPAL
+   ========================================================= */
+
+html[data-theme='dark'] .product-card {
+  background: #1d1d1d !important;
+  color: #f5f5f5 !important;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.35) !important;
+}
+
+html[data-theme='dark'] .product-image-container {
+  background: #242424 !important;
+}
+
+html[data-theme='dark'] .product-content {
+  background: #1d1d1d !important;
+  color: #f5f5f5 !important;
+}
+
+html[data-theme='dark'] .product-info h3 {
+  color: #ff4b4b !important;
+}
+
+html[data-theme='dark'] .product-desc {
+  color: #d0d0d0 !important;
+}
+
+html[data-theme='dark'] .price {
+  color: #ff4b4b !important;
+}
+
+
+/* =========================================================
+   LOGIN ADMIN
+   ========================================================= */
+
+html[data-theme='dark'] .admin-login-page {
+  background: #080808 !important;
+  color: #f5f5f5 !important;
+}
+
+html[data-theme='dark'] .admin-login-card {
+  background: #181818 !important;
+  color: #f5f5f5 !important;
+  border: 1px solid #303030 !important;
+  box-shadow: 0 12px 35px rgba(0, 0, 0, 0.45) !important;
+}
+
+html[data-theme='dark'] .admin-login-card h1,
+html[data-theme='dark'] .admin-login-card h2,
+html[data-theme='dark'] .admin-login-card h3 {
+  color: #ffffff !important;
+}
+
+html[data-theme='dark'] .admin-login-card p {
+  color: #cfcfcf !important;
+}
+
+html[data-theme='dark'] .admin-login-card label {
+  color: #f0f0f0 !important;
+}
+
+html[data-theme='dark'] .admin-login-card input {
+  background: #252525 !important;
+  color: #ffffff !important;
+  border: 1px solid #4a4a4a !important;
+}
+
+html[data-theme='dark'] .admin-login-card input::placeholder {
+  color: #999999 !important;
+}
+
+html[data-theme='dark'] .admin-login-card input:focus {
+  background: #292929 !important;
+  color: #ffffff !important;
+  border-color: #ef4444 !important;
+}
+
+html[data-theme='dark'] .admin-login-card input:-webkit-autofill,
+html[data-theme='dark'] .admin-login-card input:-webkit-autofill:hover,
+html[data-theme='dark'] .admin-login-card input:-webkit-autofill:focus {
+  -webkit-text-fill-color: #ffffff !important;
+  -webkit-box-shadow: 0 0 0 1000px #252525 inset !important;
+  transition: background-color 5000s ease-in-out 0s;
+}
+
+html[data-theme='dark'] .admin-login-remember-label {
+  color: #d5d5d5 !important;
+}
+
+
+/* Ícone/círculo do topo do login */
+
+html[data-theme='dark'] .admin-login-card .login-icon,
+html[data-theme='dark'] .admin-login-card .admin-login-icon {
+  background: #3a2020 !important;
+  color: #ff4b4b !important;
+}
+
+
+/* =========================================================
+   STATUS DO PAGAMENTO PIX
+   ========================================================= */
+
+html[data-theme='dark'] .admin-pix-status {
+  background: #202020 !important;
+  border-color: #3d3d3d !important;
+  color: #f5f5f5 !important;
+}
+
+html[data-theme='dark'] .admin-pix-status-title {
+  color: #f1f1f1 !important;
+}
+
+
+/* Botões Pix */
+
+html[data-theme='dark'] .admin-pix-status-button {
+  opacity: 1 !important;
+}
+
+
+/* Pendente */
+
+html[data-theme='dark'] .admin-pix-status-button.pix-pendente {
+  background: #382817 !important;
+  color: #ffb15c !important;
+  border-color: #a8550a !important;
+}
+
+
+/* Pendente selecionado */
+
+html[data-theme='dark']
+.admin-pix-status-button.pix-pendente.active {
+  background: #422817 !important;
+  color: #ffbd70 !important;
+  border-color: #f97316 !important;
+}
+
+
+/* Pago */
+
+html[data-theme='dark'] .admin-pix-status-button.pix-pago {
+  background: #173322 !important;
+  color: #70e39a !important;
+  border-color: #347a4d !important;
+}
+
+
+/* Pago selecionado */
+
+html[data-theme='dark']
+.admin-pix-status-button.pix-pago.active {
+  background: #19452b !important;
+  color: #86efac !important;
+  border-color: #4ade80 !important;
+}
+
+
+/* Cancelado */
+
+html[data-theme='dark'] .admin-pix-status-button.pix-cancelado {
+  background: #381c1f !important;
+  color: #ff8d95 !important;
+  border-color: #7f3038 !important;
+}
+
+
+/* Cancelado selecionado */
+
+html[data-theme='dark']
+.admin-pix-status-button.pix-cancelado.active {
+  background: #481f23 !important;
+  color: #ff9ca3 !important;
+  border-color: #f87171 !important;
+}
+
+
+/* =========================================================
+   PAGAMENTO / OBSERVAÇÕES DO PEDIDO
+   ========================================================= */
+
+html[data-theme='dark']
+.admin-dashboard-page
+.admin-order-card
+.admin-items-box
+.admin-payment-info {
+  color: #d0d0d0 !important;
+}
+
+html[data-theme='dark']
+.admin-dashboard-page
+.admin-order-card
+.admin-items-box
+.admin-observation {
+  background: #302b16 !important;
+  border-color: #655b25 !important;
+  color: #f5e7a5 !important;
+}
+
+html[data-theme='dark']
+.admin-dashboard-page
+.admin-order-card
+.admin-items-box
+.admin-observation strong {
+  color: #f6d85e !important;
+}
+
+html[data-theme='dark']
+.admin-dashboard-page
+.admin-order-card
+.admin-items-box
+.admin-observation p {
+  color: #f0e7c2 !important;
+}
+
+
+/* =========================================================
+   PEQUENO AJUSTE NO FUNDO DA PÁGINA PRINCIPAL
+   ========================================================= */
+
+html[data-theme='dark'] .container {
+  color: #f5f5f5;
+}
+
+/* =========================================================
+   STATUS PIX - ESTILO BASE
+   Mantém o visual claro atual.
+   ========================================================= */
+
+.admin-pix-status {
+  margin-top: 12px;
+  padding: 12px;
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+}
+
+.admin-pix-status-title {
+  display: block;
+  margin-bottom: 9px;
+  color: #475569;
+  font-size: 0.82rem;
+}
+
+.admin-pix-status-buttons {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.admin-pix-status-button {
+  padding: 8px 12px;
+  border-radius: 8px;
+  font-weight: 800;
+  cursor: pointer;
+  transition:
+    opacity 0.2s ease,
+    transform 0.2s ease;
+}
+
+.admin-pix-status-button:hover {
+  transform: translateY(-1px);
+}
+
+
+/* Pendente */
+
+.admin-pix-status-button.pix-pendente {
+  background: #fff7ed;
+  color: #9a3412;
+  border: 1px solid #d1d5db;
+}
+
+.admin-pix-status-button.pix-pendente.active {
+  border: 2px solid #9a3412;
+}
+
+
+/* Pago */
+
+.admin-pix-status-button.pix-pago {
+  background: #f0fdf4;
+  color: #166534;
+  border: 1px solid #d1d5db;
+}
+
+.admin-pix-status-button.pix-pago.active {
+  border: 2px solid #166534;
+}
+
+
+/* Cancelado */
+
+.admin-pix-status-button.pix-cancelado {
+  background: #fef2f2;
+  color: #b91c1c;
+  border: 1px solid #d1d5db;
+}
+
+.admin-pix-status-button.pix-cancelado.active {
+  border: 2px solid #b91c1c;
+}
+
+
+/* =========================================================
+   TRANSIÇÕES
+   ========================================================= */
+
+html[data-theme='dark'] body,
+html[data-theme='light'] body,
+html[data-theme='dark'] .admin-order-card,
+html[data-theme='light'] .admin-order-card,
+html[data-theme='dark'] .admin-items-box,
+html[data-theme='light'] .admin-items-box,
+html[data-theme='dark'] .admin-modal,
+html[data-theme='light'] .admin-modal {
+  transition: var(--theme-transition);
+}
+
+/* =========================================================
+   CORREÇÕES FINAIS DO TEMA
+   Não altera a estrutura/layout. Apenas corrige contraste
+   dos elementos que possuem estilos inline.
+   ========================================================= */
+
+/* ---------- BASE DA PÁGINA ADMIN ---------- */
+
+html[data-theme='dark'] body {
+  background: #0f0f0f !important;
+  color: #f5f5f5 !important;
+}
+
+html[data-theme='light'] body {
+  background: #f8f9fa;
+  color: #222222;
+}
+
+
+/* ---------- LOGIN ADMIN ---------- */
+
+.admin-login-page {
+  min-height: 100vh !important;
+  box-sizing: border-box;
+}
+
+html[data-theme='dark'] .admin-login-page {
+  min-height: 100vh !important;
+  background: #080808 !important;
+  color: #f5f5f5 !important;
+}
+
+html[data-theme='dark'] .admin-login-card {
+  background: #181818 !important;
+  color: #f5f5f5 !important;
+  border: 1px solid #303030 !important;
+  box-shadow: 0 12px 35px rgba(0, 0, 0, 0.45) !important;
+}
+
+html[data-theme='dark'] .admin-login-card h1,
+html[data-theme='dark'] .admin-login-card h2,
+html[data-theme='dark'] .admin-login-card h3 {
+  color: #ffffff !important;
+}
+
+html[data-theme='dark'] .admin-login-card p {
+  color: #cfcfcf !important;
+}
+
+html[data-theme='dark'] .admin-login-card label,
+html[data-theme='dark'] .admin-login-label,
+html[data-theme='dark'] .admin-login-remember-label {
+  color: #eeeeee !important;
+}
+
+html[data-theme='dark'] .admin-login-card input:not([type='checkbox']) {
+  background: #252525 !important;
+  color: #ffffff !important;
+  border: 1px solid #4a4a4a !important;
+}
+
+html[data-theme='dark'] .admin-login-card input:not([type='checkbox'])::placeholder {
+  color: #999999 !important;
+}
+
+html[data-theme='dark'] .admin-login-card input:not([type='checkbox']):focus {
+  background: #292929 !important;
+  color: #ffffff !important;
+  border-color: #ef4444 !important;
+}
+
+html[data-theme='dark'] .admin-login-card input[type='checkbox'] {
+  accent-color: #ef4444;
+}
+
+html[data-theme='dark'] .admin-login-card input:-webkit-autofill,
+html[data-theme='dark'] .admin-login-card input:-webkit-autofill:hover,
+html[data-theme='dark'] .admin-login-card input:-webkit-autofill:focus {
+  -webkit-text-fill-color: #ffffff !important;
+  -webkit-box-shadow: 0 0 0 1000px #252525 inset !important;
+}
+
+
+/* ---------- CARDS DOS PRODUTOS ---------- */
+
+html[data-theme='dark'] .product-card {
+  background: #1d1d1d !important;
+  color: #f5f5f5 !important;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.35) !important;
+}
+
+html[data-theme='dark'] .product-card .product-image-container {
+  background: #242424 !important;
+}
+
+html[data-theme='dark'] .product-card .product-content {
+  background: #1d1d1d !important;
+  color: #f5f5f5 !important;
+}
+
+html[data-theme='dark'] .product-card h3,
+html[data-theme='dark'] .product-card .product-info h3 {
+  color: #ff4b4b !important;
+}
+
+html[data-theme='dark'] .product-card .product-desc {
+  color: #d0d0d0 !important;
+}
+
+html[data-theme='dark'] .product-card .price {
+  color: #ff4b4b !important;
+}
+
+
+/* =========================================================
+   CAIXA
+   ========================================================= */
+
+html[data-theme='dark'] .admin-cashier-section {
+  background: #1b1b1b !important;
+  color: #f5f5f5 !important;
+  border-color: #333333 !important;
+}
+
+/* Títulos e textos gerais da Caixa */
+html[data-theme='dark'] .admin-cashier-section h1,
+html[data-theme='dark'] .admin-cashier-section h2,
+html[data-theme='dark'] .admin-cashier-section h3,
+html[data-theme='dark'] .admin-cashier-section strong {
+  color: #ffffff !important;
+}
+
+html[data-theme='dark'] .admin-cashier-section p,
+html[data-theme='dark'] .admin-cashier-section span {
+  color: #d5d5d5;
+}
+
+/* Resumos */
+html[data-theme='dark'] .admin-cashier-section .admin-summary-neutral,
+html[data-theme='dark'] .admin-cashier-section .admin-summary-green,
+html[data-theme='dark'] .admin-cashier-section .admin-summary-red,
+html[data-theme='dark'] .admin-cashier-section .neutral-summary-card,
+html[data-theme='dark'] .admin-cashier-section .green-summary-card,
+html[data-theme='dark'] .admin-cashier-section .red-summary-card {
+  background: #252525 !important;
+  border-color: #3d3d3d !important;
+  color: #f5f5f5 !important;
+}
+
+/* Texto que estava quase branco no card "Aberto em" */
+html[data-theme='dark'] .admin-cashier-section .admin-summary-neutral *,
+html[data-theme='dark'] .admin-cashier-section .neutral-summary-card * {
+  color: #f1f1f1 !important;
+}
+
+/* Card verde */
+html[data-theme='dark'] .admin-cashier-section .admin-summary-green *,
+html[data-theme='dark'] .admin-cashier-section .green-summary-card * {
+  color: #6ee7a0 !important;
+}
+
+/* Card vermelho */
+html[data-theme='dark'] .admin-cashier-section .admin-summary-red *,
+html[data-theme='dark'] .admin-cashier-section .red-summary-card * {
+  color: #ff8b8b !important;
+}
+
+/* Aviso amarelo */
+html[data-theme='dark'] .admin-cashier-section .admin-operation-notice {
+  background: #302915 !important;
+  border-color: #65551d !important;
+  color: #f5d76e !important;
+}
+
+html[data-theme='dark'] .admin-cashier-section .admin-operation-notice *,
+html[data-theme='dark'] .admin-cashier-section .admin-operation-notice p,
+html[data-theme='dark'] .admin-cashier-section .admin-operation-notice strong {
+  color: #f5d76e !important;
+}
+
+/* Formulário de abertura */
+html[data-theme='dark'] .admin-cashier-section .admin-open-cashier-form {
+  color: #f5f5f5 !important;
+}
+
+html[data-theme='dark'] .admin-cashier-section .admin-opening-input,
+html[data-theme='dark'] .admin-cashier-section input {
+  background: #252525 !important;
+  color: #ffffff !important;
+  border-color: #4a4a4a !important;
+}
+
+html[data-theme='dark'] .admin-cashier-section input::placeholder {
+  color: #999999 !important;
+}
+
+/* Resumo por forma de pagamento */
+html[data-theme='dark'] .admin-cashier-section .admin-payment-breakdown {
+  background: #202020 !important;
+  border-color: #383838 !important;
+  color: #f5f5f5 !important;
+}
+
+html[data-theme='dark'] .admin-cashier-section .admin-payment-breakdown-label {
+  color: #f1f1f1 !important;
+}
+
+/* Pílulas de pagamento */
+html[data-theme='dark'] .admin-cashier-section .admin-payment-pill {
+  background: #292929 !important;
+  color: #f5f5f5 !important;
+  border-color: #464646 !important;
+}
+
+html[data-theme='dark'] .admin-cashier-section .admin-payment-pill-money {
+  color: #72e6a0 !important;
+  border-color: #347a4d !important;
+}
+
+html[data-theme='dark'] .admin-cashier-section .admin-payment-pill-pix {
+  color: #8ab4ff !important;
+  border-color: #365c9c !important;
+}
+
+html[data-theme='dark'] .admin-cashier-section .admin-payment-pill-credit {
+  color: #e7a4ff !important;
+  border-color: #70418a !important;
+}
+
+html[data-theme='dark'] .admin-cashier-section .admin-payment-pill-debit {
+  color: #ffb47d !important;
+  border-color: #89522e !important;
+}
+
+html[data-theme='dark'] .admin-cashier-section .admin-payment-pill-other {
+  color: #d5d5d5 !important;
+  border-color: #4a4a4a !important;
+}
+
+
+/* =========================================================
+   HISTÓRICO DO CAIXA
+   ========================================================= */
+
+html[data-theme='dark'] .admin-history-card {
+  background: #202020 !important;
+  color: #f5f5f5 !important;
+  border-color: #3a3a3a !important;
+}
+
+html[data-theme='dark'] .admin-history-card h3,
+html[data-theme='dark'] .admin-history-card strong {
+  color: #ffffff !important;
+}
+
+html[data-theme='dark'] .admin-history-card p,
+html[data-theme='dark'] .admin-history-card span {
+  color: #d2d2d2 !important;
+}
+
+html[data-theme='dark'] .admin-history-order {
+  background: #181818 !important;
+  color: #f5f5f5 !important;
+  border-color: #3a3a3a !important;
+}
+
+html[data-theme='dark'] .admin-history-order-date {
+  color: #aaaaaa !important;
+}
+
+html[data-theme='dark'] .admin-history-customer-name {
+  color: #ffffff !important;
+}
+
+html[data-theme='dark'] .admin-history-order-total {
+  color: #ff6b6b !important;
+}
+
+html[data-theme='dark'] .admin-history-payment-method,
+html[data-theme='dark'] .admin-history-payment-method strong {
+  color: #d5d5d5 !important;
+}
+
+html[data-theme='dark'] .admin-history-items-box {
+  background: #222222 !important;
+  color: #f5f5f5 !important;
+  border-color: #3a3a3a !important;
+}
+
+html[data-theme='dark'] .admin-history-items-box *,
+html[data-theme='dark'] .admin-history-item-row {
+  color: #e8e8e8;
+}
+
+html[data-theme='dark'] .admin-history-empty-items {
+  color: #999999 !important;
+}
+
+
+/* =========================================================
+   PEDIDOS - STATUS PIX
+   ========================================================= */
+
+html[data-theme='dark'] .admin-pix-status {
+  background: #202020 !important;
+  color: #f5f5f5 !important;
+  border-color: #3d3d3d !important;
+}
+
+html[data-theme='dark'] .admin-pix-status-title {
+  color: #f1f1f1 !important;
+}
+
+html[data-theme='dark'] .admin-pix-status-button {
+  opacity: 1 !important;
+}
+
+/* Pendente */
+html[data-theme='dark'] .admin-pix-status-button.pix-pendente {
+  background: #382817 !important;
+  color: #ffb15c !important;
+  border-color: #a8550a !important;
+}
+
+html[data-theme='dark'] .admin-pix-status-button.pix-pendente.active {
+  background: #422817 !important;
+  color: #ffbd70 !important;
+  border: 2px solid #f97316 !important;
+}
+
+/* Pago */
+html[data-theme='dark'] .admin-pix-status-button.pix-pago {
+  background: #173322 !important;
+  color: #70e39a !important;
+  border-color: #347a4d !important;
+}
+
+html[data-theme='dark'] .admin-pix-status-button.pix-pago.active {
+  background: #19452b !important;
+  color: #86efac !important;
+  border: 2px solid #4ade80 !important;
+}
+
+/* Cancelado */
+html[data-theme='dark'] .admin-pix-status-button.pix-cancelado {
+  background: #381c1f !important;
+  color: #ff8d95 !important;
+  border-color: #7f3038 !important;
+}
+
+html[data-theme='dark'] .admin-pix-status-button.pix-cancelado.active {
+  background: #481f23 !important;
+  color: #ff9ca3 !important;
+  border: 2px solid #f87171 !important;
+}
+
+
+/* =========================================================
+   PEDIDOS - OBSERVAÇÕES / PAGAMENTO
+   ========================================================= */
+
+html[data-theme='dark'] .admin-order-card .admin-items-box {
+  background: #242424 !important;
+  color: #f5f5f5 !important;
+}
+
+html[data-theme='dark'] .admin-order-card .admin-items-box span,
+html[data-theme='dark'] .admin-order-card .admin-items-box p,
+html[data-theme='dark'] .admin-order-card .admin-items-box strong {
+  color: #eeeeee !important;
+}
+
+html[data-theme='dark'] .admin-order-card .admin-items-box .admin-observation {
+  background: #302b16 !important;
+  border-color: #655b25 !important;
+}
+
+html[data-theme='dark'] .admin-order-card .admin-items-box .admin-observation strong {
+  color: #f6d85e !important;
+}
+
+html[data-theme='dark'] .admin-order-card .admin-items-box .admin-observation p {
+  color: #f0e7c2 !important;
+}
+
+html[data-theme='dark'] .admin-order-card .admin-payment-info,
+html[data-theme='dark'] .admin-order-card .admin-payment-info strong {
+  color: #d8d8d8 !important;
+}
+
+
+/* =========================================================
+   ADICIONAR / EDITAR CARDÁPIO
+   ========================================================= */
+
+html[data-theme='dark'] .admin-add-product,
+html[data-theme='dark'] .admin-edit-product {
+  background: #1b1b1b !important;
+  color: #f5f5f5 !important;
+  border-color: #363636 !important;
+}
+
+html[data-theme='dark'] .admin-add-product h2,
+html[data-theme='dark'] .admin-edit-product h2,
+html[data-theme='dark'] .admin-add-product h3,
+html[data-theme='dark'] .admin-edit-product h3 {
+  color: #ffffff !important;
+}
+
+html[data-theme='dark'] .admin-add-product label,
+html[data-theme='dark'] .admin-edit-product label {
+  color: #eeeeee !important;
+}
+
+html[data-theme='dark'] .admin-add-product input,
+html[data-theme='dark'] .admin-add-product select,
+html[data-theme='dark'] .admin-add-product textarea,
+html[data-theme='dark'] .admin-edit-product input,
+html[data-theme='dark'] .admin-edit-product select,
+html[data-theme='dark'] .admin-edit-product textarea {
+  background: #252525 !important;
+  color: #ffffff !important;
+  border-color: #4a4a4a !important;
+}
+
+html[data-theme='dark'] .admin-add-product input::placeholder,
+html[data-theme='dark'] .admin-edit-product input::placeholder,
+html[data-theme='dark'] .admin-add-product textarea::placeholder,
+html[data-theme='dark'] .admin-edit-product textarea::placeholder {
+  color: #999999 !important;
+}
+
+
+/* =========================================================
+   MODAL ADMIN
+   ========================================================= */
+
+html[data-theme='dark'] .admin-modal {
+  background: #1b1b1b !important;
+  color: #f5f5f5 !important;
+  border-color: #3a3a3a !important;
+}
+
+html[data-theme='dark'] .admin-modal h1,
+html[data-theme='dark'] .admin-modal h2,
+html[data-theme='dark'] .admin-modal h3,
+html[data-theme='dark'] .admin-modal strong {
+  color: #ffffff !important;
+}
+
+html[data-theme='dark'] .admin-modal label {
+  color: #eeeeee !important;
+}
+
+html[data-theme='dark'] .admin-modal input,
+html[data-theme='dark'] .admin-modal select,
+html[data-theme='dark'] .admin-modal textarea {
+  background: #252525 !important;
+  color: #ffffff !important;
+  border-color: #4a4a4a !important;
+}
+
+
+/* =========================================================
+   BOTÕES / ABA / FILTROS
+   ========================================================= */
+
+html[data-theme='dark'] .admin-tab {
+  color: #cfcfcf !important;
+}
+
+html[data-theme='dark'] .admin-tab.active {
+  color: #ff6b6b !important;
+}
+
+html[data-theme='dark'] .admin-filter {
+  background: #292929 !important;
+  color: #dddddd !important;
+  border-color: #444444 !important;
+}
+
+html[data-theme='dark'] .admin-filter.active {
+  background: #d32f2f !important;
+  color: #ffffff !important;
+  border-color: #d32f2f !important;
+}
+
+html[data-theme='dark'] .admin-exit-button {
+  background: #252525 !important;
+  color: #ffffff !important;
+  border-color: #444444 !important;
+}
+
+
+/* ---------- TRANSIÇÃO ---------- */
+
+html[data-theme='dark'] .admin-cashier-section,
+html[data-theme='dark'] .admin-history-card,
+html[data-theme='dark'] .admin-history-order,
+html[data-theme='dark'] .admin-add-product,
+html[data-theme='dark'] .admin-edit-product,
+html[data-theme='dark'] .admin-login-card,
+html[data-theme='dark'] .product-card {
+  transition: var(--theme-transition);
+}
+
+/* =========================================================
+   CORREÇÕES FINAIS — DARK MODE
+   Estas regras trabalham com os estilos inline existentes.
+   Não alteram estrutura, tamanho ou layout.
+   ========================================================= */
+
+/* LOGIN */
+html[data-theme='dark'] .admin-login-page {
+  min-height: 100vh !important;
+  width: 100% !important;
+  box-sizing: border-box !important;
+  background: #0d0d0d !important;
+}
+
+html[data-theme='dark'] .admin-login-page .admin-login-card {
+  background: #1b1b1b !important;
+  color: #f5f5f5 !important;
+  border: 1px solid #303030 !important;
+  box-shadow: 0 10px 25px rgba(0,0,0,.45) !important;
+}
+
+html[data-theme='dark'] .admin-login-page .admin-login-card h2 {
+  color: #ffffff !important;
+}
+
+html[data-theme='dark'] .admin-login-page .admin-login-card p {
+  color: #cfcfcf !important;
+}
+
+html[data-theme='dark'] .admin-login-page .admin-login-card label {
+  color: #f1f1f1 !important;
+}
+
+html[data-theme='dark'] .admin-login-page .admin-login-card input:not([type='checkbox']) {
+  background: #252525 !important;
+  color: #ffffff !important;
+  border-color: #4a4a4a !important;
+  box-sizing: border-box !important;
+}
+
+html[data-theme='dark'] .admin-login-page .admin-login-card input:not([type='checkbox'])::placeholder {
+  color: #999999 !important;
+}
+
+html[data-theme='dark'] .admin-login-page .admin-login-card input[type='checkbox'] {
+  accent-color: #ef4444 !important;
+}
+
+html[data-theme='dark'] .admin-login-page .admin-login-card button[type='submit'] {
+  background: #ef4444 !important;
+  color: #ffffff !important;
+}
+
+/* CAIXA — cores solicitadas */
+html[data-theme='dark'] .admin-cashier-section .neutral-summary-card *,
+html[data-theme='dark'] .admin-cashier-section .admin-summary-neutral * {
+  color: #65d98b !important;
+}
+html[data-theme='dark'] .admin-cashier-section .green-summary-card *,
+html[data-theme='dark'] .admin-cashier-section .admin-summary-green * {
+  color: #65d98b !important;
+}
+html[data-theme='dark'] .admin-cashier-section .red-summary-card *,
+html[data-theme='dark'] .admin-cashier-section .admin-summary-red * {
+  color: #ff7777 !important;
+}
+
+/* ADICIONAR */
+html[data-theme='dark'] .admin-add-product {
+  background: #1b1b1b !important;
+  color: #f5f5f5 !important;
+  border: 1px solid #303030 !important;
+}
+html[data-theme='dark'] .admin-add-product h2 {
+  color: #ffffff !important;
+}
+html[data-theme='dark'] .admin-add-input,
+html[data-theme='dark'] .admin-add-select {
+  background: #252525 !important;
+  color: #ffffff !important;
+  border-color: #4a4a4a !important;
+  box-sizing: border-box !important;
+}
+html[data-theme='dark'] .admin-add-input::placeholder {
+  color: #9d9d9d !important;
+}
+html[data-theme='dark'] .admin-upload-label {
+  background: #252525 !important;
+  border-color: #555555 !important;
+  color: #eeeeee !important;
+}
+html[data-theme='dark'] .admin-upload-label .admin-upload-text {
+  color: #eeeeee !important;
+}
+html[data-theme='dark'] .admin-upload-label .admin-upload-icon {
+  color: #cccccc !important;
+}
+
+/* IMAGEM CARREGADA */
+html[data-theme='dark'] .admin-add-product [style*='#f0fdf4'] {
+  background: #183323 !important;
+  border-color: #2d7045 !important;
+}
+html[data-theme='dark'] .admin-add-product [style*='#166534'] {
+  color: #78e6a0 !important;
+}
+
+/* EDITAR */
+html[data-theme='dark'] .products-list .admin-edit-product {
+  background: #1b1b1b !important;
+  color: #f5f5f5 !important;
+  border-color: #3a3a3a !important;
+}
+html[data-theme='dark'] .admin-edit-product strong {
+  color: #ffffff !important;
+}
+html[data-theme='dark'] .admin-edit-product span {
+  color: #cccccc !important;
+}
+html[data-theme='dark'] .admin-edit-product span[style*='#ef4444'] {
+  color: #ff6b6b !important;
+}
+html[data-theme='dark'] .admin-product-action {
+  color: #eeeeee !important;
+  border: 1px solid #444444 !important;
+}
+html[data-theme='dark'] .admin-product-action[style*='#f3f4f6'] {
+  background: #292929 !important;
+  color: #dddddd !important;
+}
+html[data-theme='dark'] .admin-product-action[style*='#f0f0f0'] {
+  background: #292929 !important;
+  color: #eeeeee !important;
+}
+html[data-theme='dark'] .admin-edit-product span[style*='#fee2e2'] {
+  background: #3a2020 !important;
+  color: #ff8585 !important;
+}
+
+/* MODAL DE EDIÇÃO */
+html[data-theme='dark'] .admin-edit-modal-overlay {
+  background: rgba(0,0,0,.72) !important;
+}
+html[data-theme='dark'] .admin-edit-modal {
+  background: #1b1b1b !important;
+  color: #f5f5f5 !important;
+  border: 1px solid #3a3a3a !important;
+}
+html[data-theme='dark'] .admin-edit-modal h2,
+html[data-theme='dark'] .admin-edit-modal label {
+  color: #f5f5f5 !important;
+}
+html[data-theme='dark'] .admin-edit-modal .admin-edit-input,
+html[data-theme='dark'] .admin-edit-modal .admin-edit-select {
+  background: #252525 !important;
+  color: #ffffff !important;
+  border-color: #4a4a4a !important;
+  box-sizing: border-box !important;
+}
+html[data-theme='dark'] .admin-edit-modal .admin-edit-upload-label {
+  background: #252525 !important;
+  border-color: #4a4a4a !important;
+  color: #eeeeee !important;
+}
+html[data-theme='dark'] .admin-edit-modal .admin-modal-close {
+  color: #dddddd !important;
+}
+
+/* =========================================================
+   EVITAR TEXTO BRANCO SOBRE FUNDO BRANCO NO PAINEL
+   ========================================================= */
+html[data-theme='dark'] .admin-dashboard-page {
+  color: #f5f5f5 !important;
+}
+html[data-theme='dark'] .admin-dashboard-page .container {
+  color: #f5f5f5 !important;
+}
+
+
+/* =========================================================
+   CORREÇÕES FINAIS - LOGIN, EDITAR PRODUTOS E HISTÓRICO
+   ========================================================= */
+
+/* Login: o componente original usa estilos inline, então as regras
+   precisam apontar para as classes adicionadas sem alterar o layout. */
+html[data-theme='dark'] .admin-login-page {
+  min-height: 100vh !important;
+  width: 100% !important;
+  box-sizing: border-box !important;
+  background: #0f0f0f !important;
+  color: #f5f5f5 !important;
+}
+
+html[data-theme='dark'] .admin-login-card {
+  background: #1b1b1b !important;
+  color: #f5f5f5 !important;
+  border: 1px solid #303030 !important;
+  box-shadow: 0 10px 25px rgba(0,0,0,.45) !important;
+}
+
+html[data-theme='dark'] .admin-login-card h2 {
+  color: #ffffff !important;
+}
+
+html[data-theme='dark'] .admin-login-card p {
+  color: #cfcfcf !important;
+}
+
+html[data-theme='dark'] .admin-login-card label {
+  color: #f0f0f0 !important;
+}
+
+html[data-theme='dark'] .admin-login-card input:not([type='checkbox']) {
+  background: #252525 !important;
+  color: #ffffff !important;
+  border-color: #4a4a4a !important;
+  box-sizing: border-box !important;
+}
+
+html[data-theme='dark'] .admin-login-card input:not([type='checkbox'])::placeholder {
+  color: #999999 !important;
+}
+
+html[data-theme='dark'] .admin-login-card input[type='checkbox'] {
+  accent-color: #ef4444 !important;
+}
+
+/* Editar produtos: os ícones ficavam quase brancos sobre os botões claros. */
+html[data-theme='dark'] .admin-edit-product .admin-product-action,
+html[data-theme='dark'] .admin-edit-product .admin-product-toggle,
+html[data-theme='dark'] .admin-edit-product .admin-product-edit {
+  background: #303030 !important;
+  color: #ffffff !important;
+  border: 1px solid #4a4a4a !important;
+}
+
+html[data-theme='dark'] .admin-edit-product .admin-product-action:hover,
+html[data-theme='dark'] .admin-edit-product .admin-product-toggle:hover,
+html[data-theme='dark'] .admin-edit-product .admin-product-edit:hover {
+  background: #3b3b3b !important;
+  color: #ffffff !important;
+}
+
+html[data-theme='dark'] .admin-edit-product .admin-product-delete {
+  background: #3a2020 !important;
+  color: #ff6b6b !important;
+  border: 1px solid #6b3030 !important;
+}
+
+html[data-theme='dark'] .admin-edit-product .admin-product-delete:hover {
+  background: #4a2424 !important;
+  color: #ff8a8a !important;
+}
+
+/* Modal de edição */
+html[data-theme='dark'] .admin-edit-modal {
+  background: #1b1b1b !important;
+  color: #f5f5f5 !important;
+  border: 1px solid #303030 !important;
+}
+
+html[data-theme='dark'] .admin-edit-modal label {
+  color: #dddddd !important;
+}
+
+html[data-theme='dark'] .admin-edit-modal .admin-edit-upload-label {
+  background: #252525 !important;
+  color: #eeeeee !important;
+  border-color: #4a4a4a !important;
+}
+
+/* Histórico: Abertura verde, Vendas vermelha e Total branco. */
+html[data-theme='dark'] .admin-history-card .admin-history-opening-label,
+html[data-theme='dark'] .admin-history-card .admin-history-opening-value {
+  color: #4ade80 !important;
+}
+
+html[data-theme='dark'] .admin-history-card .admin-history-sales-label,
+html[data-theme='dark'] .admin-history-card .admin-history-sales-value {
+  color: #ff6b6b !important;
+}
+
+html[data-theme='dark'] .admin-history-card .admin-final-total-label,
+html[data-theme='dark'] .admin-history-card .admin-final-total strong {
+  color: #ffffff !important;
+}
+
+/* Estruturas do CashierSection corrigido */
+html[data-theme='dark'] .admin-cashier-section {
+  background: #1b1b1b !important;
+  color: #f5f5f5 !important;
+  border-color: #303030 !important;
+}
+
+html[data-theme='dark'] .admin-history-card {
+  background: #1b1b1b !important;
+  color: #f5f5f5 !important;
+  border-color: #3b3b3b !important;
+}
+
+html[data-theme='dark'] .admin-history-order {
+  background: #242424 !important;
+  color: #f5f5f5 !important;
+  border-color: #3b3b3b !important;
+}
+
+html[data-theme='dark'] .admin-history-items-box {
+  background: #1f1f1f !important;
+  color: #f5f5f5 !important;
+}
+
+html[data-theme='dark'] .admin-history-item-row {
+  border-bottom-color: #3b3b3b !important;
+}
+
+/* =========================================================
+   CONTATO - MODO ESCURO
+   Mantém o layout original e altera apenas contraste/cores.
+   ========================================================= */
+html[data-theme='dark'] .contact-card,
+html[data-theme='dark'] .contact-faq-card {
+  background: #1b1b1b !important;
+  color: #f5f5f5 !important;
+  border-color: #333333 !important;
+}
+
+html[data-theme='dark'] .contact-card span,
+html[data-theme='dark'] .contact-faq-card summary,
+html[data-theme='dark'] .contact-faq-card p,
+html[data-theme='dark'] .contact-hours-text,
+html[data-theme='dark'] .contact-hours-value {
+  color: #f5f5f5 !important;
+}
+
+html[data-theme='dark'] .contact-card .contact-hours-row {
+  border-bottom-color: #3a3a3a !important;
+}
+
+html[data-theme='dark'] .contact-faq-card p {
+  color: #d6d6d6 !important;
+}
+/* =========================================================
+   LOCALIZAÇÃO + ACOMPANHAR PEDIDO
+   AJUSTES DO MODO ESCURO
+   ========================================================= */
+
+
+/* =========================================================
+   LOCALIZAÇÃO
+   ========================================================= */
+
+html[data-theme='dark'] .location-map-card {
+  background: #1b1b1b !important;
+  color: #f5f5f5 !important;
+  border-color: #303030 !important;
+}
+
+html[data-theme='dark'] .location-map-card strong {
+  color: #ffffff !important;
+}
+
+html[data-theme='dark'] .location-address-text {
+  color: #d5d5d5 !important;
+}
+
+
+/* Aviso amarelo da retirada */
+
+html[data-theme='dark'] .location-warning {
+  background: #29230f !important;
+  border-color: #665515 !important;
+  color: #f5f5f5 !important;
+}
+
+html[data-theme='dark'] .location-warning-title {
+  color: #ffd95a !important;
+}
+
+html[data-theme='dark'] .location-warning-text {
+  color: #e8dca8 !important;
+}
+
+html[data-theme='dark'] .location-warning-icon {
+  background: #d49f00 !important;
+}
+
+
+/* =========================================================
+   ACOMPANHAR PEDIDO
+   ========================================================= */
+
+
+/* Fundo escuro atrás do modal */
+
+html[data-theme='dark'] .order-tracking-overlay {
+  background: rgba(0, 0, 0, 0.78) !important;
+}
+
+
+/* Card principal */
+
+html[data-theme='dark'] .order-tracking-modal {
+  background: #1b1b1b !important;
+  color: #f5f5f5 !important;
+  border: 1px solid #303030 !important;
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.55) !important;
+}
+
+
+/* Título */
+
+html[data-theme='dark'] .order-tracking-modal h2 {
+  color: #ffffff !important;
+}
+
+
+/* Textos */
+
+html[data-theme='dark'] .order-tracking-modal span {
+  color: #cfcfcf !important;
+}
+
+html[data-theme='dark'] .order-tracking-modal p {
+  color: #d5d5d5 !important;
+}
+
+
+/* Caixa de informação no final do modal */
+
+html[data-theme='dark'] .order-tracking-modal > div:last-child {
+  background: #252525 !important;
+  color: #d5d5d5 !important;
+}
+
+
+/* Botão X do modal */
+
+html[data-theme='dark'] .order-tracking-modal button {
+  background: #292929 !important;
+  color: #ffffff !important;
+}
+
+html[data-theme='dark'] .order-tracking-modal button:hover {
+  background: #353535 !important;
+}
+
+
+/* =========================================================
+   NOTIFICAÇÃO DE ATUALIZAÇÃO DO PEDIDO
+   ========================================================= */
+
+html[data-theme='dark'] .order-tracking-notification {
+  background: #1b1b1b !important;
+  color: #f5f5f5 !important;
+  border-left-color: #ef4444 !important;
+  box-shadow: 0 10px 35px rgba(0, 0, 0, 0.55) !important;
+}
+
+html[data-theme='dark'] .order-tracking-notification strong {
+  color: #ffffff !important;
+}
+
+html[data-theme='dark'] .order-tracking-notification span {
+  color: #d5d5d5 !important;
+}
+
+
+/* Botão fechar da notificação */
+
+html[data-theme='dark'] .order-tracking-notification button {
+  background: #292929 !important;
+  color: #ffffff !important;
+}
+
+html[data-theme='dark'] .order-tracking-notification button:hover {
+  background: #383838 !important;
+}
+
+
+/* =========================================================
+   ÍCONE DE STATUS DO PEDIDO
+   ========================================================= */
+
+html[data-theme='dark'] .order-tracking-modal > div:first-child {
+  color: #ef4444 !important;
+}
+
+
+/* =========================================================
+   AJUSTES EXTRAS DA LOCALIZAÇÃO
+   ========================================================= */
+
+/* Mantém o botão "Como Chegar" usando o vermelho da marca */
+html[data-theme='dark'] .location-map-card .btn-checkout {
+  color: #ffffff !important;
+}
+
+
+/* =========================================================
+   TRANSIÇÃO SUAVE SOMENTE NAS CORES
+   ========================================================= */
+
+html[data-theme='dark'] .location-map-card,
+html[data-theme='dark'] .location-warning,
+html[data-theme='dark'] .order-tracking-modal,
+html[data-theme='dark'] .order-tracking-notification {
+  transition:
+    background-color 0.2s ease,
+    color 0.2s ease,
+    border-color 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+/* =========================================================
+   GESTÃO DE CAIXA - MODO ESCURO
+   Os valores desta tela ficam neutros/brancos.
+   As cores verde/vermelha continuam reservadas ao Histórico.
+   ========================================================= */
+html[data-theme='dark'] .admin-cashier-section .admin-summary-green-label,
+html[data-theme='dark'] .admin-cashier-section .admin-summary-green-value,
+html[data-theme='dark'] .admin-cashier-section .admin-summary-red-label,
+html[data-theme='dark'] .admin-cashier-section .admin-summary-red-value,
+html[data-theme='dark'] .admin-cashier-section .admin-summary-neutral,
+html[data-theme='dark'] .admin-cashier-section .admin-summary-neutral .admin-summary-label,
+html[data-theme='dark'] .admin-cashier-section .admin-summary-neutral .admin-summary-value {
+  color: #ffffff !important;
+}
+
+html[data-theme='dark'] .admin-cashier-section .admin-summary-green,
+html[data-theme='dark'] .admin-cashier-section .admin-summary-red,
+html[data-theme='dark'] .admin-cashier-section .admin-summary-neutral {
+  color: #ffffff !important;
+}
+
+
+/* =========================================================
+   CARRINHO - MODO NOTURNO
+   Mantém exatamente o layout atual.
+   ========================================================= */
+
+html[data-theme='dark'] .cart-drawer {
+  background: #171717 !important;
+  color: #f5f5f5 !important;
+}
+
+html[data-theme='dark'] .cart-drawer-header,
+html[data-theme='dark'] .cart-drawer-footer {
+  background: #171717 !important;
+  border-color: #333333 !important;
+}
+
+html[data-theme='dark'] .cart-drawer h2,
+html[data-theme='dark'] .cart-drawer .cart-total-label,
+html[data-theme='dark'] .cart-drawer .cart-general-note-label {
+  color: #ffffff !important;
+}
+
+html[data-theme='dark'] .cart-empty-message {
+  color: #a8a8a8 !important;
+}
+
+html[data-theme='dark'] .cart-item {
+  border-bottom-color: #333333 !important;
+}
+
+html[data-theme='dark'] .cart-item-name {
+  color: #ffffff !important;
+}
+
+html[data-theme='dark'] .cart-item-price {
+  color: #bdbdbd !important;
+}
+
+html[data-theme='dark'] .cart-quantity-button {
+  background: #292929 !important;
+  color: #ffffff !important;
+  border-color: #484848 !important;
+}
+
+html[data-theme='dark'] .cart-remove-button {
+  background: #3a2020 !important;
+  color: #ff7373 !important;
+  border-color: #693535 !important;
+}
+
+html[data-theme='dark'] .cart-item-note,
+html[data-theme='dark'] .cart-general-note {
+  background: #242424 !important;
+  color: #ffffff !important;
+  border-color: #484848 !important;
+}
+
+html[data-theme='dark'] .cart-item-note::placeholder,
+html[data-theme='dark'] .cart-general-note::placeholder {
+  color: #999999 !important;
+}
+
+html[data-theme='dark'] .cart-total-value {
+  color: #ff5555 !important;
+}
+
+html[data-theme='dark'] .cart-checkout-button {
+  color: #ffffff !important;
+}
+
+html[data-theme='dark'] .cart-drawer-header button {
+  background: #292929 !important;
+  color: #ffffff !important;
+  border-color: #444444 !important;
+}
+
+/* =========================================================
+   FINALIZAR PEDIDO - MODO NOTURNO
+   ========================================================= */
+
+html[data-theme='dark'] .checkout-overlay {
+  background: rgba(0, 0, 0, 0.78) !important;
+}
+
+html[data-theme='dark'] .checkout-card {
+  background: #1b1b1b !important;
+  color: #f5f5f5 !important;
+  border: 1px solid #333333 !important;
+  box-shadow: 0 15px 40px rgba(0, 0, 0, 0.55) !important;
+}
+
+html[data-theme='dark'] .checkout-header {
+  border-bottom-color: #363636 !important;
+}
+
+html[data-theme='dark'] .checkout-title {
+  color: #ffffff !important;
+}
+
+html[data-theme='dark'] .checkout-label {
+  color: #eeeeee !important;
+}
+
+html[data-theme='dark'] .checkout-input,
+html[data-theme='dark'] .checkout-select,
+html[data-theme='dark'] .checkout-change-input {
+  background: #252525 !important;
+  color: #ffffff !important;
+  border-color: #484848 !important;
+  box-sizing: border-box !important;
+}
+
+html[data-theme='dark'] .checkout-input::placeholder,
+html[data-theme='dark'] .checkout-change-input::placeholder {
+  color: #999999 !important;
+}
+
+html[data-theme='dark'] .checkout-input:focus,
+html[data-theme='dark'] .checkout-select:focus,
+html[data-theme='dark'] .checkout-change-input:focus {
+  border-color: #ef4444 !important;
+  outline: none !important;
+}
+
+html[data-theme='dark'] .checkout-select option {
+  background: #252525 !important;
+  color: #ffffff !important;
+}
+
+html[data-theme='dark'] .checkout-close-button {
+  background: #292929 !important;
+  color: #ffffff !important;
+  border-color: #444444 !important;
+}
+
+html[data-theme='dark'] .checkout-change-box {
+  background: #242424 !important;
+  border-color: #3f3f3f !important;
+  color: #ffffff !important;
+}
+
+html[data-theme='dark'] .checkout-change-box label {
+  color: #eeeeee !important;
+}
+
+html[data-theme='dark'] .checkout-closed-notice {
+  background: #352f17 !important;
+  color: #ffe58a !important;
+  border-color: #6f5d1c !important;
+}
+
+html[data-theme='dark'] .checkout-submit-button {
+  color: #ffffff !important;
+}
+
+/* =========================================================
+   ACOMPANHAR PEDIDO - reforço
+   ========================================================= */
+
+html[data-theme='dark'] .order-tracking-modal {
+  background: #1b1b1b !important;
+  color: #f5f5f5 !important;
+}
+
+html[data-theme='dark'] .order-tracking-modal h2 {
+  color: #ffffff !important;
+}
+
+html[data-theme='dark'] .order-tracking-modal span {
+  color: #cfcfcf !important;
+}
+
+html[data-theme='dark'] .order-tracking-modal p {
+  color: #d5d5d5 !important;
+}
+
+html[data-theme='dark'] .order-tracking-notification {
+  background: #1b1b1b !important;
+  color: #f5f5f5 !important;
+}
+
+/* =========================================================
+   OBSERVAÇÃO
+   ========================================================= */
+
+html[data-theme='dark'] .cart-drawer,
+html[data-theme='dark'] .checkout-card,
+html[data-theme='dark'] .order-tracking-modal {
+  transition: background-color 0.2s ease, color 0.2s ease, border-color 0.2s ease;
+}
+
+/* =========================================================
+   CORREÇÃO FINAL - CARRINHO + POPUP ACOMPANHAR PEDIDO
+   Apenas cores/contraste. Não altera o layout.
+   ========================================================= */
+
+/* ---------- CARRINHO ---------- */
+html[data-theme='dark'] .cart-drawer {
+  background: #171717 !important;
+  color: #f5f5f5 !important;
+  box-shadow: -8px 0 30px rgba(0,0,0,.55) !important;
+}
+
+html[data-theme='dark'] .cart-drawer > div:first-child {
+  background: #171717 !important;
+  border-bottom-color: #303030 !important;
+}
+
+html[data-theme='dark'] .cart-drawer > div:first-child h2 {
+  color: #ffffff !important;
+}
+
+html[data-theme='dark'] .cart-drawer > div:first-child button {
+  background: #292929 !important;
+  color: #ffffff !important;
+  border-color: #444444 !important;
+}
+
+html[data-theme='dark'] .cart-drawer > div:nth-child(2) {
+  background: #171717 !important;
+  color: #f5f5f5 !important;
+}
+
+html[data-theme='dark'] .cart-drawer .cart-empty-message {
+  color: #bdbdbd !important;
+}
+
+html[data-theme='dark'] .cart-drawer .cart-item {
+  border-bottom-color: #303030 !important;
+}
+
+html[data-theme='dark'] .cart-drawer .cart-item-name {
+  color: #ffffff !important;
+}
+
+html[data-theme='dark'] .cart-drawer .cart-item-price {
+  color: #bdbdbd !important;
+}
+
+html[data-theme='dark'] .cart-drawer .cart-item-note,
+html[data-theme='dark'] .cart-drawer .cart-general-note {
+  background: #252525 !important;
+  color: #ffffff !important;
+  border-color: #454545 !important;
+}
+
+html[data-theme='dark'] .cart-drawer .cart-item-note::placeholder,
+html[data-theme='dark'] .cart-drawer .cart-general-note::placeholder {
+  color: #9f9f9f !important;
+}
+
+html[data-theme='dark'] .cart-drawer .cart-quantity-button {
+  background: #292929 !important;
+  color: #ffffff !important;
+  border-color: #454545 !important;
+}
+
+html[data-theme='dark'] .cart-drawer .cart-remove-button {
+  background: #351b1b !important;
+  color: #ff7070 !important;
+  border-color: #5c2a2a !important;
+}
+
+html[data-theme='dark'] .cart-drawer > div:last-child {
+  background: #171717 !important;
+  border-top-color: #303030 !important;
+  color: #f5f5f5 !important;
+}
+
+html[data-theme='dark'] .cart-drawer .cart-general-note-label {
+  color: #ffffff !important;
+}
+
+html[data-theme='dark'] .cart-drawer .cart-total-label {
+  color: #ffffff !important;
+}
+
+html[data-theme='dark'] .cart-drawer .cart-total-value {
+  color: #ff5b5b !important;
+}
+
+html[data-theme='dark'] .cart-drawer .cart-checkout-button {
+  color: #ffffff !important;
+}
+
+
+/* ---------- POPUP "ACOMPANHAR PEDIDO" ---------- */
+/* O componente usa track-order-*, e não order-tracking-*. */
+
+html[data-theme='dark'] .track-order-overlay {
+  background: rgba(0, 0, 0, .82) !important;
+}
+
+html[data-theme='dark'] .track-order-modal {
+  background: #1b1b1b !important;
+  color: #f5f5f5 !important;
+  border: 1px solid #303030 !important;
+  box-shadow: 0 24px 60px rgba(0,0,0,.60) !important;
+}
+
+html[data-theme='dark'] .track-order-modal h2 {
+  color: #ffffff !important;
+}
+
+html[data-theme='dark'] .track-order-modal > p {
+  color: #cfcfcf !important;
+}
+
+html[data-theme='dark'] .track-order-modal label {
+  color: #eeeeee !important;
+}
+
+html[data-theme='dark'] .track-order-modal .track-order-search-row > div {
+  background: #252525 !important;
+  border-color: #454545 !important;
+}
+
+html[data-theme='dark'] .track-order-modal input[type='tel'] {
+  background: #252525 !important;
+  color: #ffffff !important;
+  border-color: #454545 !important;
+}
+
+html[data-theme='dark'] .track-order-modal input[type='tel']::placeholder {
+  color: #999999 !important;
+}
+
+html[data-theme='dark'] .track-order-modal input[type='tel']:focus {
+  border-color: #ef4444 !important;
+}
+
+html[data-theme='dark'] .track-order-modal .track-order-search-row button {
+  background: #ef4444 !important;
+  color: #ffffff !important;
+}
+
+html[data-theme='dark'] .track-order-modal button[aria-label='Fechar'] {
+  background: #292929 !important;
+  color: #ffffff !important;
+}
+
+/* =========================================================
+   AJUSTE FINAL - CONTRASTE DO MODO NOTURNO
+   Somente cores/contraste. Não altera layout.
+   ========================================================= */
+
+/* ---------- CARRINHO ---------- */
+html[data-theme='dark'] .cart-drawer .cart-item,
+html[data-theme='dark'] .cart-drawer .cart-item * {
+  color: #ffffff !important;
+}
+
+html[data-theme='dark'] .cart-drawer .cart-item-price {
+  color: #d7d7d7 !important;
+}
+
+html[data-theme='dark'] .cart-drawer .cart-quantity-button,
+html[data-theme='dark'] .cart-drawer .cart-remove-button {
+  color: #ffffff !important;
+}
+
+html[data-theme='dark'] .cart-drawer .cart-item-note,
+html[data-theme='dark'] .cart-drawer .cart-general-note {
+  background: #252525 !important;
+  color: #ffffff !important;
+  border-color: #454545 !important;
+}
+
+html[data-theme='dark'] .cart-drawer .cart-item-note::placeholder,
+html[data-theme='dark'] .cart-drawer .cart-general-note::placeholder {
+  color: #a9a9a9 !important;
+}
+
+html[data-theme='dark'] .cart-drawer .cart-general-note-label,
+html[data-theme='dark'] .cart-drawer .cart-total-label {
+  color: #ffffff !important;
+}
+
+html[data-theme='dark'] .cart-drawer .cart-total-value {
+  color: #ff5b5b !important;
+}
+
+/* ---------- CONTATO ---------- */
+html[data-theme='dark'] .contact-card,
+html[data-theme='dark'] .contact-faq-card {
+  background: #1b1b1b !important;
+  color: #ffffff !important;
+  border-color: #333333 !important;
+}
+
+html[data-theme='dark'] .contact-card span,
+html[data-theme='dark'] .contact-card div,
+html[data-theme='dark'] .contact-card a,
+html[data-theme='dark'] .contact-faq-card summary,
+html[data-theme='dark'] .contact-faq-card p,
+html[data-theme='dark'] .contact-hours-text,
+html[data-theme='dark'] .contact-hours-value {
+  color: #ffffff !important;
+}
+
+html[data-theme='dark'] .contact-card .contact-hours-row {
+  border-bottom-color: #3a3a3a !important;
+}
+
+/* ---------- ACOMPANHAR PEDIDO ---------- */
+/* O componente atual usa track-order-*. Os textos abaixo possuem
+   cores inline, por isso usamos !important para o tema prevalecer. */
+html[data-theme='dark'] .track-order-modal {
+  background: #1b1b1b !important;
+  color: #ffffff !important;
+  border-color: #303030 !important;
+}
+
+html[data-theme='dark'] .track-order-modal .orderHeader,
+html[data-theme='dark'] .track-order-modal .order-header {
+  color: #ffffff !important;
+  border-bottom-color: #3a3a3a !important;
+}
+
+html[data-theme='dark'] .track-order-modal .orderNumber,
+html[data-theme='dark'] .track-order-modal .order-number,
+html[data-theme='dark'] .track-order-modal .orderHeader strong,
+html[data-theme='dark'] .track-order-modal .order-header strong {
+  color: #ffffff !important;
+}
+
+html[data-theme='dark'] .track-order-modal .orderLabel,
+html[data-theme='dark'] .track-order-modal .order-label {
+  color: #bdbdbd !important;
+}
+
+html[data-theme='dark'] .track-order-modal .orderDate,
+html[data-theme='dark'] .track-order-modal .order-date {
+  color: #bdbdbd !important;
+}
+
+/* Situação: "Pedido em preparo!", "Pedido pronto!" etc. */
+html[data-theme='dark'] .track-order-modal .statusBanner strong,
+html[data-theme='dark'] .track-order-modal .status-banner strong {
+  color: #ffffff !important;
+}
+
+html[data-theme='dark'] .track-order-modal .statusDescription,
+html[data-theme='dark'] .track-order-modal .status-description {
+  color: #ffffff !important;
+}
+
+/* Etapas: Recebido / Em preparo / Pronto / Finalizado */
+html[data-theme='dark'] .track-order-modal .progressLabel,
+html[data-theme='dark'] .track-order-modal .progress-label {
+  color: #ffffff !important;
+}
+
+/* Cliente / forma de pagamento */
+html[data-theme='dark'] .track-order-modal .customerBox,
+html[data-theme='dark'] .track-order-modal .customer-box {
+  background: #252525 !important;
+  color: #ffffff !important;
+}
+
+html[data-theme='dark'] .track-order-modal .infoLabel,
+html[data-theme='dark'] .track-order-modal .info-label {
+  color: #bdbdbd !important;
+}
+
+html[data-theme='dark'] .track-order-modal .infoValue,
+html[data-theme='dark'] .track-order-modal .info-value {
+  color: #ffffff !important;
+}
+
+/* Status do pagamento */
+html[data-theme='dark'] .track-order-modal .paymentStatus,
+html[data-theme='dark'] .track-order-modal .payment-status {
+  color: #ffffff !important;
+}
+
+html[data-theme='dark'] .track-order-modal .paymentStatus span,
+html[data-theme='dark'] .track-order-modal .payment-status span,
+html[data-theme='dark'] .track-order-modal .paymentStatus strong,
+html[data-theme='dark'] .track-order-modal .payment-status strong {
+  color: #ffffff !important;
+}
+
+/* "Itens do pedido" + nome dos produtos + quantidade + preço */
+html[data-theme='dark'] .track-order-modal .sectionTitle,
+html[data-theme='dark'] .track-order-modal .section-title {
+  color: #ffffff !important;
+}
+
+html[data-theme='dark'] .track-order-modal .itemList,
+html[data-theme='dark'] .track-order-modal .item-list {
+  background: #1b1b1b !important;
+  border-color: #555555 !important;
+}
+
+html[data-theme='dark'] .track-order-modal .itemRow,
+html[data-theme='dark'] .track-order-modal .item-row {
+  color: #ffffff !important;
+  border-bottom-color: #3a3a3a !important;
+}
+
+html[data-theme='dark'] .track-order-modal .itemInfo,
+html[data-theme='dark'] .track-order-modal .item-info,
+html[data-theme='dark'] .track-order-modal .itemInfo span,
+html[data-theme='dark'] .track-order-modal .item-info span {
+  color: #ffffff !important;
+}
+
+html[data-theme='dark'] .track-order-modal .itemQuantity,
+html[data-theme='dark'] .track-order-modal .item-quantity {
+  color: #ff5b5b !important;
+}
+
+html[data-theme='dark'] .track-order-modal .itemRow > strong,
+html[data-theme='dark'] .track-order-modal .item-row > strong {
+  color: #ffffff !important;
+}
+
+/* Total */
+html[data-theme='dark'] .track-order-modal .totalRow,
+html[data-theme='dark'] .track-order-modal .total-row,
+html[data-theme='dark'] .track-order-modal .totalRow span,
+html[data-theme='dark'] .track-order-modal .total-row span,
+html[data-theme='dark'] .track-order-modal .totalRow strong,
+html[data-theme='dark'] .track-order-modal .total-row strong {
+  color: #ffffff !important;
+  border-color: #555555 !important;
+}
+
+/* Observação */
+html[data-theme='dark'] .track-order-modal .notesBox,
+html[data-theme='dark'] .track-order-modal .notes-box {
+  background: #302b16 !important;
+  color: #fff3bd !important;
+}
+
+html[data-theme='dark'] .track-order-modal .notesTitle,
+html[data-theme='dark'] .track-order-modal .notes-title,
+html[data-theme='dark'] .track-order-modal .notesText,
+html[data-theme='dark'] .track-order-modal .notes-text {
+  color: #fff3bd !important;
+}
+
+/* ---------- PIX ---------- */
+/* Estes seletores funcionam na versão do PixPaymentModal que usa
+   as classes pix-payment-*. Se o arquivo ainda não tiver essas
+   classes, elas precisam ser adicionadas ao componente. */
+html[data-theme='dark'] .pix-payment-overlay {
+  background: rgba(0, 0, 0, .84) !important;
+}
+
+html[data-theme='dark'] .pix-payment-modal {
+  background: #1b1b1b !important;
+  color: #ffffff !important;
+  border-color: #303030 !important;
+  box-shadow: 0 24px 60px rgba(0,0,0,.65) !important;
+}
+
+html[data-theme='dark'] .pix-payment-title,
+html[data-theme='dark'] .pix-payment-modal h1,
+html[data-theme='dark'] .pix-payment-modal h2,
+html[data-theme='dark'] .pix-payment-modal h3 {
+  color: #ffffff !important;
+}
+
+html[data-theme='dark'] .pix-payment-description,
+html[data-theme='dark'] .pix-payment-modal p {
+  color: #d8d8d8 !important;
+}
+
+html[data-theme='dark'] .pix-payment-close {
+  background: #292929 !important;
+  color: #ffffff !important;
+}
+
+html[data-theme='dark'] .pix-payment-value-box {
+  background: #252525 !important;
+  color: #ffffff !important;
+}
+
+html[data-theme='dark'] .pix-payment-order {
+  color: #d0d0d0 !important;
+}
+
+html[data-theme='dark'] .pix-payment-value {
+  color: #ffffff !important;
+}
+
+html[data-theme='dark'] .pix-payment-qrcode-area,
+html[data-theme='dark'] .pix-payment-qrcode {
+  background: #ffffff !important;
+  color: #000000 !important;
+  border-color: #555555 !important;
+}
+
+html[data-theme='dark'] .pix-payment-code-section,
+html[data-theme='dark'] .pix-payment-code-label {
+  color: #ffffff !important;
+}
+
+html[data-theme='dark'] .pix-payment-code {
+  background: #252525 !important;
+  color: #eeeeee !important;
+  border-color: #454545 !important;
+}
+
+html[data-theme='dark'] .pix-payment-copy-button {
+  background: #1b1b1b !important;
+  color: #55d477 !important;
+  border-color: #28a745 !important;
+}
+
+html[data-theme='dark'] .pix-payment-warning {
+  background: #2b260f !important;
+  border-color: #665515 !important;
+  color: #e8dca8 !important;
+}
+
+html[data-theme='dark'] .pix-payment-warning-text {
+  color: #e8dca8 !important;
+}
+
+html[data-theme='dark'] .pix-payment-done-button {
+  background: #28a745 !important;
+  color: #ffffff !important;
+}
+
+/* =========================================================
+   AJUSTE FINAL - PIX QR + ACOMPANHAR PEDIDO
+   Somente cores/contraste no modo noturno.
+   ========================================================= */
+
+/* ---------- PIX: fundo ao redor do QR fica escuro ---------- */
+html[data-theme='dark'] .pix-payment-qrcode-area {
+  background: #171717 !important;
+  color: #ffffff !important;
+  border-color: #303030 !important;
+}
+
+/* O QR continua branco para ser lido corretamente */
+html[data-theme='dark'] .pix-payment-qrcode {
+  background: #ffffff !important;
+  color: #000000 !important;
+  border-color: #555555 !important;
+}
+
+html[data-theme='dark'] .pix-payment-qrcode img,
+html[data-theme='dark'] .pix-payment-qrcode canvas {
+  background: #ffffff !important;
+}
+
+/* ---------- ACOMPANHAR PEDIDO ---------- */
+/*
+   O componente atual usa estilos inline (styles.orderNumber,
+   styles.statusTitle, styles.itemName, styles.totalRow etc.).
+   Por isso as regras abaixo usam a estrutura do modal e !important.
+*/
+html[data-theme='dark'] .track-order-modal .results > div {
+  background: #1b1b1b !important;
+  color: #ffffff !important;
+  border-color: #3a3a3a !important;
+}
+
+html[data-theme='dark'] .track-order-modal .results strong,
+html[data-theme='dark'] .track-order-modal .results span,
+html[data-theme='dark'] .track-order-modal .results p {
+  color: #ffffff !important;
+}
+
+/* Número do pedido */
+html[data-theme='dark'] .track-order-modal .results strong {
+  color: #ffffff !important;
+}
+
+/* Data/hora */
+html[data-theme='dark'] .track-order-modal .results svg + *,
+html[data-theme='dark'] .track-order-modal .results div {
+  color: #ffffff !important;
+}
+
+/* Faixa de status: título e descrição */
+html[data-theme='dark'] .track-order-modal .results > div > div {
+  color: #ffffff !important;
+}
+
+/* Cliente / forma de pagamento */
+html[data-theme='dark'] .track-order-modal .results > div strong,
+html[data-theme='dark'] .track-order-modal .results > div span {
+  color: #ffffff !important;
+}
+
+/* Itens do pedido */
+html[data-theme='dark'] .track-order-modal .results > div span,
+html[data-theme='dark'] .track-order-modal .results > div strong {
+  color: #ffffff !important;
+}
+
+
+/* Total do pedido */
+html[data-theme='dark'] .track-order-modal .results > div:last-child,
+html[data-theme='dark'] .track-order-modal .results > div:last-child strong,
+html[data-theme='dark'] .track-order-modal .results > div:last-child span {
+  color: #ffffff !important;
+}
+
+/* Títulos das seções e textos da timeline */
+html[data-theme='dark'] .track-order-modal .results h3,
+html[data-theme='dark'] .track-order-modal .results h4 {
+  color: #ffffff !important;
+}
+
+html[data-theme='dark'] .track-order-modal .results .timelineTitle,
+html[data-theme='dark'] .track-order-modal .results .timelineDescription {
+  color: #ffffff !important;
+}
+
+/* ==========================================================
+   CORREÇÃO FINAL — ACOMPANHAR PEDIDO + FEEDBACKS
+   ========================================================== */
+
+/* ACOMPANHAR PEDIDO — textos que usam color inline */
+html[data-theme='dark'] .track-order-modal .results [style*='color'] {
+  color: #ffffff !important;
+}
+
+html[data-theme='dark'] .track-order-modal .results [style*='color: #1f2937'],
+html[data-theme='dark'] .track-order-modal .results [style*='color:#1f2937'],
+html[data-theme='dark'] .track-order-modal .results [style*='color: #374151'],
+html[data-theme='dark'] .track-order-modal .results [style*='color:#374151'],
+html[data-theme='dark'] .track-order-modal .results [style*='color: #4b5563'],
+html[data-theme='dark'] .track-order-modal .results [style*='color:#4b5563'],
+html[data-theme='dark'] .track-order-modal .results [style*='color: #6b7280'],
+html[data-theme='dark'] .track-order-modal .results [style*='color:#6b7280'],
+html[data-theme='dark'] .track-order-modal .results [style*='color: #111827'],
+html[data-theme='dark'] .track-order-modal .results [style*='color:#111827'] {
+  color: #ffffff !important;
+}
+
+html[data-theme='dark'] .track-order-modal .results strong,
+html[data-theme='dark'] .track-order-modal .results p,
+html[data-theme='dark'] .track-order-modal .results h3,
+html[data-theme='dark'] .track-order-modal .results h4,
+html[data-theme='dark'] .track-order-modal .results span {
+  color: #ffffff !important;
+}
+
+/* Mantém os banners de status visíveis, mas deixa o texto claro */
+html[data-theme='dark'] .track-order-modal .results [style*='background'] {
+  color: #ffffff !important;
+}
+
+/* FEEDBACK — modo escuro */
+html[data-theme='dark'] .feedback-overlay {
+  background: rgba(0, 0, 0, 0.78) !important;
+}
+
+html[data-theme='dark'] .feedback-container {
+  background: #1b1b1b !important;
+  color: #ffffff !important;
+  border: 1px solid #333333 !important;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.55) !important;
+}
+
+html[data-theme='dark'] .feedback-close {
+  color: #dddddd !important;
+}
+
+html[data-theme='dark'] .feedback-header h2 {
+  color: #ffffff !important;
+}
+
+html[data-theme='dark'] .feedback-header p {
+  color: #d0d0d0 !important;
+}
+
+html[data-theme='dark'] .feedback-comment label {
+  color: #f0f0f0 !important;
+}
+
+html[data-theme='dark'] .feedback-comment textarea {
+  background: #252525 !important;
+  color: #ffffff !important;
+  border-color: #4a4a4a !important;
+}
+
+html[data-theme='dark'] .feedback-comment textarea::placeholder {
+  color: #a9a9a9 !important;
+}
+
+html[data-theme='dark'] .star-button {
+  color: #ffffff !important;
+}
+
+html[data-theme='dark'] .btn-send-feedback {
+  color: #ffffff !important;
+}

@@ -657,3 +657,153 @@ p {
   }
 }
 }
+
+/* =================================
+   MODO ESCURO - ALTERAÇÃO SUAVE
+================================= */
+
+.site-mobile-actions {
+  display: none;
+  align-items: center;
+  gap: 8px;
+  margin-left: auto;
+}
+
+.site-theme-button {
+  width: 44px;
+  height: 44px;
+  padding: 0;
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  background: rgba(255, 255, 255, 0.08);
+  color: #fff;
+
+  border: 1px solid rgba(255, 255, 255, 0.42);
+  border-radius: 50%;
+
+  transition: background 0.2s ease, transform 0.2s ease;
+}
+
+.site-theme-button:hover {
+  background: rgba(255, 255, 255, 0.17);
+  transform: translateY(-1px);
+}
+
+html.dark-mode body {
+  background-color: #171717;
+  color: #f1f1f1;
+}
+
+html.dark-mode h1 {
+  color: #f1f1f1;
+}
+
+html.dark-mode p {
+  color: #c5c5c5;
+}
+
+html.dark-mode .search-input {
+  background: #202020;
+  color: #f1f1f1;
+}
+
+html.dark-mode .search-input::placeholder {
+  color: #999;
+}
+
+html.dark-mode .filter-btn {
+  background: #252525;
+  color: #cfcfcf;
+}
+
+html.dark-mode .filter-btn:hover {
+  background: #303030;
+}
+
+html.dark-mode .product-card {
+  background: #202020;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.28);
+}
+
+html.dark-mode .product-image-container {
+  background: #252525;
+}
+
+html.dark-mode .product-desc {
+  color: #c5c5c5;
+}
+
+html.dark-mode .site-mobile-menu {
+  background: #202020;
+}
+
+html.dark-mode .site-mobile-nav a,
+html.dark-mode .site-mobile-nav button {
+  color: #e5e5e5;
+}
+
+html.dark-mode .site-mobile-nav a:hover,
+html.dark-mode .site-mobile-nav button:hover {
+  background: #2c2c2c;
+  color: var(--primary);
+}
+
+html.dark-mode .drawer {
+  background: #202020;
+}
+
+html.dark-mode .drawer h2,
+html.dark-mode .cart-item,
+html.dark-mode .order-item-row {
+  color: #f1f1f1;
+}
+
+html.dark-mode .qty-controls {
+  background: #292929;
+}
+
+html.dark-mode .btn-qty {
+  background: #202020;
+  color: #f1f1f1;
+  border-color: #444;
+}
+
+html.dark-mode .cart-item {
+  border-bottom-color: #333;
+}
+
+html.dark-mode .order-card {
+  background: #202020;
+}
+
+html.dark-mode .status-actions {
+  border-top-color: #333;
+}
+
+html.dark-mode .image-modal-content {
+  background: #202020;
+}
+
+html.dark-mode input,
+html.dark-mode textarea,
+html.dark-mode select {
+  background-color: #202020;
+  color: #f1f1f1;
+  border-color: #444;
+}
+
+@media (max-width: 850px) {
+  .site-mobile-actions {
+    display: flex;
+  }
+}
+
+@media (max-width: 380px) {
+  .site-theme-button {
+    width: 40px;
+    height: 40px;
+  }
+}

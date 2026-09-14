@@ -4,20 +4,17 @@ const PAYMENT_OPTIONS = [
   {
     value: 'pendente',
     label: 'Pendente',
-    background: '#fff7ed',
-    color: '#9a3412'
+    className: 'pix-pendente'
   },
   {
     value: 'pago',
     label: 'Pago',
-    background: '#f0fdf4',
-    color: '#166534'
+    className: 'pix-pago'
   },
   {
     value: 'cancelado',
     label: 'Cancelado',
-    background: '#fef2f2',
-    color: '#b91c1c'
+    className: 'pix-cancelado'
   }
 ];
 
@@ -26,33 +23,37 @@ export default function PaymentStatusButtons({
   paymentStatus = 'pendente',
   onChange
 }) {
-  const currentStatus = String(paymentStatus || 'pendente')
+  const currentStatus = String(
+    paymentStatus || 'pendente'
+  )
     .trim()
     .toLowerCase();
 
   return (
-    <div style={styles.container}>
-      <strong style={styles.title}>Status do pagamento Pix</strong>
+    <div className="admin-pix-status">
+      <strong className="admin-pix-status-title">
+        Status do pagamento Pix
+      </strong>
 
-      <div style={styles.buttonsWrapper}>
+      <div className="admin-pix-status-buttons">
         {PAYMENT_OPTIONS.map((option) => {
-          const isActive = currentStatus === option.value;
+          const isActive =
+            currentStatus === option.value;
 
           return (
             <button
               key={option.value}
               type="button"
-              onClick={() => onChange(orderId, option.value)}
+              onClick={() =>
+                onChange(
+                  orderId,
+                  option.value
+                )
+              }
               aria-pressed={isActive}
-              style={{
-                ...styles.button,
-                border: isActive
-                  ? `2px solid ${option.color}`
-                  : '1px solid #d1d5db',
-                background: option.background,
-                color: option.color,
-                opacity: isActive ? 1 : 0.72
-              }}
+              className={`admin-pix-status-button ${option.className} ${
+                isActive ? 'active' : ''
+              }`}
             >
               {isActive ? '✓ ' : ''}
               {option.label}
@@ -63,34 +64,3 @@ export default function PaymentStatusButtons({
     </div>
   );
 }
-
-const styles = {
-  container: {
-    marginTop: '12px',
-    padding: '12px',
-    background: '#f8fafc',
-    border: '1px solid #e2e8f0',
-    borderRadius: '8px'
-  },
-
-  title: {
-    display: 'block',
-    marginBottom: '9px',
-    color: '#475569',
-    fontSize: '0.82rem'
-  },
-
-  buttonsWrapper: {
-    display: 'flex',
-    gap: '8px',
-    flexWrap: 'wrap'
-  },
-
-  button: {
-    padding: '8px 12px',
-    borderRadius: '8px',
-    fontWeight: 800,
-    cursor: 'pointer',
-    transition: 'opacity 0.2s ease, transform 0.2s ease'
-  }
-};

@@ -198,7 +198,7 @@ export default function CheckoutModal({
     <>
       {isOpen && !showFeedback && !showPixModal && (
         <div 
-          className="modal-overlay" 
+          className="modal-overlay checkout-overlay" 
           style={{ 
             display: 'flex', 
             justifyContent: 'center', 
@@ -227,7 +227,7 @@ export default function CheckoutModal({
               position: 'relative'
             }}
           >
-            <div style={{ 
+            <div className="checkout-header" style={{ 
               display: 'flex', 
               justifyContent: 'space-between', 
               alignItems: 'center', 
@@ -235,8 +235,8 @@ export default function CheckoutModal({
               borderBottom: '1px solid #eee',
               paddingBottom: '15px'
             }}>
-              <h2 style={{ margin: 0, fontSize: '1.4rem', fontWeight: '800' }}>Finalizar Pedido</h2>
-              <button 
+              <h2 className="checkout-title" style={{ margin: 0, fontSize: '1.4rem', fontWeight: '800' }}>Finalizar Pedido</h2>
+              <button className="checkout-close-button"
                 onClick={handleClose} 
                 style={{ background: '#f5f5f5', border: 'none', cursor: 'pointer', padding: '8px', borderRadius: '50%', display: 'flex' }}
               >
@@ -246,8 +246,8 @@ export default function CheckoutModal({
 
             <form onSubmit={handleSubmit}>
               <div style={{ marginBottom: '15px' }}>
-                <label style={{ display: 'block', marginBottom: '8px', fontWeight: '600', fontSize: '0.9rem' }}>Nome</label>
-                <input 
+                <label className="checkout-label" style={{ display: 'block', marginBottom: '8px', fontWeight: '600', fontSize: '0.9rem' }}>Nome</label>
+                <input className="checkout-input"
                   required 
                   placeholder="Seu nome completo" 
                   style={{ width: '100%', padding: '12px', borderRadius: '10px', border: '1px solid #ddd', fontSize: '1rem' }} 
@@ -257,8 +257,8 @@ export default function CheckoutModal({
               </div>
 
               <div style={{ marginBottom: '15px' }}>
-                <label style={{ display: 'block', marginBottom: '8px', fontWeight: '600', fontSize: '0.9rem' }}>Telefone</label>
-                <input 
+                <label className="checkout-label" style={{ display: 'block', marginBottom: '8px', fontWeight: '600', fontSize: '0.9rem' }}>Telefone</label>
+                <input className="checkout-input"
                   required 
                   type="tel" 
                   placeholder="(00) 00000-0000" 
@@ -269,8 +269,8 @@ export default function CheckoutModal({
               </div>
 
               <div style={{ marginBottom: '20px' }}>
-                <label style={{ display: 'block', marginBottom: '8px', fontWeight: '600', fontSize: '0.9rem' }}>Forma de Pagamento</label>
-                <select 
+                <label className="checkout-label" style={{ display: 'block', marginBottom: '8px', fontWeight: '600', fontSize: '0.9rem' }}>Forma de Pagamento</label>
+                <select className="checkout-select"
                   value={formData.payment} 
                   style={{ width: '100%', padding: '12px', borderRadius: '10px', border: '1px solid #ddd', fontSize: '1rem', background: 'white' }} 
                   onChange={e => setFormData({ ...formData, payment: e.target.value })}
@@ -283,7 +283,7 @@ export default function CheckoutModal({
               </div>
 
               {formData.payment === 'dinheiro' && (
-                <div style={{ marginBottom: '20px', padding: '15px', background: '#f8f9fa', borderRadius: '12px', border: '1px solid #e9ecef' }}>
+                <div className="checkout-change-box" style={{ marginBottom: '20px', padding: '15px', background: '#f8f9fa', borderRadius: '12px', border: '1px solid #e9ecef' }}>
                   <label style={{ display: 'flex', alignItems: 'center', gap: '10px', cursor: 'pointer', fontWeight: '600' }}>
                     <input 
                       type="checkbox" 
@@ -294,7 +294,7 @@ export default function CheckoutModal({
                     Precisa de troco?
                   </label>
                   {formData.needsChange && (
-                    <input 
+                    <input className="checkout-input checkout-change-input"
                       required 
                       placeholder="Troco para quanto?" 
                       style={{ width: '100%', marginTop: '12px', padding: '12px', borderRadius: '8px', border: '1px solid #ddd' }} 
@@ -306,7 +306,7 @@ export default function CheckoutModal({
               )}
 
               {!aberto && (
-                <div
+                <div className="checkout-closed-notice"
                   style={{
                     marginBottom: '15px',
                     padding: '12px',
@@ -324,7 +324,7 @@ export default function CheckoutModal({
                 </div>
               )}
 
-              <button
+              <button className="checkout-submit-button"
                 type="submit"
                 disabled={loading || !aberto}
                 style={{

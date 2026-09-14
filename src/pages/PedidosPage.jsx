@@ -43,7 +43,7 @@ export default function PedidosPage({ addToCart, cartCount, openCart }) {
 
   const getImageUrl = (imagePath) => {
     if (!imagePath || imagePath === '.') {
-      return 'https://images.unsplash.com/photo-1513104890138-7c749659a591?w=400';
+      return '/Logo.png';
     }
 
     if (imagePath.startsWith('http')) {
@@ -186,8 +186,7 @@ export default function PedidosPage({ addToCart, cartCount, openCart }) {
                     style={{ cursor: 'pointer' }}
                     onError={(e) => {
                       e.target.onerror = null; 
-                      e.target.src =
-                        'https://images.unsplash.com/photo-1513104890138-7c749659a591?w=400';
+                      e.target.src = '/Logo.png';
                     }}
                   />
                 </div>
@@ -284,6 +283,10 @@ export default function PedidosPage({ addToCart, cartCount, openCart }) {
               src={selectedImage.url}
               alt={selectedImage.name}
               className="image-modal-img"
+              onError={(e) => {
+                e.currentTarget.onerror = null;
+                e.currentTarget.src = '/Logo.png';
+              }}
             />
 
             <p className="image-modal-warning">

@@ -86,6 +86,7 @@ export default function CartDrawer({
         role="dialog"
         aria-modal="true"
         aria-label="Carrinho de compras"
+        className="cart-drawer"
         onClick={(event) => event.stopPropagation()}
         style={{
           position: 'relative',
@@ -167,7 +168,7 @@ export default function CartDrawer({
           }}
         >
           {cart.length === 0 ? (
-            <p
+            <p className="cart-empty-message"
               style={{
                 margin: '38px 0 0',
                 textAlign: 'center',
@@ -181,6 +182,7 @@ export default function CartDrawer({
             cart.map((item) => (
               <div
                 key={item.id}
+                className="cart-item"
                 style={{
                   width: '100%',
                   padding: '16px 0',
@@ -208,7 +210,7 @@ export default function CartDrawer({
                       minWidth: 0
                     }}
                   >
-                    <span
+                    <span className="cart-item-name"
                       style={{
                         display: 'block',
                         marginBottom: '3px',
@@ -219,7 +221,7 @@ export default function CartDrawer({
                       {item.name}
                     </span>
 
-                    <span
+                    <span className="cart-item-price"
                       style={{
                         color: '#777777',
                         fontSize: '0.87rem'
@@ -241,6 +243,7 @@ export default function CartDrawer({
                       type="button"
                       aria-label={`Diminuir quantidade de ${item.name}`}
                       onClick={() => updateQty(item.id, -1)}
+                      className="cart-quantity-button"
                       style={quantityButtonStyle}
                     >
                       <Minus size={15} />
@@ -261,6 +264,7 @@ export default function CartDrawer({
                       type="button"
                       aria-label={`Aumentar quantidade de ${item.name}`}
                       onClick={() => updateQty(item.id, 1)}
+                      className="cart-quantity-button"
                       style={quantityButtonStyle}
                     >
                       <Plus size={15} />
@@ -269,6 +273,7 @@ export default function CartDrawer({
                     <button
                       type="button"
                       aria-label={`Remover ${item.name} do carrinho`}
+                      className="cart-remove-button"
                       onClick={() => removeItem(item.id)}
                       style={{
                         width: '36px',
@@ -293,6 +298,7 @@ export default function CartDrawer({
                 </div>
 
                 <input
+                  className="cart-item-note"
                   type="text"
                   placeholder="Ex: Tirar cebola, ponto da carne..."
                   value={item.note || ''}
@@ -329,6 +335,7 @@ export default function CartDrawer({
         >
           <div style={{ marginBottom: '15px' }}>
             <label
+              className="cart-general-note-label"
               htmlFor="general-note"
               style={{
                 marginBottom: '8px',
@@ -347,6 +354,7 @@ export default function CartDrawer({
             </label>
 
             <textarea
+              className="cart-general-note"
               id="general-note"
               placeholder="Deseja adicionar alguma observação ao pedido?"
               value={generalNote}
@@ -379,7 +387,7 @@ export default function CartDrawer({
               gap: '10px'
             }}
           >
-            <span
+            <span className="cart-total-label"
               style={{
                 color: '#222222',
                 fontSize: '1.2rem',
@@ -389,7 +397,7 @@ export default function CartDrawer({
               Total:
             </span>
 
-            <span
+            <span className="cart-total-value"
               style={{
                 color: 'var(--primary, #e52f2f)',
                 fontSize: '1.25rem',
@@ -401,6 +409,7 @@ export default function CartDrawer({
           </div>
 
           <button
+            className="cart-checkout-button"
             type="button"
             onClick={() => onCheckout(generalNote)}
             disabled={cart.length === 0}

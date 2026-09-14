@@ -635,17 +635,17 @@ export default function AdminDashboard() {
 
       {/* CONTEÚDO: ADICIONAR ITEM */}
       {activeTab === 'adicionar' && (
-        <div style={{ background: 'white', padding: '20px', borderRadius: '12px', boxShadow: '0 2px 10px rgba(0,0,0,0.05)' }}>
+        <div className="admin-add-product" style={{ background: 'white', padding: '20px', borderRadius: '12px', boxShadow: '0 2px 10px rgba(0,0,0,0.05)' }}>
           <h2 style={{ marginBottom: '20px', display: 'flex', alignItems: 'center', gap: '10px' }}><PlusCircle color="#ef4444"/> Novo Produto</h2>
           <form onSubmit={handleAddProduct} style={{ display: 'grid', gap: '15px' }}>
-            <input type="text" placeholder="Nome do produto" value={newProduct.name} onChange={e => setNewProduct({...newProduct, name: e.target.value})} required style={{ padding: '12px', borderRadius: '8px', border: '1px solid #ddd' }} />
-            <input type="text" placeholder="Preço (R$ 0,00)" value={newProduct.price} onChange={e => setNewProduct({...newProduct, price: applyPriceMask(e.target.value)})} required style={{ padding: '12px', borderRadius: '8px', border: '1px solid #ddd' }} />
-            <select value={newProduct.category} onChange={e => setNewProduct({...newProduct, category: e.target.value})} style={{ padding: '12px', borderRadius: '8px', border: '1px solid #ddd' }}>
+            <input type="text" className="admin-add-input" placeholder="Nome do produto" value={newProduct.name} onChange={e => setNewProduct({...newProduct, name: e.target.value})} required style={{ padding: '12px', borderRadius: '8px', border: '1px solid #ddd' }} />
+            <input type="text" className="admin-add-input" placeholder="Preço (R$ 0,00)" value={newProduct.price} onChange={e => setNewProduct({...newProduct, price: applyPriceMask(e.target.value)})} required style={{ padding: '12px', borderRadius: '8px', border: '1px solid #ddd' }} />
+            <select className="admin-add-select" value={newProduct.category} onChange={e => setNewProduct({...newProduct, category: e.target.value})} style={{ padding: '12px', borderRadius: '8px', border: '1px solid #ddd' }}>
               <option>Salgados</option><option>Salgadinho</option><option>Pasteis</option><option>Bebidas</option><option>Doces</option>
             </select>
             <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
-                <label style={{ cursor: 'pointer', background: '#f8f9fa', padding: '15px', borderRadius: '8px', border: '2px dashed #ddd', textAlign: 'center', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '10px' }}>
-                  <Upload size={20} color="#666" /><span style={{ color: '#666', fontWeight: '600' }}>{uploading ? 'Carregando...' : 'Selecionar Imagem'}</span>
+                <label className="admin-upload-label" style={{ cursor: 'pointer', background: '#f8f9fa', padding: '15px', borderRadius: '8px', border: '2px dashed #ddd', textAlign: 'center', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '10px' }}>
+                  <Upload className="admin-upload-icon" size={20} color="#666" /><span className="admin-upload-text" style={{ color: '#666', fontWeight: '600' }}>{uploading ? 'Carregando...' : 'Selecionar Imagem'}</span>
                   <input type="file" accept="image/*" hidden onChange={(e) => handleFileUpload(e, false)} />
                 </label>
                 {newProduct.image && (
@@ -664,7 +664,7 @@ export default function AdminDashboard() {
       {activeTab === 'editar' && (
         <div className="products-list" style={{ display: 'grid', gap: '10px' }}>
           {products.map(p => (
-            <div key={p.id} style={{ background: 'white', padding: '15px', borderRadius: '10px', display: 'flex', justifyContent: 'space-between', alignItems: 'center', border: '1px solid #eee', opacity: p.ativo === false ? 0.6 : 1 }}>
+            <div key={p.id} className="admin-edit-product" style={{ background: 'white', padding: '15px', borderRadius: '10px', display: 'flex', justifyContent: 'space-between', alignItems: 'center', border: '1px solid #eee', opacity: p.ativo === false ? 0.6 : 1 }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
                 {p.image && <img src={p.image} alt="" style={{ width: '40px', height: '40px', borderRadius: '6px', objectFit: 'cover', filter: p.ativo === false ? 'grayscale(100%)' : 'none' }} />}
                 <div>
@@ -675,11 +675,11 @@ export default function AdminDashboard() {
                 </div>
               </div>
               <div style={{ display: 'flex', gap: '10px' }}>
-                <button onClick={() => handleToggleProduct(p.id, p.ativo)} title={p.ativo === false ? 'Reativar produto' : 'Pausar produto'} style={{ background: '#f3f4f6', color: '#4b5563', border: 'none', padding: '8px', borderRadius: '5px', cursor: 'pointer' }}>
+                <button className="admin-product-action admin-product-toggle" onClick={() => handleToggleProduct(p.id, p.ativo)} title={p.ativo === false ? 'Reativar produto' : 'Pausar produto'} style={{ background: '#f3f4f6', color: '#4b5563', border: 'none', padding: '8px', borderRadius: '5px', cursor: 'pointer' }}>
                   {p.ativo === false ? <EyeOff size={16}/> : <Eye size={16}/>}
                 </button>
-                <button onClick={() => setEditingProduct({...p, price: formatCurrency(p.price)})} style={{ background: '#f0f0f0', border: 'none', padding: '8px', borderRadius: '5px', cursor: 'pointer' }}><Edit size={16}/></button>
-                <button onClick={() => handleDeleteProduct(p.id)} style={{ background: '#fee2e2', color: '#ef4444', border: 'none', padding: '8px', borderRadius: '5px', cursor: 'pointer' }}><Trash2 size={16}/></button>
+                <button className="admin-product-action admin-product-edit" onClick={() => setEditingProduct({...p, price: formatCurrency(p.price)})} style={{ background: '#f0f0f0', border: 'none', padding: '8px', borderRadius: '5px', cursor: 'pointer' }}><Edit size={16}/></button>
+                <button className="admin-product-delete" onClick={() => handleDeleteProduct(p.id)} style={{ background: '#fee2e2', color: '#ef4444', border: 'none', padding: '8px', borderRadius: '5px', cursor: 'pointer' }}><Trash2 size={16}/></button>
               </div>
             </div>
           ))}
@@ -688,31 +688,31 @@ export default function AdminDashboard() {
 
       {/* MODAL DE EDIÇÃO DE PRODUTO */}
       {editingProduct && (
-        <div style={{ position: 'fixed', top: 0, left: 0, right: 0, bottom: 0, background: 'rgba(0,0,0,0.5)', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 1000, padding: '20px' }}>
-          <div style={{ background: 'white', padding: '25px', borderRadius: '12px', width: '100%', maxWidth: '450px', boxShadow: '0 10px 25px rgba(0,0,0,0.2)' }}>
+        <div className="admin-edit-modal-overlay" style={{ position: 'fixed', top: 0, left: 0, right: 0, bottom: 0, background: 'rgba(0,0,0,0.5)', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 1000, padding: '20px' }}>
+          <div className="admin-edit-modal" style={{ background: 'white', padding: '25px', borderRadius: '12px', width: '100%', maxWidth: '450px', boxShadow: '0 10px 25px rgba(0,0,0,0.2)' }}>
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px' }}>
               <h2 style={{ margin: 0, fontSize: '1.25rem', display: 'flex', alignItems: 'center', gap: '8px' }}><Edit size={20} color="#ef4444"/> Editar Item</h2>
-              <button onClick={() => setEditingProduct(null)} style={{ background: 'none', border: 'none', cursor: 'pointer', color: '#666' }}><X size={24}/></button>
+              <button className="admin-modal-close" onClick={() => setEditingProduct(null)} style={{ background: 'none', border: 'none', cursor: 'pointer', color: '#666' }}><X size={24}/></button>
             </div>
             <form onSubmit={handleUpdateProduct} style={{ display: 'grid', gap: '15px' }}>
               <div>
                 <label style={{ fontSize: '0.85rem', fontWeight: 'bold', color: '#666', marginBottom: '5px', display: 'block' }}>Nome do Produto</label>
-                <input type="text" value={editingProduct.name} onChange={e => setEditingProduct({...editingProduct, name: e.target.value})} required style={{ width: '100%', padding: '12px', borderRadius: '8px', border: '1px solid #ddd' }} />
+                <input className="admin-edit-input" type="text" value={editingProduct.name} onChange={e => setEditingProduct({...editingProduct, name: e.target.value})} required style={{ width: '100%', padding: '12px', borderRadius: '8px', border: '1px solid #ddd' }} />
               </div>
               <div>
                 <label style={{ fontSize: '0.85rem', fontWeight: 'bold', color: '#666', marginBottom: '5px', display: 'block' }}>Preço</label>
-                <input type="text" value={editingProduct.price} onChange={e => setEditingProduct({...editingProduct, price: applyPriceMask(e.target.value)})} required style={{ width: '100%', padding: '12px', borderRadius: '8px', border: '1px solid #ddd' }} />
+                <input className="admin-edit-input" type="text" value={editingProduct.price} onChange={e => setEditingProduct({...editingProduct, price: applyPriceMask(e.target.value)})} required style={{ width: '100%', padding: '12px', borderRadius: '8px', border: '1px solid #ddd' }} />
               </div>
               <div>
                 <label style={{ fontSize: '0.85rem', fontWeight: 'bold', color: '#666', marginBottom: '5px', display: 'block' }}>Categoria</label>
-                <select value={editingProduct.category} onChange={e => setEditingProduct({...editingProduct, category: e.target.value})} style={{ width: '100%', padding: '12px', borderRadius: '8px', border: '1px solid #ddd' }}>
+                <select className="admin-edit-select" value={editingProduct.category} onChange={e => setEditingProduct({...editingProduct, category: e.target.value})} style={{ width: '100%', padding: '12px', borderRadius: '8px', border: '1px solid #ddd' }}>
                   <option>Salgados</option><option>Salgadinho</option><option>Pasteis</option><option>Bebidas</option><option>Doces</option>
                 </select>
               </div>
               <div>
                 <label style={{ fontSize: '0.85rem', fontWeight: 'bold', color: '#666', marginBottom: '5px', display: 'block' }}>Imagem do Produto</label>
                 <div style={{ display: 'flex', gap: '10px', alignItems: 'center' }}>
-                    <label style={{ flex: 1, cursor: 'pointer', background: '#f8f9fa', padding: '10px', borderRadius: '8px', border: '1px solid #ddd', textAlign: 'center', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px' }}>
+                    <label className="admin-edit-upload-label" style={{ flex: 1, cursor: 'pointer', background: '#f8f9fa', padding: '10px', borderRadius: '8px', border: '1px solid #ddd', textAlign: 'center', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px' }}>
                       <Upload size={18} /><span style={{ fontSize: '0.8rem' }}>Trocar</span><input type="file" accept="image/*" hidden onChange={(e) => handleFileUpload(e, true)} />
                     </label>
                     {editingProduct.image && <img src={editingProduct.image} alt="" style={{ width: '50px', height: '50px', borderRadius: '5px', objectFit: 'cover' }} />}

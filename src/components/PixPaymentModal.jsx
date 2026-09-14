@@ -36,6 +36,7 @@ export default function PixPaymentModal({
 
   return (
     <div
+      className="pix-payment-overlay"
       onClick={onClose}
       style={{
         position: 'fixed',
@@ -49,6 +50,7 @@ export default function PixPaymentModal({
       }}
     >
       <div
+        className="pix-payment-modal"
         onClick={(event) => event.stopPropagation()}
         style={{
           width: '100%',
@@ -62,10 +64,12 @@ export default function PixPaymentModal({
           position: 'relative'
         }}
       >
+        {/* Botão fechar */}
         <button
           type="button"
           onClick={onClose}
           aria-label="Fechar pagamento Pix"
+          className="pix-payment-close"
           style={{
             position: 'absolute',
             top: '16px',
@@ -84,7 +88,9 @@ export default function PixPaymentModal({
           <X size={20} />
         </button>
 
+        {/* Título */}
         <div
+          className="pix-payment-header"
           style={{
             textAlign: 'center',
             paddingRight: '30px',
@@ -92,6 +98,7 @@ export default function PixPaymentModal({
           }}
         >
           <h2
+            className="pix-payment-title"
             style={{
               margin: '0 0 8px',
               fontSize: '1.5rem',
@@ -102,6 +109,7 @@ export default function PixPaymentModal({
           </h2>
 
           <p
+            className="pix-payment-description"
             style={{
               margin: 0,
               color: '#666',
@@ -112,7 +120,9 @@ export default function PixPaymentModal({
           </p>
         </div>
 
+        {/* Valor do pedido */}
         <div
+          className="pix-payment-value-box"
           style={{
             background: '#f8f9fa',
             borderRadius: '14px',
@@ -122,6 +132,7 @@ export default function PixPaymentModal({
           }}
         >
           <span
+            className="pix-payment-order"
             style={{
               display: 'block',
               fontSize: '0.9rem',
@@ -133,6 +144,7 @@ export default function PixPaymentModal({
           </span>
 
           <strong
+            className="pix-payment-value"
             style={{
               display: 'block',
               fontSize: '2rem',
@@ -143,7 +155,9 @@ export default function PixPaymentModal({
           </strong>
         </div>
 
+        {/* QR Code */}
         <div
+          className="pix-payment-qrcode-area"
           style={{
             display: 'flex',
             justifyContent: 'center',
@@ -151,6 +165,7 @@ export default function PixPaymentModal({
           }}
         >
           <div
+            className="pix-payment-qrcode"
             style={{
               padding: '14px',
               background: '#fff',
@@ -167,8 +182,15 @@ export default function PixPaymentModal({
           </div>
         </div>
 
-        <div style={{ marginBottom: '18px' }}>
+        {/* Pix Copia e Cola */}
+        <div
+          className="pix-payment-code-section"
+          style={{
+            marginBottom: '18px'
+          }}
+        >
           <label
+            className="pix-payment-code-label"
             style={{
               display: 'block',
               fontWeight: '700',
@@ -180,6 +202,7 @@ export default function PixPaymentModal({
           </label>
 
           <div
+            className="pix-payment-code"
             style={{
               border: '1px solid #ddd',
               borderRadius: '12px',
@@ -196,9 +219,11 @@ export default function PixPaymentModal({
           </div>
         </div>
 
+        {/* Copiar código */}
         <button
           type="button"
           onClick={handleCopy}
+          className="pix-payment-copy-button"
           style={{
             width: '100%',
             padding: '14px',
@@ -229,7 +254,9 @@ export default function PixPaymentModal({
           )}
         </button>
 
+        {/* Aviso */}
         <div
+          className="pix-payment-warning"
           style={{
             display: 'flex',
             alignItems: 'flex-start',
@@ -242,9 +269,16 @@ export default function PixPaymentModal({
             color: '#735c00'
           }}
         >
-          <Clock size={21} style={{ flexShrink: 0, marginTop: '1px' }} />
+          <Clock
+            size={21}
+            style={{
+              flexShrink: 0,
+              marginTop: '1px'
+            }}
+          />
 
           <span
+            className="pix-payment-warning-text"
             style={{
               fontSize: '0.9rem',
               lineHeight: 1.45
@@ -255,9 +289,11 @@ export default function PixPaymentModal({
           </span>
         </div>
 
+        {/* Pagamento realizado */}
         <button
           type="button"
           onClick={onPaymentDone}
+          className="pix-payment-done-button"
           style={{
             width: '100%',
             padding: '16px',

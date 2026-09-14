@@ -14,6 +14,7 @@ import Toast from './components/Toast';
 import OrderTrackingModal from './components/OrderTrackingModal';
 import { initializeNotifications } from './services/notifications';
 import './styles/global.css';
+import './styles/theme.css';
 
 export default function App() {
   const [cart, setCart] = useState([]);

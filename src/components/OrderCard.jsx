@@ -1,4 +1,5 @@
 import React from 'react';
+
 import {
   Trash2,
   CheckCircle2,
@@ -12,15 +13,40 @@ import {
   Star,
   MessageCircle
 } from 'lucide-react';
+
 import StatusBadge from './StatusBadge';
 import PaymentStatusButtons from './PaymentStatusButtons';
 import { formatCurrency } from '../utils/formatCurrency';
 
 const ORDER_ACTIONS = [
-  { status: 'em_preparo', label: 'Preparar', icon: Play, bg: '#fef3c7', color: '#b45309' },
-  { status: 'pronto', label: 'Pronto', icon: CheckCircle2, bg: '#d1fae5', color: '#065f46' },
-  { status: 'finalizado', label: 'Entregue', icon: PackageCheck, bg: '#cffafe', color: '#0891b2' },
-  { status: 'cancelado', label: 'Cancelar', icon: XCircle, bg: '#fee2e2', color: '#b91c1c' }
+  {
+    status: 'em_preparo',
+    label: 'Preparar',
+    icon: Play,
+    bg: '#fef3c7',
+    color: '#b45309'
+  },
+  {
+    status: 'pronto',
+    label: 'Pronto',
+    icon: CheckCircle2,
+    bg: '#d1fae5',
+    color: '#065f46'
+  },
+  {
+    status: 'finalizado',
+    label: 'Entregue',
+    icon: PackageCheck,
+    bg: '#cffafe',
+    color: '#0891b2'
+  },
+  {
+    status: 'cancelado',
+    label: 'Cancelar',
+    icon: XCircle,
+    bg: '#fee2e2',
+    color: '#b91c1c'
+  }
 ];
 
 export default function OrderCard({
@@ -30,20 +56,26 @@ export default function OrderCard({
   onDelete
 }) {
   const noteRaw = order.notes || '';
+
   const noteParts = noteRaw.split('|');
 
   const trocoPart = noteParts
-    .find((part) => part.includes('TROCO PARA:'))
+    .find((part) =>
+      part.includes('TROCO PARA:')
+    )
     ?.split(':')[1]
     ?.trim();
 
-  const feedbackData = order.feedbacks?.[0];
+  const feedbackData =
+    order.feedbacks?.[0];
 
   const ratingVal =
     feedbackData?.stars ||
     order.rating ||
     noteParts
-      .find((part) => part.includes('FEEDBACK_STARS:'))
+      .find((part) =>
+        part.includes('FEEDBACK_STARS:')
+      )
       ?.split(':')[1]
       ?.trim();
 
@@ -51,19 +83,31 @@ export default function OrderCard({
     feedbackData?.comment ||
     order.feedback ||
     noteParts
-      .find((part) => part.includes('FEEDBACK_COMMENT:'))
+      .find((part) =>
+        part.includes('FEEDBACK_COMMENT:')
+      )
       ?.split(':')[1]
       ?.trim();
 
   const getFinalObservation = () => {
-    const obsPart = noteParts.find((part) => part.includes('OBS_GERAL:'));
+    const obsPart = noteParts.find(
+      (part) =>
+        part.includes('OBS_GERAL:')
+    );
 
     if (obsPart) {
-      return obsPart.split('OBS_GERAL:')[1]?.trim() || '';
+      return (
+        obsPart
+          .split('OBS_GERAL:')[1]
+          ?.trim() || ''
+      );
     }
 
     const simple = noteRaw.trim();
-    const paymentMethod = String(order.payment_method || '').trim();
+
+    const paymentMethod = String(
+      order.payment_method || ''
+    ).trim();
 
     const containsSystemData =
       simple.includes('PAYMENT:') ||
@@ -74,7 +118,8 @@ export default function OrderCard({
     if (
       simple &&
       !containsSystemData &&
-      simple.toLowerCase() !== paymentMethod.toLowerCase()
+      simple.toLowerCase() !==
+        paymentMethod.toLowerCase()
     ) {
       return simple;
     }
@@ -88,80 +133,184 @@ export default function OrderCard({
         ? JSON.parse(order.items)
         : order.items || [];
     } catch (error) {
-      console.error('Erro ao ler os itens do pedido:', error);
+      console.error(
+        'Erro ao ler os itens do pedido:',
+        error
+      );
+
       return null;
     }
   };
 
-  const normalizeWhatsAppPhone = (phone) => {
-    const numbers = String(phone || '').replace(/\D/g, '');
+  const normalizeWhatsAppPhone = (
+    phone
+  ) => {
+    const numbers = String(
+      phone || ''
+    ).replace(/\D/g, '');
 
-    if (!numbers) return '';
+    if (!numbers) {
+      return '';
+    }
 
-    return numbers.startsWith('55') ? numbers : `55${numbers}`;
+    return numbers.startsWith('55')
+      ? numbers
+      : `55${numbers}`;
   };
 
   const handleSendReadyMessage = () => {
-    const phone = normalizeWhatsAppPhone(order.customer_phone);
+    const phone =
+      normalizeWhatsAppPhone(
+        order.customer_phone
+      );
 
     if (!phone || phone.length < 12) {
-      window.alert('O telefone deste cliente parece estar inválido.');
+      window.alert(
+        'O telefone deste cliente parece estar inválido.'
+      );
+
       return;
     }
 
-    const customerName = order.customer_name || 'cliente';
+    const customerName =
+      order.customer_name || 'cliente';
 
-   const message =
-    `Olá, ${customerName}!\n\n` +
-    `Seu pedido #${order.id} já está pronto para retirada.\n\n` +
-    `Estamos aguardando você. Obrigado pela preferência!\n\n` +
-    `Di Salgados`;
+    const message =
+      `Olá, ${customerName}!\n\n` +
+      `Seu pedido #${order.id} já está pronto para retirada.\n\n` +
+      `Estamos aguardando você. Obrigado pela preferência!\n\n` +
+      `Di Salgados`;
 
     const whatsappUrl =
-      `https://wa.me/${phone}?text=${encodeURIComponent(message)}`;
+      `https://wa.me/${phone}?text=${encodeURIComponent(
+        message
+      )}`;
 
-    window.open(whatsappUrl, '_blank', 'noopener,noreferrer');
+    window.open(
+      whatsappUrl,
+      '_blank',
+      'noopener,noreferrer'
+    );
   };
 
   const items = getItems();
-  const finalObservation = getFinalObservation();
-  const isPix = String(order.payment_method || '').toLowerCase() === 'pix';
-  const isReady = order.status === 'pronto';
+
+  const finalObservation =
+    getFinalObservation();
+
+  const isPix =
+    String(
+      order.payment_method || ''
+    ).toLowerCase() === 'pix';
+
+  const isReady =
+    order.status === 'pronto';
 
   return (
     <div
+      className="admin-order-card"
       style={{
         background: 'white',
         borderRadius: '12px',
         padding: '15px',
         marginBottom: '20px',
-        boxShadow: '0 2px 10px rgba(0,0,0,0.05)',
-        borderLeft: `5px solid var(--status-${order.status})`
+        boxShadow:
+          '0 2px 10px rgba(0,0,0,0.05)',
+        borderLeft:
+          `5px solid var(--status-${order.status})`
       }}
     >
-      <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '10px' }}>
+
+      {/* CABEÇALHO */}
+      <div
+        style={{
+          display: 'flex',
+          justifyContent:
+            'space-between',
+          marginBottom: '10px',
+          gap: '15px'
+        }}
+      >
         <div>
-          <h3 style={{ margin: 0 }}>Pedido #{order.id.toString().slice(-2)}</h3>
-          <span style={{ fontSize: '0.8rem', color: '#999' }}>
-            {new Date(order.created_at).toLocaleString('pt-BR')}
+
+          <h3
+            className="admin-order-title"
+            style={{
+              margin: 0
+            }}
+          >
+            Pedido #
+            {order.id
+              .toString()
+              .slice(-2)}
+          </h3>
+
+          <span
+            className="admin-order-date"
+            style={{
+              fontSize: '0.8rem',
+              color: '#999'
+            }}
+          >
+            {new Date(
+              order.created_at
+            ).toLocaleString(
+              'pt-BR'
+            )}
           </span>
-          <p style={{ margin: '5px 0', fontWeight: '700' }}>
+
+          <p
+            className="admin-order-customer"
+            style={{
+              margin: '5px 0',
+              fontWeight: '700'
+            }}
+          >
             {order.customer_name}{' '}
-            <span style={{ fontWeight: '400', color: '#666' }}>
+
+            <span
+              className="admin-order-phone"
+              style={{
+                fontWeight: '400',
+                color: '#666'
+              }}
+            >
               - {order.customer_phone}
             </span>
           </p>
+
         </div>
 
-        <div style={{ textAlign: 'right' }}>
-          <StatusBadge status={order.status} />
-          <div style={{ fontSize: '1.2rem', fontWeight: '900', marginTop: '5px' }}>
-            {formatCurrency(order.total)}
+        <div
+          style={{
+            textAlign: 'right'
+          }}
+        >
+
+          <StatusBadge
+            status={order.status}
+          />
+
+          <div
+            className="admin-order-total"
+            style={{
+              fontSize: '1.2rem',
+              fontWeight: '900',
+              marginTop: '5px'
+            }}
+          >
+            {formatCurrency(
+              order.total
+            )}
           </div>
+
           <button
             type="button"
-            onClick={() => onDelete(order.id)}
+            onClick={() =>
+              onDelete(order.id)
+            }
             aria-label={`Excluir pedido ${order.id}`}
+            title="Excluir pedido"
             style={{
               color: '#ef4444',
               background: 'none',
@@ -172,11 +321,24 @@ export default function OrderCard({
           >
             <Trash2 size={18} />
           </button>
+
         </div>
       </div>
 
-      <div style={{ background: '#f8f9fa', padding: '12px', borderRadius: '8px', marginBottom: '15px' }}>
+
+      {/* ITENS */}
+      <div
+        className="admin-items-box"
+        style={{
+          background: '#f8f9fa',
+          padding: '12px',
+          borderRadius: '8px',
+          marginBottom: '15px'
+        }}
+      >
+
         <p
+          className="admin-items-title"
           style={{
             margin: '0 0 10px',
             fontWeight: 'bold',
@@ -186,151 +348,478 @@ export default function OrderCard({
             gap: '5px'
           }}
         >
-          <UtensilsCrossed size={16} /> Itens pedidos:
+          <UtensilsCrossed size={16} />
+
+          Itens pedidos:
         </p>
 
+
         {items === null ? (
-          <p>Erro ao ler itens.</p>
+          <p className="admin-items-error">
+            Erro ao ler itens.
+          </p>
         ) : (
-          items.map((item, index) => {
-            const quantity = item.qty || item.quantity || 1;
+          items.map(
+            (item, index) => {
+              const quantity =
+                item.qty ||
+                item.quantity ||
+                1;
 
-            return (
-              <div key={`${item.id || item.name}-${index}`} style={{ padding: '8px 0', borderBottom: '1px solid #eee' }}>
-                <div style={{ display: 'flex', justifyContent: 'space-between', gap: '12px' }}>
-                  <span>
-                    <strong style={{ color: '#ef4444' }}>{quantity}x</strong>{' '}
-                    {item.name}
-                  </span>
-                  <span>{formatCurrency(Number(item.price || 0) * quantity)}</span>
-                </div>
+              return (
+                <div
+                  key={`${item.id || item.name}-${index}`}
+                  className="admin-order-item"
+                  style={{
+                    padding:
+                      '8px 0',
+                    borderBottom:
+                      '1px solid #eee'
+                  }}
+                >
 
-                {item.note && (
-                  <div style={{ fontSize: '0.85rem', color: '#d35400', fontWeight: '600', marginTop: '4px' }}>
-                    ↳ OBS: {item.note}
+                  <div
+                    style={{
+                      display:
+                        'flex',
+                      justifyContent:
+                        'space-between',
+                      gap: '12px'
+                    }}
+                  >
+
+                    <span className="admin-order-item-name">
+
+                      <strong
+                        style={{
+                          color:
+                            '#ef4444'
+                        }}
+                      >
+                        {quantity}x
+                      </strong>{' '}
+
+                      {item.name}
+
+                    </span>
+
+                    <span className="admin-order-item-price">
+                      {formatCurrency(
+                        Number(
+                          item.price || 0
+                        ) * quantity
+                      )}
+                    </span>
+
                   </div>
-                )}
-              </div>
-            );
-          })
+
+
+                  {item.note && (
+                    <div
+                      className="admin-item-observation"
+                      style={{
+                        fontSize:
+                          '0.85rem',
+                        color:
+                          '#d35400',
+                        fontWeight:
+                          '600',
+                        marginTop:
+                          '4px'
+                      }}
+                    >
+                      ↳ OBS: {item.note}
+                    </div>
+                  )}
+
+                </div>
+              );
+            }
+          )
         )}
 
-        {finalObservation && finalObservation.toLowerCase() !== 'null' && (
-          <div style={{ marginTop: '12px', padding: '10px', background: '#fff9db', borderRadius: '6px', border: '1px solid #ffec99' }}>
-            <strong style={{ fontSize: '0.8rem', color: '#856404', display: 'flex', alignItems: 'center', gap: '4px' }}>
-              <MessageSquare size={14} /> OBSERVAÇÃO DO CLIENTE:
-            </strong>
-            <p style={{ margin: '4px 0 0', fontSize: '0.9rem', color: '#444', fontWeight: '500' }}>
-              {finalObservation}
-            </p>
-          </div>
-        )}
 
+        {/* OBSERVAÇÃO DO CLIENTE */}
+        {finalObservation &&
+          finalObservation
+            .toLowerCase() !==
+            'null' && (
+            <div
+              className="admin-order-observation"
+              style={{
+                marginTop:
+                  '12px',
+                padding: '10px',
+                background:
+                  '#fff9db',
+                borderRadius:
+                  '6px',
+                border:
+                  '1px solid #ffec99'
+              }}
+            >
+
+              <strong
+                className="admin-observation-title"
+                style={{
+                  fontSize:
+                    '0.8rem',
+                  color:
+                    '#856404',
+                  display:
+                    'flex',
+                  alignItems:
+                    'center',
+                  gap: '4px'
+                }}
+              >
+                <MessageSquare
+                  size={14}
+                />
+
+                OBSERVAÇÃO DO CLIENTE:
+              </strong>
+
+              <p
+                className="admin-observation-text"
+                style={{
+                  margin:
+                    '4px 0 0',
+                  fontSize:
+                    '0.9rem',
+                  color:
+                    '#444',
+                  fontWeight:
+                    '500',
+                  lineHeight:
+                    '1.45',
+                  wordBreak:
+                    'break-word'
+                }}
+              >
+                {finalObservation}
+              </p>
+
+            </div>
+          )}
+
+
+        {/* TROCO */}
         {trocoPart && (
-          <div style={{ marginTop: '10px', fontSize: '0.85rem', color: '#666' }}>
-            <Banknote size={14} style={{ verticalAlign: 'middle', marginRight: '5px', color: '#28a745' }} />
-            <strong>Troco para:</strong> {trocoPart}
+          <div
+            className="admin-order-payment-info"
+            style={{
+              marginTop:
+                '10px',
+              fontSize:
+                '0.85rem',
+              color:
+                '#666'
+            }}
+          >
+            <Banknote
+              size={14}
+              style={{
+                verticalAlign:
+                  'middle',
+                marginRight:
+                  '5px',
+                color:
+                  '#28a745'
+              }}
+            />
+
+            <strong>
+              Troco para:
+            </strong>{' '}
+
+            {trocoPart}
           </div>
         )}
 
-        <div style={{ marginTop: '10px', fontSize: '0.85rem', color: '#666' }}>
-          <CreditCard size={14} style={{ verticalAlign: 'middle', marginRight: '5px' }} />
-          <strong>Pagamento:</strong> {order.payment_method?.toUpperCase()}
+
+        {/* PAGAMENTO */}
+        <div
+          className="admin-order-payment-info"
+          style={{
+            marginTop:
+              '10px',
+            fontSize:
+              '0.85rem',
+            color:
+              '#666'
+          }}
+        >
+
+          <CreditCard
+            size={14}
+            style={{
+              verticalAlign:
+                'middle',
+              marginRight:
+                '5px'
+            }}
+          />
+
+          <strong>
+            Pagamento:
+          </strong>{' '}
+
+          {order.payment_method?.toUpperCase()}
+
         </div>
 
+
+        {/* PIX */}
         {isPix && (
           <PaymentStatusButtons
             orderId={order.id}
-            paymentStatus={order.payment_status}
-            onChange={onChangePaymentStatus}
+            paymentStatus={
+              order.payment_status
+            }
+            onChange={
+              onChangePaymentStatus
+            }
           />
         )}
 
-        {(ratingVal || feedbackComment) && (
-          <div style={{ marginTop: '15px', padding: '12px', background: '#fefce8', borderRadius: '8px', border: '1px solid #fde047' }}>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: feedbackComment ? '8px' : 0 }}>
-              <div style={{ display: 'flex', gap: '2px' }}>
-                {[...Array(5)].map((_, index) => (
-                  <Star
-                    key={index}
-                    size={16}
-                    fill={index < Number(ratingVal) ? '#f59e0b' : 'none'}
-                    color="#f59e0b"
-                  />
-                ))}
+
+        {/* AVALIAÇÃO */}
+        {(ratingVal ||
+          feedbackComment) && (
+          <div
+            className="admin-feedback-box"
+            style={{
+              marginTop:
+                '15px',
+              padding:
+                '12px',
+              background:
+                '#fefce8',
+              borderRadius:
+                '8px',
+              border:
+                '1px solid #fde047'
+            }}
+          >
+
+            <div
+              style={{
+                display:
+                  'flex',
+                alignItems:
+                  'center',
+                gap: '8px',
+                marginBottom:
+                  feedbackComment
+                    ? '8px'
+                    : 0
+              }}
+            >
+
+              <div
+                style={{
+                  display:
+                    'flex',
+                  gap: '2px'
+                }}
+              >
+                {[...Array(5)].map(
+                  (_, index) => (
+                    <Star
+                      key={index}
+                      size={16}
+                      fill={
+                        index <
+                        Number(
+                          ratingVal
+                        )
+                          ? '#f59e0b'
+                          : 'none'
+                      }
+                      color="#f59e0b"
+                    />
+                  )
+                )}
               </div>
-              <span style={{ fontSize: '0.85rem', fontWeight: 'bold', color: '#854d0e' }}>
-                AVALIAÇÃO ({ratingVal || 0}/5)
+
+              <span
+                className="admin-feedback-title"
+                style={{
+                  fontSize:
+                    '0.85rem',
+                  fontWeight:
+                    'bold',
+                  color:
+                    '#854d0e'
+                }}
+              >
+                AVALIAÇÃO (
+                {ratingVal || 0}
+                /5)
               </span>
+
             </div>
 
+
             {feedbackComment && (
-              <div style={{ marginTop: '5px', borderTop: '1px solid #fef08a', paddingTop: '5px' }}>
-                <p style={{ margin: 0, fontSize: '0.9rem', color: '#713f12', fontStyle: 'italic', lineHeight: 1.4 }}>
+              <div
+                className="admin-feedback-comment"
+                style={{
+                  marginTop:
+                    '5px',
+                  borderTop:
+                    '1px solid #fef08a',
+                  paddingTop:
+                    '5px'
+                }}
+              >
+
+                <p
+                  className="admin-feedback-text"
+                  style={{
+                    margin: 0,
+                    fontSize:
+                      '0.9rem',
+                    color:
+                      '#713f12',
+                    fontStyle:
+                      'italic',
+                    lineHeight:
+                      1.4
+                  }}
+                >
                   “{feedbackComment}”
                 </p>
+
               </div>
             )}
+
           </div>
         )}
+
       </div>
 
+
+      {/* WHATSAPP */}
       {isReady && (
         <button
           type="button"
-          onClick={handleSendReadyMessage}
+          onClick={
+            handleSendReadyMessage
+          }
+          className="admin-whatsapp-button"
           style={{
             width: '100%',
             padding: '13px',
-            marginBottom: '12px',
-            borderRadius: '10px',
+            marginBottom:
+              '12px',
+            borderRadius:
+              '10px',
             border: 'none',
-            background: '#25D366',
-            color: '#ffffff',
-            fontWeight: '800',
-            fontSize: '0.95rem',
-            cursor: 'pointer',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
+            background:
+              '#25D366',
+            color:
+              '#ffffff',
+            fontWeight:
+              '800',
+            fontSize:
+              '0.95rem',
+            cursor:
+              'pointer',
+            display:
+              'flex',
+            alignItems:
+              'center',
+            justifyContent:
+              'center',
             gap: '8px',
-            boxShadow: '0 4px 10px rgba(37, 211, 102, 0.25)'
+            boxShadow:
+              '0 4px 10px rgba(37, 211, 102, 0.25)'
           }}
         >
-          <MessageCircle size={20} />
+          <MessageCircle
+            size={20}
+          />
+
           Avisar cliente pelo WhatsApp
         </button>
       )}
 
-      <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap' }}>
-        {ORDER_ACTIONS.map((action) => {
-          const ActionIcon = action.icon;
 
-          return (
-            <button
-              key={action.status}
-              type="button"
-              onClick={() => onChangeStatus(order.id, action.status)}
-              style={{
-                flex: '1 1 120px',
-                padding: '10px',
-                borderRadius: '8px',
-                border: 'none',
-                background: action.bg,
-                color: action.color,
-                fontWeight: 'bold',
-                cursor: 'pointer',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                gap: '5px'
-              }}
-            >
-              <ActionIcon size={16} /> {action.label}
-            </button>
-          );
-        })}
+      {/* AÇÕES */}
+      <div
+        className="admin-order-actions"
+        style={{
+          display:
+            'flex',
+          gap: '8px',
+          flexWrap:
+            'wrap'
+        }}
+      >
+
+        {ORDER_ACTIONS.map(
+          (action) => {
+            const ActionIcon =
+              action.icon;
+
+            return (
+              <button
+                key={
+                  action.status
+                }
+                type="button"
+                onClick={() =>
+                  onChangeStatus(
+                    order.id,
+                    action.status
+                  )
+                }
+                className={
+                  `admin-order-action admin-order-action-${action.status}`
+                }
+                style={{
+                  flex:
+                    '1 1 120px',
+                  padding:
+                    '10px',
+                  borderRadius:
+                    '8px',
+                  border:
+                    'none',
+                  background:
+                    action.bg,
+                  color:
+                    action.color,
+                  fontWeight:
+                    'bold',
+                  cursor:
+                    'pointer',
+                  display:
+                    'flex',
+                  alignItems:
+                    'center',
+                  justifyContent:
+                    'center',
+                  gap:
+                    '5px'
+                }}
+              >
+
+                <ActionIcon
+                  size={16}
+                />
+
+                {action.label}
+
+              </button>
+            );
+          }
+        )}
+
       </div>
+
     </div>
   );
 }

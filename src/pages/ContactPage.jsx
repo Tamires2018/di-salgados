@@ -11,7 +11,7 @@ export default function ContactPage() {
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '30px' }}>
         
         {/* Canais de Atendimento */}
-        <div className="order-card" style={{ padding: '20px' }}>
+        <div className="order-card contact-card" style={{ padding: '20px' }}>
           <h3 style={{ marginBottom: '20px', color: 'var(--primary)' }}>Canais Diretos</h3>
           
           <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
@@ -36,16 +36,16 @@ export default function ContactPage() {
         </div>
 
         {/* Horário Único de Funcionamento */}
-        <div className="order-card" style={{ padding: '20px' }}>
+        <div className="order-card contact-card" style={{ padding: '20px' }}>
           <h3 style={{ marginBottom: '20px', color: 'var(--primary)' }}>
             <Clock size={20} style={{ marginRight: '8px', verticalAlign: 'middle' }} />
             Horário de Funcionamento
           </h3>
           
           <ul style={{ listStyle: 'none', padding: 0 }}>
-            <li style={{ display: 'flex', justifyContent: 'space-between', padding: '15px 0', borderBottom: '1px solid #eee' }}>
-              <span>Segunda a Sexta</span>
-              <strong>07:00 - 16:10</strong>
+            <li className="contact-hours-row" style={{ display: 'flex', justifyContent: 'space-between', padding: '15px 0', borderBottom: '1px solid #eee' }}>
+              <span className="contact-hours-text">Segunda a Sexta</span>
+              <strong className="contact-hours-value">07:00 - 16:10</strong>
             </li>
             <li style={{ padding: '15px 0', color: '#ff4444', textAlign: 'center', fontWeight: 'bold' }}>
               Fechado aos Sábados, Domingos e Feriados
@@ -56,7 +56,7 @@ export default function ContactPage() {
       </div>
 
       {/* Dúvidas Frequentes Ajustadas */}
-      <div className="order-card" style={{ marginTop: '30px', padding: '20px' }}>
+      <div className="order-card contact-faq-card" style={{ marginTop: '30px', padding: '20px' }}>
         <h3 style={{ marginBottom: '15px' }}>Dúvidas Frequentes</h3>
         
         <details style={{ marginBottom: '10px', cursor: 'pointer' }}>

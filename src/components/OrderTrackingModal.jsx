@@ -1,4 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
+
 import {
   CheckCircle2,
   Clock,
@@ -7,6 +8,7 @@ import {
   XCircle,
   X
 } from 'lucide-react';
+
 import { supabase } from '../services/supabase';
 
 const STATUS_CONFIG = {
@@ -118,7 +120,10 @@ export default function OrderTrackingModal({
       }
     };
 
-    const updateOrder = (updatedOrder, shouldNotify = true) => {
+    const updateOrder = (
+      updatedOrder,
+      shouldNotify = true
+    ) => {
       if (!isMounted || !updatedOrder) return;
 
       const previousStatus = previousStatusRef.current;
@@ -149,12 +154,15 @@ export default function OrderTrackingModal({
           .eq('id', orderId)
           .maybeSingle();
 
-        if (error) throw error;
+        if (error) {
+          throw error;
+        }
 
         // Se o pedido não existe mais, limpa o ID antigo salvo
         // e fecha automaticamente a tela de acompanhamento.
         if (!data) {
           localStorage.removeItem('currentOrderId');
+
           previousStatusRef.current = null;
 
           if (isMounted) {
@@ -170,7 +178,10 @@ export default function OrderTrackingModal({
 
         updateOrder(data, !isFirstLoad);
       } catch (error) {
-        console.error('Erro ao carregar pedido:', error);
+        console.error(
+          'Erro ao carregar pedido:',
+          error
+        );
       } finally {
         if (isMounted) {
           setLoading(false);
@@ -204,10 +215,15 @@ export default function OrderTrackingModal({
         }
       )
       .subscribe((status, error) => {
-        console.log('Status do Realtime:', status);
+        console.log(
+          'Status do Realtime:',
+          status
+        );
 
         if (status === 'SUBSCRIBED') {
-          console.log(`Acompanhando o pedido #${orderId}`);
+          console.log(
+            `Acompanhando o pedido #${orderId}`
+          );
         }
 
         if (
@@ -228,7 +244,9 @@ export default function OrderTrackingModal({
 
     // Atualiza imediatamente quando o cliente volta para a página.
     const handleVisibilityChange = () => {
-      if (document.visibilityState === 'visible') {
+      if (
+        document.visibilityState === 'visible'
+      ) {
         loadOrder(false);
       }
     };
@@ -244,7 +262,9 @@ export default function OrderTrackingModal({
       window.clearInterval(intervalId);
 
       if (notificationTimeoutRef.current) {
-        window.clearTimeout(notificationTimeoutRef.current);
+        window.clearTimeout(
+          notificationTimeoutRef.current
+        );
       }
 
       document.removeEventListener(
@@ -254,9 +274,11 @@ export default function OrderTrackingModal({
 
       supabase.removeChannel(channel);
     };
-  }, [orderId]);
+  }, [orderId, onClose]);
 
-  if (!orderId) return null;
+  if (!orderId) {
+    return null;
+  }
 
   const statusData =
     STATUS_CONFIG[order?.status] ||
@@ -265,10 +287,17 @@ export default function OrderTrackingModal({
   const StatusIcon = statusData.icon;
 
   const handleClose = () => {
-    const finishedStatuses = ['finalizado', 'cancelado'];
+    const finishedStatuses = [
+      'finalizado',
+      'cancelado'
+    ];
 
-    if (finishedStatuses.includes(order?.status)) {
-      localStorage.removeItem('currentOrderId');
+    if (
+      finishedStatuses.includes(order?.status)
+    ) {
+      localStorage.removeItem(
+        'currentOrderId'
+      );
     }
 
     onClose();
@@ -276,6 +305,7 @@ export default function OrderTrackingModal({
 
   return (
     <div
+      className="order-tracking-overlay"
       style={{
         position: 'fixed',
         inset: 0,
@@ -291,6 +321,7 @@ export default function OrderTrackingModal({
       {notification && (
         <div
           role="alert"
+          className="order-tracking-notification"
           style={{
             position: 'fixed',
             top: '20px',
@@ -302,16 +333,21 @@ export default function OrderTrackingModal({
             borderLeft: '5px solid #ef4444',
             borderRadius: '12px',
             padding: '16px',
-            boxShadow: '0 10px 35px rgba(0, 0, 0, 0.25)',
+            boxShadow:
+              '0 10px 35px rgba(0, 0, 0, 0.25)',
             zIndex: 10001,
             textAlign: 'left'
           }}
-          onClick={(event) => event.stopPropagation()}
+          onClick={(event) =>
+            event.stopPropagation()
+          }
         >
           <button
             type="button"
             aria-label="Fechar notificação"
-            onClick={() => setNotification(null)}
+            onClick={() =>
+              setNotification(null)
+            }
             style={{
               position: 'absolute',
               top: '8px',
@@ -354,14 +390,18 @@ export default function OrderTrackingModal({
       )}
 
       <div
-        onClick={(event) => event.stopPropagation()}
+        className="order-tracking-modal"
+        onClick={(event) =>
+          event.stopPropagation()
+        }
         style={{
           width: '100%',
           maxWidth: '430px',
           background: '#ffffff',
           borderRadius: '20px',
           padding: '25px',
-          boxShadow: '0 20px 50px rgba(0, 0, 0, 0.25)',
+          boxShadow:
+            '0 20px 50px rgba(0, 0, 0, 0.25)',
           position: 'relative',
           textAlign: 'center'
         }}
@@ -390,8 +430,14 @@ export default function OrderTrackingModal({
 
         {loading ? (
           <div style={{ padding: '35px 10px' }}>
-            <Clock size={45} color="#ef4444" />
-            <h2>Carregando pedido...</h2>
+            <Clock
+              size={45}
+              color="#ef4444"
+            />
+
+            <h2>
+              Carregando pedido...
+            </h2>
           </div>
         ) : (
           <>
@@ -450,8 +496,8 @@ export default function OrderTrackingModal({
                 color: '#555'
               }}
             >
-              Esta tela será atualizada automaticamente quando o
-              estabelecimento alterar o pedido.
+              Esta tela será atualizada automaticamente
+              quando o estabelecimento alterar o pedido.
             </div>
           </>
         )}

@@ -41,7 +41,7 @@ export default function AdminLoginPage() {
   };
 
   return (
-    <div style={{ 
+    <div className="admin-login-page" style={{ 
       flex: 1, 
       display: 'flex', 
       justifyContent: 'center', 
@@ -49,7 +49,7 @@ export default function AdminLoginPage() {
       padding: '20px',
       background: '#f8f9fa' 
     }}>
-      <div style={{ 
+      <div className="admin-login-card" style={{ 
         maxWidth: '400px', 
         width: '100%', 
         background: 'white', 
