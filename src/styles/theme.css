@@ -2800,3 +2800,24 @@ html[data-theme='dark'] .star-button {
 html[data-theme='dark'] .btn-send-feedback {
   color: #ffffff !important;
 }
+
+/* =========================================================
+   MENU MOBILE — TEXTO E ÍCONES BRANCOS NO MODO NOTURNO
+   Mantém o fundo do menu exatamente como está.
+   ========================================================= */
+
+html[data-theme='dark'] .site-mobile-nav a,
+html[data-theme='dark'] .site-mobile-nav button {
+  color: #ffffff !important;
+}
+
+html[data-theme='dark'] .site-mobile-nav a span,
+html[data-theme='dark'] .site-mobile-nav button span {
+  color: #ffffff !important;
+}
+
+html[data-theme='dark'] .site-mobile-nav a svg,
+html[data-theme='dark'] .site-mobile-nav button svg {
+  color: #ffffff !important;
+  stroke: #ffffff !important;
+}
