@@ -2916,3 +2916,17 @@ html[data-theme='dark'] .search-icon-wrapper svg {
   color: #ff3030 !important;
   stroke: #ff3030 !important;
 }
+
+/* MODO CLARO */
+.status-aguardando_pagamento {
+  background: #fff3cd;
+  color: #856404;
+  border: 1px solid #ffe69c;
+}
+
+/* MODO ESCURO */
+[data-theme="dark"] .status-aguardando_pagamento {
+  background: #3d3215;
+  color: #facc15;
+  border: 1px solid #66551c;
+}
