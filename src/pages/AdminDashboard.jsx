@@ -111,9 +111,23 @@ export default function AdminDashboard() {
   };
 
   const checkCashierStatus = async () => {
-    const { data } = await supabase.from('caixa').select('*').eq('status', 'aberto').single();
-    setCashierStatus(data ? { isOpen: true, data } : { isOpen: false, data: null });
-  };
+  const { data, error } = await supabase
+    .from('caixa')
+    .select('*')
+    .eq('status', 'aberto')
+    .maybeSingle();
+
+  if (error) {
+    console.error('Erro ao verificar status do caixa:', error);
+    return;
+  }
+
+  setCashierStatus(
+    data
+      ? { isOpen: true, data }
+      : { isOpen: false, data: null }
+  );
+};
 
   const loadCashierHistory = async () => {
     const { data, error } = await supabase.from('caixa').select('*').eq('status', 'fechado').order('fechado_em', { ascending: false });
