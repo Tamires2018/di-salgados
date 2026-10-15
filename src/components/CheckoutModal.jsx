@@ -4,6 +4,7 @@ import { supabase } from '../services/supabase';
 import Toast from '../components/Toast'; 
 import FeedbackModal from './FeedbackModal';
 import { estabelecimentoAberto } from '../utils/businessHours';
+import useStoreStatus from '../hooks/useStoreStatus';
 import PixPaymentModal from './PixPaymentModal';
 import { generatePix } from '../utils/pix';
 
@@ -16,6 +17,7 @@ export default function CheckoutModal({
   onOrderCreated,
   notesFromCart
 }) {
+  const { aberto, closedMessage, refresh } = useStoreStatus();
   const [notification, setNotification] = useState(null);
   const [loading, setLoading] = useState(false);
   const [showFeedback, setShowFeedback] = useState(false);
@@ -87,14 +89,20 @@ export default function CheckoutModal({
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (!estabelecimentoAberto()) {
-      setNotification({
-        message: "Estamos fechados. Nosso horário de atendimento é de segunda a sexta, das 07:00 às 16:10.",
-        type: "error"
-      });
-      return;
-    }    
+    if (loading) return;
     setLoading(true);
+    try {
+      const manuallyClosed = await refresh();
+      if (manuallyClosed || !estabelecimentoAberto()) {
+        setNotification({ message: manuallyClosed ? 'Estamos temporariamente fechados. Os pedidos estão pausados.' : 'Estamos fora do horário de atendimento.', type: 'error' });
+        setLoading(false);
+        return;
+      }
+    } catch {
+      setNotification({ message: 'Não foi possível consultar o funcionamento. Tente novamente.', type: 'error' });
+      setLoading(false);
+      return;
+    }
 
     const parts = [];
     parts.push(`PAYMENT:${formData.payment.toUpperCase()}`); 
@@ -192,7 +200,6 @@ export default function CheckoutModal({
 
   if (!isOpen && !showFeedback && !showPixModal) return null;
 
-  const aberto = estabelecimentoAberto();
 
   return (
     <>
@@ -318,9 +325,7 @@ export default function CheckoutModal({
                     textAlign: 'center'
                   }}
                 >
-                  No momento estamos fechados.
-                  <br />
-                  Funcionamos de segunda a sexta, das 07:00 às 16:10.
+                  {closedMessage}
                 </div>
               )}
 

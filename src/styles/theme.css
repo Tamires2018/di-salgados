@@ -6,6 +6,96 @@
     box-shadow 0.25s ease;
 }
 
+/* Fechamento manual: acompanha o tema selecionado no site. */
+.store-status-panel {
+  --store-surface: #ffffff;
+  --store-text: #222222;
+  --store-muted: #666666;
+  --store-border: #dddddd;
+  --store-input: #ffffff;
+  --store-action: #dc2626;
+  background: var(--store-surface);
+  color: var(--store-text);
+  border: 1px solid var(--store-border);
+  border-radius: 12px;
+  padding: 16px;
+  margin-bottom: 20px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+  justify-content: space-between;
+  align-items: center;
+  transition: var(--theme-transition);
+}
+
+.store-status-panel.is-closed {
+  --store-surface: #fff3cd;
+  --store-text: #664d03;
+  --store-muted: #735c17;
+  --store-border: #e6cf88;
+  --store-action: #15803d;
+}
+
+html[data-theme='dark'] .store-status-panel {
+  --store-surface: #1b1b1b;
+  --store-text: #f5f5f5;
+  --store-muted: #bbbbbb;
+  --store-border: #444444;
+  --store-input: #222222;
+  --store-action: #b91c1c;
+  color-scheme: dark;
+}
+
+html[data-theme='dark'] .store-status-panel.is-closed {
+  --store-surface: #352f17;
+  --store-text: #ffe58a;
+  --store-muted: #eadca7;
+  --store-border: #75631f;
+  --store-action: #166534;
+}
+
+.store-status-description {
+  margin: 6px 0 0;
+  color: var(--store-muted);
+}
+
+.store-status-password {
+  padding: 10px;
+  border: 1px solid var(--store-border);
+  border-radius: 8px;
+  max-width: 100%;
+  min-width: 0;
+  background: var(--store-input);
+  color: var(--store-text);
+  transition: var(--theme-transition);
+}
+
+.store-status-button {
+  padding: 12px 16px;
+  border-radius: 8px;
+  border: none;
+  background: var(--store-action);
+  color: #ffffff;
+  font-weight: bold;
+  cursor: pointer;
+  transition: var(--theme-transition);
+}
+
+.store-status-button:hover:not(:disabled) {
+  filter: brightness(1.12);
+}
+
+.store-status-button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.store-status-button:focus-visible,
+.store-status-password:focus-visible {
+  outline: 2px solid var(--store-text);
+  outline-offset: 3px;
+}
+
 /* =========================================================
    BOTÃO DE TEMA
    ========================================================= */

@@ -15,6 +15,8 @@ import CashierSection from '../components/CashierSection';
 import AdminNotificationBell from '../components/AdminNotificationBell'; // <- Nosso botão de sininho integrado
 import { formatCurrency } from '../utils/formatCurrency';
 import { notifyNewOrder } from '../services/notifications';
+import useStoreStatus from '../hooks/useStoreStatus';
+import { setStoreClosed } from '../services/storeStatus';
 
 // --- Funções Auxiliares ---
 const applyPriceMask = (value) => {
@@ -46,6 +48,26 @@ const ORDER_ACTIONS = [
 ];
 
 export default function AdminDashboard() {
+  const { manuallyClosed, error: storeError, refresh: refreshStoreStatus } = useStoreStatus();
+  const [savingStoreStatus, setSavingStoreStatus] = useState(false);
+  const [storePassword, setStorePassword] = useState('');
+
+  const handleToggleStore = async (event) => {
+    event.preventDefault();
+    if (savingStoreStatus || manuallyClosed === null || !storePassword) return;
+    setSavingStoreStatus(true);
+    try {
+      await setStoreClosed(!manuallyClosed, storePassword);
+      await refreshStoreStatus();
+      setStorePassword('');
+      setNotification({ message: manuallyClosed ? 'Horário automático retomado!' : 'Loja fechada manualmente. Novos pedidos estão pausados.', type: 'success' });
+    } catch (error) {
+      setNotification({ message: error.message || 'Não foi possível alterar o funcionamento.', type: 'error' });
+    } finally {
+      setSavingStoreStatus(false);
+    }
+  };
+
   const [activeTab, setActiveTab] = useState('pedidos');
   const [orders, setOrders] = useState([]);
   const [products, setProducts] = useState([]);
@@ -592,6 +614,24 @@ export default function AdminDashboard() {
           </button>
         </div>
       </div>
+
+      <section aria-label="Funcionamento da loja" className={`store-status-panel${manuallyClosed ? ' is-closed' : ''}`}>
+        <div role="status">
+          <strong>{storeError ? 'Funcionamento indisponível' : manuallyClosed === null ? 'Consultando funcionamento...' : manuallyClosed ? 'Loja fechada manualmente' : 'Horário automático ativo'}</strong>
+          <p className="store-status-description">
+            {storeError ? 'Não foi possível consultar o status. Verifique a configuração do Supabase.' : manuallyClosed ? 'Os pedidos continuam pausados até você retomar o horário automático.' : 'Feche a loja em caso de emergência ou férias. O fechamento permanece até você desativá-lo.'}
+          </p>
+        </div>
+        <form onSubmit={handleToggleStore} style={{ display: 'flex', flexWrap: 'wrap', gap: '10px', alignItems: 'end' }}>
+          <label style={{ display: 'grid', gap: '5px', fontSize: '0.85rem' }}>
+            Confirme sua senha de administrador
+            <input className="store-status-password" type="password" autoComplete="current-password" required value={storePassword} onChange={event => setStorePassword(event.target.value)} disabled={savingStoreStatus} />
+          </label>
+        <button className="store-status-button" type="submit" disabled={savingStoreStatus || manuallyClosed === null || !!storeError || !storePassword}>
+          {savingStoreStatus ? 'Salvando...' : manuallyClosed ? 'Retomar horário automático' : 'Fechar loja agora'}
+        </button>
+        </form>
+      </section>
 
       {/* TABS DE NAVEGAÇÃO ENXUTAS */}
       <div style={{ display: 'flex', gap: '15px', marginBottom: '25px', borderBottom: '1px solid #eee', overflowX: 'auto' }}>

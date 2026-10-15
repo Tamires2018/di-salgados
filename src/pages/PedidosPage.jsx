@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Search, Plus, ShoppingCart, Loader2, X, LayoutGrid, Sandwich, Croissant, CupSoda, Candy, Popcorn} from 'lucide-react';
 import { supabase } from '../services/supabase'; 
 import { formatCurrency } from '../utils/formatCurrency';
-import { estabelecimentoAberto } from '../utils/businessHours';
+import useStoreStatus from '../hooks/useStoreStatus';
 
 export default function PedidosPage({ addToCart, cartCount, openCart }) {
   const [products, setProducts] = useState([]); 
@@ -11,7 +11,7 @@ export default function PedidosPage({ addToCart, cartCount, openCart }) {
   const [filter, setFilter] = useState('Todos');
   const [selectedImage, setSelectedImage] = useState(null); 
 
-  const aberto = estabelecimentoAberto();
+  const { aberto, closedMessage } = useStoreStatus();
 
   const categories = [
     {
@@ -122,10 +122,7 @@ export default function PedidosPage({ addToCart, cartCount, openCart }) {
             fontWeight: '600'
           }}
         >
-          ⚠️ No momento estamos fechados.
-          <br />
-          Funcionamos de segunda a sexta das{' '}
-          <strong>07:00 às 16:10</strong>.
+          {closedMessage}
         </div>
       )}
 
