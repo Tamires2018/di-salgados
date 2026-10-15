@@ -38,8 +38,8 @@ export function estabelecimentoAberto() {
 
   const horarioAtual = hora * 60 + minuto;
 
-  const abertura = 7 * 60;        // 07:00
-  const fechamento = 16 * 60 + 10; // 16:10
+  const abertura = 10 * 60;        // 10:00
+  const fechamento = 16 * 60 ; // 16:00
 
   return horarioAtual >= abertura && horarioAtual <= fechamento;
 }
